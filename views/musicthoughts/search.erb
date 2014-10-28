@@ -1,0 +1,47 @@
+<h1><%= t.search %></h1>
+
+<form action="/search" method="get">
+<label for="q"><%= t.search_intro %></label>
+<input type="text" id="q" name="q" value="" size="10">
+<input type="submit" name="search" class="button" value="<%= t.search %>">
+</form>
+
+<% if @results %>
+
+<% if @results[:categories].size > 0 %>
+<h2><%= t.categories %></h2>
+<ul>
+<% @results[:categories].each do |x| %>
+	<li><a href="/cat/<%= x.id %>"><%= x.name %></a></li>
+<% end %>
+</ul>
+<% end %>
+
+<% if @results[:authors].size > 0 %>
+<h2><%= t.authors %></h2>
+<ul>
+<% @results[:authors].each do |x| %>
+	<li><a href="/author/<%= x.id %>"><%= x.name %></a></li>
+<% end %>
+</ul>
+<% end %>
+
+<% if @results[:contributors].size > 0 %>
+<h2><%= t.contributors %></h2>
+<ul>
+<% @results[:contributors].each do |x| %>
+	<li><a href="/contributor/<%= x.id %>"><%= x.name %></a></li>
+<% end %>
+</ul>
+<% end %>
+
+<% if @results[:thoughts].size > 0 %>
+<h2><%= t.musicthoughts %></h2>
+<ul>
+<% @results[:thoughts].each do |thought| %>
+	<li><%= erb(:_thought, {locals: {thought: thought}, layout: false}) %></li>
+<% end %>
+</ul>
+<% end %>
+
+<% end %>

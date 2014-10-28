@@ -1,0 +1,6 @@
+<blockquote>
+	<q><%= @thought.thought.gsub("\n", '<br>') %></q>
+	<cite><%= @authorlink %></cite>
+	<footer><%= t.contributed_by_s % @contriblink %></footer>
+</blockquote>
+

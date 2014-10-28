@@ -1,0 +1,8 @@
+<h1><%= @pagetitle %></h1>
+<ul>
+<% @thoughts.each do |thought| %>
+	<li>
+	<%= erb(:_thought, {locals: {thought: thought}, layout: false}) %>
+	</li>
+<% end %>
+</ul>

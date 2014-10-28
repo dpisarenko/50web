@@ -1,0 +1,41 @@
+<h1><%= t.add_thought_header %></h1>
+<p><%= t.add_thought_subheader %></p>
+
+<div class="row">
+<div id="addform">
+<form action="/add" method="post">
+
+<label for="verify"><%= t.add_verify_label %></label>
+<input type="text" id="verify" name="verify">
+
+<label for="thought"><%= t.add_thought_label %></label>
+<textarea name="thought" id="thought" rows="3"></textarea>
+
+<label for="author_name"><%= t.add_author_label %></label>
+<input type="text" id="author_name" name="author_name">
+
+<h2><%= t.add_contributor_header %></h2>
+
+<label for="contributor_name"><%= t.add_contributor_label %></label>
+<input type="text" id="contributor_name" name="contributor_name">
+
+<label for="contributor_email"><%= t.add_contributor_email_label %></label>
+<input type="text" id="contributor_email" name="contributor_email">
+
+<label for="contributor_place"><%= t.add_contributor_place_label %></label>
+<input type="text" id="contributor_place" name="contributor_place">
+
+<label for="contributor_url"><%= t.add_contributor_url_label %></label>
+<input type="text" id="contributor_url" url="contributor_url">
+
+<input type="hidden" name="lang" value="<%= @lang %>">
+<input type="submit" name="submit" class="button" value="<%= t.submit %>">
+
+</form>
+</div>
+
+<div id="halfpad">
+<!-- ugly workaround to make input fields not 100% wide.  -->
+</div>
+</div>
+
