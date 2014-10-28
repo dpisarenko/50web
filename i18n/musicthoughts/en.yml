@@ -1,0 +1,40 @@
+home: home
+search: search
+categories: categories
+author_quote_quote: "%s quote: %s"
+more_info_link: (%smore info%s)
+anonymous: anonymous
+contributed_by_s: contributed by %s
+none_found_try_again: Sorry! None found. Try again?
+author: author
+authors: authors
+contributor: contributor
+contributors: contributors
+top_s: top %s
+new: new
+musicthoughts: MusicThoughts
+musicthoughts_slogan: a quiet place to think about music
+random_thought: random thought
+list_thoughts: list of thoughts
+newest_thoughts: newest thoughts
+search_intro: search for any subject, instrument, musician, anything...
+from: from
+add_thanks: If your quote is approved, it will appear on the website. If not, please don’t take offense.  We have strict guidelines because we pay professional translators by the word.
+add_another: Add another quote?
+add_thought: add a thought
+add_quotes_s: "%sAdd your own favorite quotes%s, to share."
+add_verify_label: First, please write the word “music” in this box to prove you're real.
+add_thought_header: Add a quote about making music
+add_thought_subheader: Only approved quotes will appear on the site.
+add_thought_label: type the thought or quote here
+add_author_label: who said it?
+add_category_label: what is it about?
+add_author_source_label: where is this quote from?
+add_author_url_label: website about this person?
+add_contributor_header: "about you:"
+add_contributor_label: your name?
+add_contributor_place_label: where in the world are you?
+add_contributor_email_label: your email?
+add_contributor_url_label: your website?
+submit: submit
+thank_you_big: Thank you!

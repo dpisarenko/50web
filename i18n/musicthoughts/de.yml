@@ -1,0 +1,40 @@
+home: Home
+search: Suche
+categories: Kategorien
+author_quote_quote: "%s Zitat: %s"
+more_info_link: (%smehr Info%s)
+anonymous: anonym
+contributed_by_s: beigetragen von %s
+none_found_try_again: Entschuldigung! Nicht gefunden. Nochmals versuchen?
+author: Autor
+authors: Autoren
+contributor: Mitwirkender
+contributors: Mitwirkende
+top_s: Top %s
+new: neu
+musicthoughts: MusicThoughts
+musicthoughts_slogan: Ein ruhiger Ort um über Musik nachzudenken
+random_thought: Zufälliger Gedanke
+list_thoughts: Gedankenliste
+newest_thoughts: neuste Gedanken
+search_intro: suche nach jeglichem Thema, Instrument, Musiker, egal was...
+from: von
+add_thanks: Sobald dein Zitat genehmigt wurde, erscheint es auf der Webseite. Wenn nicht, fühle dich bitte nicht angegriffen. Wir verfügen deshalb über strenge Richtlinien, da wir professionelle Übersetzer pro Wort bezahlen.
+add_another: Ein weiteres Zitat hinzufügen?
+add_thought: einen Gedanken hinzufügen
+add_quotes_s: "%sFüge deine eigenen Lieblingszitate%s hinzu, zum teilen"
+add_verify_label: Schreibe bitte zunächst das Wort “Musik” in dieses Kästchen, um zu beweisen, dass du echt bist.
+add_thought_header: Füge ein Zitat über das Musikmachen hinzu
+add_thought_subheader: Nur genehmigte Zitate werden auf der Seite erscheinen.
+add_thought_label: schreibe hier den Gedanken oder das Zitat
+add_author_label: wer sagte es?
+add_category_label: worum geht es?
+add_author_source_label: woher stammt dieses Zitat?
+add_author_url_label: Webseite über diese Person?
+add_contributor_header: "über dich:"
+add_contributor_label: dein Name?
+add_contributor_place_label: wo in der Welt befindest du dich?
+add_contributor_email_label: deine Email?
+add_contributor_url_label: deine Webseite?
+submit: fertigstellen
+thank_you_big: Vielen Dank!

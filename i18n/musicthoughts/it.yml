@@ -1,0 +1,40 @@
+home: pagina principale
+search: ricerca
+categories: categorie
+author_quote_quote: "%s citazione: %s"
+more_info_link: (%smaggiori informazioni%s)
+anonymous: anonimo
+contributed_by_s: contribuito da %s
+none_found_try_again: Spiacente! Nessun risultato. Vuoi riprovare?
+author: autore
+authors: autori
+contributor: contributore
+contributors: contributori
+top_s: inizio %s
+new: nuovo
+musicthoughts: PensieriMusicali
+musicthoughts_slogan: un luogo tranquillo dove riflettere sulla musica
+random_thought: pensiero a caso
+list_thoughts: lista dei pensieri
+newest_thoughts: pensieri più recenti
+search_intro: ricerca qualsiasi soggetto, strumento, musicista, tutto...
+from: da
+add_thanks: Se la tua citazione viene approvata, essa apparirà sul sito. In caso contrario, non sentirti offeso. Abbiamo regole molto rigide perchè paghiamo traduttori professionisti sulla base del numero dei vocaboli.
+add_another: Vuoi aggiungere un’altra citazione?
+add_thought: aggiungi un pensiero
+add_quotes_s: "%sAggiungi le tue citazioni preferite%s, da condividere."
+add_verify_label: Innanzitutto, per cortesia scrivi la parola “musica” in questo riquadro per dimostrare che sei reale.
+add_thought_header: Aggiungi una citazione sul fare della musica
+add_thought_subheader: Solo le citazioni approvate appariranno sul sito.
+add_thought_label: digita il pensiero o la citazione qui di seguito
+add_author_label: chi l’ha detto?
+add_category_label: di che si tratta?
+add_author_source_label: da dove proviene questa citazione?
+add_author_url_label: sito web relativo a questa persona?
+add_contributor_header: "parliamo di te:"
+add_contributor_label: il tuo nome?
+add_contributor_place_label: dove ti trovi nel mondo?
+add_contributor_email_label: la tua e-mail?
+add_contributor_url_label: il tuo sito web?
+submit: invia
+thank_you_big: Grazie!

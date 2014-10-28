@@ -1,0 +1,40 @@
+home: главная страница
+search: поиск
+categories: по категориям
+author_quote_quote: "%s цитата: %s"
+more_info_link: (%sдополнительная информация%s)
+anonymous: автор неизвестен
+contributed_by_s: кто добавил %s
+none_found_try_again: Извините! Ничего не найдено. Попробовать еще раз?
+author: автор
+authors: авторы
+contributor: контрибьютор
+contributors: контрибьюторы
+top_s: самые популярные %s
+new: новое
+musicthoughts: Высказывания о музыке
+musicthoughts_slogan: тихое местечко, где можно подумать о музыке
+random_thought: случайное высказывание
+list_thoughts: список высказываний
+newest_thoughts: самые последние высказывания
+search_intro: поиск любой темы, инструмента, музыканта, чего угодно...
+from: откуда
+add_thanks: Если ваша цитата будет одобрена, она появится на сайте. Если нет, пожалуйста, не обижайтесь. У нас строгий принцип отбора, так как за каждое слово мы платим профессиональным переводчикам.
+add_another: Добавить еще одну цитату?
+add_thought: добавить высказывание
+add_quotes_s: "%sДобавить свои любимые цитаты%s, поделиться."
+add_verify_label: Сначала напишите, пожалуйста, слово “музыка” в этом окне, чтобы мы убедились,что это не робот.
+add_thought_header: Добавить цитату о создании музыки
+add_thought_subheader: Только одобренные цитаты будут показаны на сайте.
+add_thought_label: впишите высказывание или цитату здесь
+add_author_label: кто это сказал?
+add_category_label: о чем она?
+add_author_source_label: откуда эта цитата?
+add_author_url_label: веб-сайт об этом человеке?
+add_contributor_header: "о вас:"
+add_contributor_label: ваше имя?
+add_contributor_place_label: из какой вы страны?
+add_contributor_email_label: ваш e-mail?
+add_contributor_url_label: ваш веб-сайт?
+submit: отправить
+thank_you_big: Спасибо!

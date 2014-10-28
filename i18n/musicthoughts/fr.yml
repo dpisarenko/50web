@@ -1,0 +1,40 @@
+home: accueil
+search: chercher
+categories: catégories
+author_quote_quote: "%s citation: %s"
+more_info_link: (%splus d'info%s)
+anonymous: anonyme
+contributed_by_s: contribution de %s
+none_found_try_again: Désolé! Pas trouvé. Essayer encore?
+author: auteur
+authors: auteurs
+contributor: collaborateur
+contributors: collaborateurs
+top_s: meilleurs %s
+new: nouveau
+musicthoughts: PenséesMusicales
+musicthoughts_slogan: un endroit calme pour réfléchir à la musique
+random_thought: pensée au hasard
+list_thoughts: liste de pensées
+newest_thoughts: nouvelles pensées
+search_intro: chercher un sujet, un instrument, un musicien, n'importe quoi...
+from: de
+add_thanks: Si votre citation est acceptée, elle paraîtra dans le site. Sinon, ne vous en offensez pas SVP. Nous avons des lignes directrices très strictes car nous payons nos traducteurs professionnels au mot.
+add_another: Ajouter une autre citation?
+add_thought: ajouter une pensée
+add_quotes_s: "%sAjouter vos citations préférées%s, à partager."
+add_verify_label: Veuillez entrer le mot “musique” dans cette case pour indiquer que vous êtes un humain.
+add_thought_header: Ajouter une citation sur la création de la musique
+add_thought_subheader: Seules les citations approuvées paraîtront dans ce site.
+add_thought_label: taper la pensée ou la citation ici
+add_author_label: qui l'a dit?
+add_category_label: c'est à quel sujet?
+add_author_source_label: d'où vient cette citation?
+add_author_url_label: site Internet de cette personne?
+add_contributor_header: "décrivez-vous:"
+add_contributor_label: votre nom?
+add_contributor_place_label: vous êtes où dans ce monde?
+add_contributor_email_label: votre courriel?
+add_contributor_url_label: votre site Internet?
+submit: envoyer
+thank_you_big: Merci!

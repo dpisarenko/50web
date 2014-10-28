@@ -6,9 +6,9 @@ LangCode.only(LANGUAGES)
 
 require 'r18n-core'
 include R18n::Helpers
-R18n.default_places = './i18n/'
+R18n.default_places = './i18n/musicthoughts/'
 
-require 'musicthoughts'
+require 'a50c/musicthoughts'
 
 # returns hash of langcode => url
 def page_in_other_languages(env, lang)
@@ -35,12 +35,18 @@ end
 class MusicThoughtsWeb < Sinatra::Base
   use Langur, server: 'musicthoughts.com'
 
+  configure do
+    # set root one level up, since this routes file is inside subdirectory
+    set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
+    set :views, Proc.new { File.join(root, 'views/musicthoughts') }
+  end
+
   before do
     @lang = @env['lang']
     @dir = (@lang == 'ar') ? 'rtl' : 'ltr'
     R18n.set(@env['lang'])
     @rel_alternate = page_in_other_languages(@env, @lang)
-    @mt = MusicThoughts.new('http://127.0.0.1:9999', @lang)
+    @mt = A50C::MusicThoughts.new('http://127.0.0.1:9000', @lang)
     @rand1 = @mt.thought_random
     #@categories = @mt.categories
   end

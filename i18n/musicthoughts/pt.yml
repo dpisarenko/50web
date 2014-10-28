@@ -1,0 +1,40 @@
+home: Página inicial
+search: Procurar
+categories: Categorias
+author_quote_quote: "%s citação: %s"
+more_info_link: (%smais informação%s)
+anonymous: anónimo
+contributed_by_s: contribuição de %s
+none_found_try_again: Não conseguimos encontrar o que procura! Quer tentar outra vez?
+author: autor
+authors: autores
+contributor: colaborador
+contributors: colaboradores
+top_s: maiores %s
+new: novo
+musicthoughts: Pensamentos Musicais
+musicthoughts_slogan: um lugar tranquilo para pensar sobre música
+random_thought: pensamento ao acaso
+list_thoughts: lista de pensamentos
+newest_thoughts: pensamentos mais recentes
+search_intro: procurar por qualquer assunto, instrumento, músico, qualquer coisa...
+from: in
+add_thanks: Se a sua citação for aprovada, aparecerá no sítio web. Se não aparecer, por favor não se zangue. Temos regras rígidas porque pagamos a tradutores profissionais por palavra.
+add_another: Adicionar outra citação?
+add_thought: acrescente um pensamento
+add_quotes_s: "%sAcrescente a sua citação preferida%s, para partilhar."
+add_verify_label: Primeiro, escreva a palavra “música” nesta caixa de texto para provar que é uma pessoa real.
+add_thought_header: Acrescente uma citação sobre fazer música
+add_thought_subheader: Apenas citações aprovadas aparecerão neste sítio.
+add_thought_label: escreva aqui o seu pensamento ou citação
+add_author_label: quem disse isso?
+add_category_label: sobre o que é?
+add_author_source_label: de onde provém a citação?
+add_author_url_label: página web sobre esta pessoa?
+add_contributor_header: "sobre mim:"
+add_contributor_label: como se chama?
+add_contributor_place_label: onde é que você se encontra?
+add_contributor_email_label: o seu email?
+add_contributor_url_label: o seu sítio web?
+submit: enviar
+thank_you_big: Obrigado!

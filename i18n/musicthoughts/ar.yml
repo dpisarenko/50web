@@ -1,0 +1,40 @@
+home: الصفحة الرئيسية
+search: بحث
+categories: التصنيفات
+author_quote_quote: "%s المقولة: %s"
+more_info_link: (%sالمزيد من المعلومات%s)
+anonymous: مجهول
+contributed_by_s: ساهم بها %s
+none_found_try_again: عذراً! لم نجد أي شيء. أتريد المحاولة ثانيةً؟
+author: القائل
+authors: القائلون
+contributor: المساهم
+contributors: المساهمون
+top_s: أفضل %s
+new: جديد
+musicthoughts: أفكار موسيقية
+musicthoughts_slogan: مكان هادىء للتفكير في الموسيقى
+random_thought: فكرة عشوائية
+list_thoughts: لائحة الأفكار
+newest_thoughts: أجدد الأفكار
+search_intro: ابحث عن أي موضوع، آلة موسيقية، موسيقي، أي شيء...
+from: من
+add_thanks: إن تم الموافقة على المقولة التي أدخلتها، ستظهر على الموقع. إن لم تقبل، من فضلك لا تشعر بالإهانة.  نحن لدينا شروط دقيقة لأننا ندفع للمترجمين بالكلمة.
+add_another: أتريد إضافة مقولة أخرى؟
+add_thought: أضف فكرة
+add_quotes_s: "%sأضف المقولات المفضلة لديك%s كي تتشاركها مع الجميع."
+add_verify_label: من فضلك أدخل كلمة “موسيقى” في هذا الصندوق لنتأكد من أنك حقيقي.
+add_thought_header: أضف مقولة عن التأليف الموسيقي
+add_thought_subheader: سيظهر على الموقع المقولات الموافق عليها فقط.
+add_thought_label: أدخل الفكرة أو المقولة هنا
+add_author_label: من قالها؟
+add_category_label: عم تتكلم؟
+add_author_source_label: من أين أتت هذه المقولة؟
+add_author_url_label: موقع عن هذا الشخص؟
+add_contributor_header: "معلومات عنك:"
+add_contributor_label: اسمك؟
+add_contributor_place_label: أين موقعك في العالم؟
+add_contributor_email_label: بريدك الإلكتروني؟
+add_contributor_url_label: موقعك؟
+submit: أدخل
+thank_you_big: شكراً!
