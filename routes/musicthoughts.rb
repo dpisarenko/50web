@@ -10,28 +10,6 @@ R18n.default_places = './i18n/musicthoughts/'
 
 require 'a50c/musicthoughts'
 
-# returns hash of langcode => url
-def page_in_other_languages(env, lang)
-  others = {}
-  (LANGUAGES - [lang]).each do |l|
-    pathinfo = (env['PATH_INFO'] == '/') ? '/home' : env['PATH_INFO']
-    others[l] = 'http://musicthoughts.com' + pathinfo + '/' + l
-  end
-  others
-end
-
-# mt.thought.snip_for_lang(@lang)
-# Returns first 10 words or first 20 characters of quote
-class String
-  def snip_for_lang(language_code)
-    if ['zh', 'ja'].include? language_code
-      return (self[0,20] + '…')
-    else
-      return (self.split(' ')[0,10].join(' ') + '…')
-    end
-  end
-end
-
 class MusicThoughtsWeb < Sinatra::Base
   use Langur, server: 'musicthoughts.com'
 
@@ -39,6 +17,25 @@ class MusicThoughtsWeb < Sinatra::Base
     # set root one level up, since this routes file is inside subdirectory
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/musicthoughts') }
+  end
+
+  # returns hash of langcode => url
+  def page_in_other_languages(env, lang)
+    others = {}
+    (LANGUAGES - [lang]).each do |l|
+      pathinfo = (env['PATH_INFO'] == '/') ? '/home' : env['PATH_INFO']
+      others[l] = 'http://musicthoughts.com' + pathinfo + '/' + l
+    end
+    others
+  end
+
+  # Returns first 10 words or first 20 characters of quote
+  def snip_for_lang(str, language_code)
+    if ['zh', 'ja'].include? language_code
+      return (str[0,20] + '…')
+    else
+      return (str.split(' ')[0,10].join(' ') + '…')
+    end
   end
 
   before do
@@ -62,7 +59,7 @@ class MusicThoughtsWeb < Sinatra::Base
   get '/t/:id' do
     @thought = @mt.thought(params[:id])
     redirect '/' if @thought.nil?
-    @pagetitle = (t.author_quote_quote % [@thought.author.name, @thought.thought.snip_for_lang(@lang)])
+    @pagetitle = (t.author_quote_quote % [@thought.author.name, snip_for_lang(@thought.thought, @lang)])
     @bodyid = 't'
     @authorlink = '<a href="/author/%d">%s</a>' % [@thought.author.id, @thought.author.name]
     if @thought.source_url.to_s.length > 0
