@@ -73,8 +73,8 @@ class MusicThoughtsWeb < Sinatra::Base
     redirect('/t/%d' % @rand1.id, 307)
   end
 
-  get '/cat/:id' do
-    @category = @mt.category(params[:id])
+  get %r{^/cat/([0-9]+)} do |id|
+    @category = @mt.category(id)
     redirect '/' if @category.nil?
     @pagetitle = t.musicthoughts + ' - ' + @category.name
     @bodyid = 'cat'
@@ -93,8 +93,8 @@ class MusicThoughtsWeb < Sinatra::Base
     erb :new
   end
 
-  get '/author/:id' do
-    @author = @mt.author(params[:id])
+  get %r{^/author/([0-9]+)} do |id|
+    @author = @mt.author(id)
     redirect '/author' if @author.nil?
     @thoughts = @author.thoughts.shuffle
     @pagetitle = @author.name + ' ' + t.musicthoughts
@@ -109,8 +109,8 @@ class MusicThoughtsWeb < Sinatra::Base
     erb :authors
   end
 
-  get '/contributor/:id' do
-    @contributor = @mt.contributor(params[:id])
+  get %r{^/contributor/([0-9]+)} do |id|
+    @contributor = @mt.contributor(id)
     redirect '/contributor' if @contributor.nil?
     @thoughts = @contributor.thoughts.shuffle
     @pagetitle = @contributor.name + ' ' + t.musicthoughts
