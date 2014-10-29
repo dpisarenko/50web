@@ -1,4 +1,4 @@
-require 'sinatra'
+require 'sinatra/base'
 
 require 'langur'
 LANGUAGES = %w(ar de en es fr it ja pt ru zh)
@@ -11,12 +11,12 @@ R18n.default_places = './i18n/musicthoughts/'
 require 'a50c/musicthoughts'
 
 class MusicThoughtsWeb < Sinatra::Base
-  use Langur, server: 'musicthoughts.com'
+  use Langur
 
   configure do
-    # set root one level up, since this routes file is inside subdirectory
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/musicthoughts') }
+    set :port, 7001
   end
 
   # returns hash of langcode => url
@@ -24,7 +24,7 @@ class MusicThoughtsWeb < Sinatra::Base
     others = {}
     (LANGUAGES - [lang]).each do |l|
       pathinfo = (env['PATH_INFO'] == '/') ? '/home' : env['PATH_INFO']
-      others[l] = 'http://musicthoughts.com' + pathinfo + '/' + l
+      others[l] = 'http://' + env['HTTP_HOST'] + pathinfo + '/' + l  # TODO: SSL?
     end
     others
   end
@@ -155,5 +155,7 @@ class MusicThoughtsWeb < Sinatra::Base
     @bodyid = 'thanks'
     erb :thanks
   end
+
+  run!
 end
 
