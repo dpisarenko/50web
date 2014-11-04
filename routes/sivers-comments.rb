@@ -10,9 +10,19 @@ class SiversCommentsWeb < Sinatra::Base
     set :port, 7002
   end
 
+  helpers do
+    def auth!
+      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+      @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['aaaaaaaa', 'bbbbbbbb']
+    end
+  end
+
   before do
-    # AUTH HERE
-    @sc = A50C::MusicThoughts.new(api_key, api_pass)
+    auth!
+    api_key = @auth.credentials[0]
+    api_pass = @auth.credentials[1]
+    @sc = A50C::SiversComments.new(api_key, api_pass)
+    @pagetitle = 'sivers comments'
   end
 
   get '/' do
