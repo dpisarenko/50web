@@ -1,6 +1,11 @@
-<h1>sivers-comments</h1>
-<ul>
 <% @comments.each do |c| %>
-	<li><%= c.id %></li>
+	<div id="comment-<%= c.id %>">
+		<h2><a href="http://sivers.org/<%= c.uri %>"><%= c.uri %></a> — <%= c.name %> — <%= c.email %></h2>
+		<p><%= c.html %></p>
+		<a href="/comments/<%= c.id %>">edit</a>
+		<form action="/comments/<%= c.id %>/reply" method="post">
+			<input name="reply">
+			<input type="submit" value="reply">
+		</form>
+	</div>
 <% end %>
-</ul>

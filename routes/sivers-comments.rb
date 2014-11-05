@@ -10,17 +10,13 @@ class SiversCommentsWeb < Sinatra::Base
     set :port, 7002
   end
 
-  helpers do
-    def auth!
-      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['aaaaaaaa', 'bbbbbbbb']
-    end
+  # TODO: https://developers.google.com/analytics/devguides/collection/analyticsjs/cross-domain
+  use Rack::Auth::Basic, "API key and pass" do |api_key, api_pass|
+    api_key.size == 8 && api_pass.size == 8
   end
 
   before do
-    auth!
-    api_key = @auth.credentials[0]
-    api_pass = @auth.credentials[1]
+    api_key, api_pass =  Rack::Auth::Basic::Request.new(request.env)
     @sc = A50C::SiversComments.new(api_key, api_pass)
     @pagetitle = 'sivers comments'
   end
