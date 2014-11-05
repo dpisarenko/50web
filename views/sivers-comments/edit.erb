@@ -1,0 +1,38 @@
+<form action="/comment/<%= @comment.id %>" method="post">
+	<textarea name="html"><%= @comment.html %></textarea>
+	<input type="submit" value="update">
+</form>
+
+<div>
+id: <%= @comment.id %>
+</div>
+<div>
+uri: <%= @comment.uri %>
+</div>
+<div>
+person_id: <%= @comment.person_id %>
+</div>
+<div>
+created_at: <%= @comment.created_at %>
+</div>
+<div>
+name: <%= @comment.name %>
+</div>
+<div>
+email: <%= @comment.email %>
+</div>
+<div>
+Person email_count: <%= @comment.person.email_count %>
+</div>
+<div>
+Person created_at: <%= @comment.person.created_at %>
+</div>
+<div>
+Person userstats:
+<% @comment.person.userstats.each do |s| %>
+	<br><%= s['created_at'] %>: <%= s['statkey'] %> = <%= s['statvalue'] %>
+<% end %>
+</div>
+
+<form action="/comment/<%= @comment.id %>/delete" method="post"><input type="submit" value="delete"></form>
+<form action="/comment/<%= @comment.id %>/spam" method="post"><input type="submit" value="spam"></form>
