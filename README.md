@@ -2,6 +2,7 @@
 
 Websites in Sinatra using a50c gem to access 50apis API.  I think this will include:
 
+* 50.io = port 7000
 * musicthoughts.com = port 7001
 * sivers-comments = port 7002
 * musicthoughts.net (admin)
@@ -37,6 +38,31 @@ Home: 50.io is the site that requires auth to get into, but once in, is just a m
 ## nginx
 
 ```
+server {
+	listen 127.0.0.1:80;
+	server_name 50.dev;
+	charset utf-8;
+	default_type  text/html;
+	access_log  /var/log/nginx/50.access.log  main;
+	error_log  /var/log/nginx/50.error.log;
+	root /srv/public/50web/public;
+	location ~ /(css|images|js) {
+		expires 1d;
+	}
+	location / {
+		proxy_pass http://127.0.0.1:7000;
+		proxy_redirect http://$host/ http://50.dev/;
+		proxy_buffering on;
+		proxy_buffers 12 12k;
+		proxy_headers_hash_max_size 1024;
+		proxy_headers_hash_bucket_size 128;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $remote_addr;
+		proxy_set_header Host $host;
+	}
+}
+
+
 server {
 	listen 127.0.0.1:80;
 	server_name musicthoughts.dev;
