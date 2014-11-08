@@ -16,7 +16,6 @@ class MusicThoughtsWeb < Sinatra::Base
   configure do
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/musicthoughts') }
-    set :port, 7001
   end
 
   # returns hash of langcode => url
@@ -155,7 +154,5 @@ class MusicThoughtsWeb < Sinatra::Base
     @bodyid = 'thanks'
     erb :thanks
   end
-
-  run!
 end
 

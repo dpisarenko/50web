@@ -7,7 +7,6 @@ class SiversCommentsWeb < Sinatra::Base
   configure do
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/sivers-comments') }
-    set :port, 7002
   end
 
   helpers do
@@ -68,7 +67,5 @@ class SiversCommentsWeb < Sinatra::Base
     @sc.spam_comment(id)
     redirect '/'
   end
-
-  run!
 end
 
