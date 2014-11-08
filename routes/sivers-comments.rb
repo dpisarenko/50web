@@ -10,15 +10,33 @@ class SiversCommentsWeb < Sinatra::Base
     set :port, 7002
   end
 
-  # TODO: https://developers.google.com/analytics/devguides/collection/analyticsjs/cross-domain
-  use Rack::Auth::Basic, 'API key and pass' do |api_key, api_pass|
-    api_key.size == 8 && api_pass.size == 8
+  helpers do
+    def protected!
+      unless has_cookie?
+        halt 401  # TODO: go to 50.io login page
+      end
+    end
+
+    def has_cookie?
+      request.cookies['api_key'] && request.cookies['api_pass']
+    end
   end
 
   before do
-    #api_key, api_pass =  Rack::Auth::Basic::Request.new(request.env)
-    @sc = A50C::SiversComments.new('aaaaaaaa', 'bbbbbbbb')
+    protected! unless request.path_info == '/api_cookie'
+    @sc = A50C::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'])
     @pagetitle = 'sivers-comments'
+  end
+
+  post '/api_cookie' do
+    if String(params[:api_key]).length == 8 && String(params[:api_pass]).length == 8
+      # TODO: domain, SSL, expiration
+      response.set_cookie('api_key', value: params[:api_key], path: '/')
+      response.set_cookie('api_pass', value: params[:api_pass], path: '/')
+      redirect '/'
+    else
+      redirect 'https://50.io/'  # TODO: dev domain?
+    end
   end
 
   get '/' do
