@@ -6,7 +6,7 @@ LangCode.only(LANGUAGES)
 
 require 'r18n-core'
 include R18n::Helpers
-R18n.default_places = './i18n/musicthoughts/'
+R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
 require 'a50c/musicthoughts'
 
