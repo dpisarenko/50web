@@ -1,0 +1,24 @@
+<% @unopened_email_count.each do |profile, cat_counts| %>
+	<h2><%= profile %></h2>
+	<ul>
+	<% cat_counts.each do |category, num| %>
+		<li>
+			<form action="/next_unopened" method="post">
+				<input type="hidden" name="profile" value="<%= profile %>">
+				<input type="hidden" name="category" value="<%= category %>">
+				<input type="submit" value="<%= category %>">
+				(<%= num %>)
+			</form>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+
+<% if @open_emails %>
+	<h2>Open:</h2>
+	<ul>
+	<% @open_emails.each do |email| %>
+		<li><a href="/email/<%= email.id %>"><%= email.subject %></li>
+	<% end %>
+	</ul>
+<% end %>

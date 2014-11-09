@@ -2,6 +2,12 @@
 
 <p>TODO: https-only, real URLs if not dev, and know URLs from APIs.</p>
 
+<form action="http://inbox.dev/api_cookie" method="post">
+	<input type="hidden" name="api_key" value="<%= @my.key %>">
+	<input type="hidden" name="api_pass" value="<%= @my.pass %>">
+	<input type="submit" value="inbox.dev">
+</form>
+
 <form action="http://comments.dev/api_cookie" method="post">
 	<input type="hidden" name="api_key" value="<%= @my.key %>">
 	<input type="hidden" name="api_pass" value="<%= @my.pass %>">
