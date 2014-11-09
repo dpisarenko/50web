@@ -31,6 +31,18 @@
 <% end %>
 
 <script>
+function api(method, url, params) {
+	var request = new XMLHttpRequest();
+	var data = new FormData();
+	for (prop in params) {
+		if (params.hasOwnProperty(prop)) {
+			data.append(prop, params[prop]);
+		}
+	}
+	request.open(method, url, true);
+	request.send(data);
+}
+
 function sendUpdate() {
 	var id = document.getElementById('personedit').getAttribute('data-id');
 	return function(e) {
