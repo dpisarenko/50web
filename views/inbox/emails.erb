@@ -1,0 +1,10 @@
+<h2><%= @pagetitle %></h2>
+<ul>
+<% @emails.each do |email| %>
+	<li><a href="/email/<%= email.id %>"><%= email.id %></a>
+		<%= email.created_at %>
+		<%=h email.subject %>
+		<%=h email.their_name %>
+	</li>
+<% end %>
+</ul>

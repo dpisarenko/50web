@@ -1,0 +1,46 @@
+<section id="personedit" data-id="<%= @person.id %>">
+<div>id: <%= @person.id %></div>
+<div><label>name: <input name="name" value="<%=h @person.name %>"></label></div>
+<div><label>email: <input name="email" value="<%=h @person.email %>"></label></div>
+<div><label>address: <input name="address" value="<%=h @person.address %>"></label></div>
+<div><label>company: <input name="company" value="<%=h @person.company %>"></label></div>
+<div><label>city: <input name="city" value="<%=h @person.city %>"></label></div>
+<div><label>state: <input name="state" value="<%=h @person.state %>"></label></div>
+<div><label>country: <input name="country" value="<%= @person.country %>"></label></div>
+<div><label>phone: <input name="phone" value="<%=h @person.phone %>"></label></div>
+<div><label>categorize_as: <input name="categorize_as" value="<%=h @person.categorize_as %>"></label></div>
+<div><label>notes: <textarea name="notes"><%=h @person.notes %></textarea></label></div>
+<div><label>listype: <input name="listype" value="<%= @person.listype %>"></label></div>
+<div>email_count: <%= @person.email_count %></div>
+<div>created_at: <%= @person.created_at %></div>
+</section>
+
+<h4>stats:</h4>
+<% @person.stats.each do |stat| %>
+	<%= stat %>
+<% end %>
+
+<h4>urls:</h4>
+<% @person.urls.each do |url| %>
+	<%= url %>
+<% end %>
+
+<h4>emails:</h4>
+<% @person.emails.each do |email| %>
+	<%= email %>
+<% end %>
+
+<script>
+function sendUpdate() {
+	var id = document.getElementById('personedit').getAttribute('data-id');
+	return function(e) {
+		var uri = 'PUT /api/peep/people/' + id;
+		e.target.style.backgroundColor = '#c00';
+		alert(uri + ' … ' + e.target.name + ' = ' + e.target.value);
+		setTimeout(function() {
+			e.target.style.backgroundColor = '#fff';
+		}, 2000);
+	};
+}
+document.getElementById('personedit').addEventListener('change', sendUpdate(), false);
+</script>

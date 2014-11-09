@@ -1,22 +1,45 @@
 <p>id: <%= @email.id %></p>
-<p>created_at: <%= @email.created_at %></p>
-<p>subject: <%= @email.subject %></p>
-<p>outgoing: <%= @email.outgoing %></p>
-<p>message_id: <%= @email.message_id %></p>
-<p>profile: <%= @email.profile %></p>
-<p>category: <%= @email.category %></p>
-<p>opened_at: <%= @email.opened_at %></p>
-<p>closed_at: <%= @email.closed_at %></p>
-<p>their_email: <%= @email.their_email %></p>
-<p>their_name: <%= @email.their_name %></p>
-<p>headers: <%= @email.headers %></p>
-<p>body: <%= @email.body %></p>
-<p>person: <%= @email.person %></p>
-<p>created_by: <%= @email.created_by %></p>
-<p>opened_by: <%= @email.opened_by %></p>
-<p>closed_by: <%= @email.closed_by %></p>
-<p>reference_email: <%= @email.reference_email %></p>
-<p>answer_email: <%= @email.answer_email %></p>
-<p>attachments: <%= @email.attachments %></p>
-<p>new_urls: <%= @email.new_urls %></p>
-<p>new_emails: <%= @email.new_emails %></p>
+<p>profile: <%=h @email.profile %></p>
+<p>category: <%=h @email.category %></p>
+<p>their_email: <%=h @email.their_email %></p>
+<p>their_name: <%=h @email.their_name %></p>
+<p>subject: <%=h @email.subject %></p>
+<p>message_id: <%=h @email.message_id %></p>
+<p>created_at: <%= @email.created_at %>
+created_by: <%=h @email.created_by %></p>
+<p>opened_at: <%=h @email.opened_at %>
+opened_by: <%=h @email.opened_by %></p>
+<p>closed_at: <%=h @email.closed_at %>
+closed_by: <%=h @email.closed_by %></p>
+<p>headers: <%=h @email.headers %></p>
+<p>body: <%=h @email.body %></p>
+<p>person: <%=h @email.person %></p>
+<p>reference_email: <%=h @email.reference_email %>
+answer_email: <%=h @email.answer_email %></p>
+<p>attachments: <%=h @email.attachments %></p>
+<p>new_urls: <%=h @email.new_urls %></p>
+<p>new_emails: <%=h @email.new_emails %></p>
+<p>outgoing: <%=h @email.outgoing %></p>
+
+<form action="/email/<%= @email.id %>/unread" method="post"><input type="submit" value="make new"></form>
+
+<form action="/email/<%= @email.id %>/close" method="post">
+	<input type="hidden" name="profile" value="<%= @email.profile %>">
+	<input type="hidden" name="category" value="<%= @email.category %>">
+	<input type="submit" value="close">
+</form>
+
+<form action="/email/<%= @email.id %>/not_my" method="post"><input type="submit" value="not me"></form>
+
+<h3>Reply:</h3>
+<form action="/email/<%= @email.id %>/reply" method="post">
+	<input type="hidden" name="profile" value="<%= @email.profile %>">
+	<input type="hidden" name="category" value="<%= @email.category %>">
+	<textarea name="reply"></textarea>
+	<input type="submit" value="reply">
+</form>
+
+<div id="person">
+<%= erb :person %>
+</div>
+

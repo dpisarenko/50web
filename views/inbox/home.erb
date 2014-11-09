@@ -7,15 +7,15 @@
 				<input type="hidden" name="profile" value="<%= profile %>">
 				<input type="hidden" name="category" value="<%= category %>">
 				<input type="submit" value="<%= category %>">
-				(<%= num %>)
+				(<a href="/unopened?profile=<%= profile %>&amp;category=<%= category %>"><%= num %></a>)
 			</form>
 		</li>
 	<% end %>
 	</ul>
 <% end %>
 
-<% if @open_emails %>
-	<h2>Open:</h2>
+<% if @open_emails.count > 0 %>
+	<h2>open emails:</h2>
 	<ul>
 	<% @open_emails.each do |email| %>
 		<li><a href="/email/<%= email.id %>"><%= email.subject %></li>

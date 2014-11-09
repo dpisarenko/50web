@@ -19,6 +19,10 @@ class Inbox < Sinatra::Base
     def has_cookie?
       request.cookies['api_key'] && request.cookies['api_pass']
     end
+
+    def h(text)
+      Rack::Utils.escape_html(text)
+    end
   end
 
   before do
@@ -44,6 +48,12 @@ class Inbox < Sinatra::Base
     erb :home
   end
 
+  get '/unopened' do
+    @emails = @p.emails_unopened(params[:profile], params[:category])
+    @pagetitle = 'unopened for %s: %s' % [params[:profile], params[:category]]
+    erb :emails
+  end
+
   post '/next_unopened' do
     email = @p.next_unopened_email(params[:profile], params[:category])
     if email
@@ -55,8 +65,39 @@ class Inbox < Sinatra::Base
 
   get %r{\A/email/([0-9]+)\Z} do |id|
     @email = @p.open_email(id) || halt(404)
+    @person = @p.get_person(@email.person.id)
     @pagetitle = 'email %d' % id
     erb :email
+  end
+
+  post %r{\A/email/([0-9]+)/unread\Z} do |id|
+    @p.unread_email(id)
+    redirect '/'
+  end
+
+  post %r{\A/email/([0-9]+)/close\Z} do |id|
+    @p.close_email(id)
+    email = @p.next_unopened_email(params[:profile], params[:category])
+    if email
+      redirect to('/email/%d' % email.id)
+    else
+      redirect to('/')
+    end
+  end
+
+  post %r{\A/email/([0-9]+)/reply\Z} do |id|
+    @p.reply_to_email(id, params[:reply])
+    email = @p.next_unopened_email(params[:profile], params[:category])
+    if email
+      redirect to('/email/%d' % email.id)
+    else
+      redirect to('/')
+    end
+  end
+
+  post %r{\A/email/([0-9]+)/not_my\Z} do |id|
+    @p.not_my_email(id)
+    redirect '/'
   end
 
 end
