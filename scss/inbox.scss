@@ -1,0 +1,45 @@
+/* 
+pure-buttons.scss
+pure-menus.scss
+pure-tables.scss
+*/
+@import 'pure/base.scss';
+@import 'pure/grids.scss';
+@import 'pure/grids-responsive.scss';
+@import 'pure/forms.scss';
+
+#content {
+	@extend .pure-g;
+	width: 98%;
+	margin: 0 auto;
+}
+section#showemail {
+	@extend .pure-u-1;
+	@extend .pure-u-md-2-3;
+	@extend .pure-u-lg-4-5;
+	textarea {
+		width: 80%;
+	}
+	background-color: #eff;
+}
+section#showperson {
+	@extend .pure-u-1;
+	@extend .pure-u-md-1-3;
+	@extend .pure-u-lg-1-5;
+	background-color: #ffc;
+}
+form#emailform, form#personeditform, form#replyform {
+	@extend .pure-form;
+}
+form#personeditform, form#replyform {
+	@extend .pure-form-stacked;
+}
+form#emailform textarea {
+	height: 20em;
+}
+#emailactions form {
+	display: inline;
+}
+input.longtext {
+	width: 70%;
+}

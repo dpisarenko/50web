@@ -1,32 +1,34 @@
-<section id="personedit" data-id="<%= @person.id %>">
-<div>id: <%= @person.id %></div>
-<div><label>name: <input name="name" value="<%=h @person.name %>"></label></div>
-<div><label>email: <input name="email" value="<%=h @person.email %>"></label></div>
-<div><label>address: <input name="address" value="<%=h @person.address %>"></label></div>
-<div><label>company: <input name="company" value="<%=h @person.company %>"></label></div>
-<div><label>city: <input name="city" value="<%=h @person.city %>"></label></div>
-<div><label>state: <input name="state" value="<%=h @person.state %>"></label></div>
-<div><label>country: <input name="country" value="<%= @person.country %>"></label></div>
-<div><label>phone: <input name="phone" value="<%=h @person.phone %>"></label></div>
-<div><label>categorize_as: <input name="categorize_as" value="<%=h @person.categorize_as %>"></label></div>
-<div><label>notes: <textarea name="notes"><%=h @person.notes %></textarea></label></div>
-<div><label>listype: <input name="listype" value="<%= @person.listype %>"></label></div>
-<div>email_count: <%= @person.email_count %></div>
-<div>created_at: <%= @person.created_at %></div>
-</section>
+<form id="personeditform" data-id="<%= @person.id %>" action="/person/<%= @person.id %>" method="post">
+id: <%= @person.id %>
+<input name="name" placeholder="name" value="<%=h @person.name %>">
+<input name="email" placeholder="email" value="<%=h @person.email %>">
+<input name="address" placeholder="address" value="<%=h @person.address %>">
+<input name="company" placeholder="company" value="<%=h @person.company %>">
+<input name="city" placeholder="city" value="<%=h @person.city %>">
+<input name="state" placeholder="state" value="<%=h @person.state %>">
+<input name="country" placeholder="country" value="<%= @person.country %>">
+<input name="phone" placeholder="phone" value="<%=h @person.phone %>">
+<input name="categorize_as" placeholder="categorize_as" value="<%=h @person.categorize_as %>">
+<textarea name="notes"><%=h @person.notes %></textarea>
+<input name="listype" placeholder="listype" value="<%= @person.listype %>">
+<% if @email %>
+	<input type="hidden" name="email_id" value="<%= @email.id %>">
+<% end %>
+<input type="submit" value="update">
+</form>
 
 <h4>stats:</h4>
 <% @person.stats.each do |stat| %>
-	<%= stat %>
+	<%= stat.key %>
 <% end %>
 
 <h4>urls:</h4>
 <% @person.urls.each do |url| %>
-	<%= url %>
+	<%= url.url %>
 <% end %>
 
 <h4>emails:</h4>
 <% @person.emails.each do |email| %>
-	<%= email %>
+	<%= email.subject %>
 <% end %>
 

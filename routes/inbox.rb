@@ -70,6 +70,11 @@ class Inbox < Sinatra::Base
     erb :email
   end
 
+  post %r{\A/email/([0-9]+)\Z} do |id|
+    @p.update_email(id, params)
+    redirect to('/email/%d' % id)
+  end
+
   post %r{\A/email/([0-9]+)/unread\Z} do |id|
     @p.unread_email(id)
     redirect '/'
@@ -100,5 +105,20 @@ class Inbox < Sinatra::Base
     redirect '/'
   end
 
+  get %r{\A/person/([0-9]+)\Z} do |id|
+    @person = @p.get_person(id) || halt(404)
+    @emails = @p.emails_for_person(id)
+    @pagetitle = 'person %d' % id
+    erb :personfull
+  end
+
+  post %r{\A/person/([0-9]+)\Z} do |id|
+    @p.update_person(id, params)
+    if params[:email_id]
+      redirect to('/email/%d' % params[:email_id])
+    else
+      redirect to('/person/%d' % id)
+    end
+  end
 end
 
