@@ -7,7 +7,18 @@ pure-tables.scss
 @import 'pure/grids.scss';
 @import 'pure/grids-responsive.scss';
 @import 'pure/forms.scss';
+@import 'pure/menus.scss';
 
+nav#navigation {
+	@extend .pure-menu-horizontal;
+	background-color: #000;
+	a {
+		color: #fff;
+	}
+	ul {
+		margin: 0;
+	}
+}
 #content {
 	@extend .pure-g;
 	width: 98%;
