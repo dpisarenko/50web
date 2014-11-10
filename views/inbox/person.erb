@@ -1,5 +1,5 @@
 <form id="personeditform" data-id="<%= @person.id %>" action="/person/<%= @person.id %>" method="post">
-id: <%= @person.id %>
+id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 <input name="name" placeholder="name" value="<%=h @person.name %>">
 <input name="email" placeholder="email" value="<%=h @person.email %>">
 <input name="address" placeholder="address" value="<%=h @person.address %>">

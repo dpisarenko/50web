@@ -13,6 +13,9 @@ pure-tables.scss
 	width: 98%;
 	margin: 0 auto;
 }
+section#home {
+	@extend .pure-u-1;
+}
 section#showemail {
 	@extend .pure-u-1;
 	@extend .pure-u-md-2-3;
