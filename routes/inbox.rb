@@ -75,6 +75,11 @@ class Inbox < Sinatra::Base
     redirect to('/email/%d' % id)
   end
 
+  post %r{\A/email/([0-9]+)/delete\Z} do |id|
+    @p.delete_email(id)
+    redirect '/'
+  end
+
   post %r{\A/email/([0-9]+)/unread\Z} do |id|
     @p.unread_email(id)
     redirect '/'

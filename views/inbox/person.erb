@@ -19,7 +19,7 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 
 <h4>stats:</h4>
 <% @person.stats.each do |stat| %>
-	<%= stat.key %>
+	<%= stat.name %> = <%=h stat.value %>
 <% end %>
 
 <h4>urls:</h4>
