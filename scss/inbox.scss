@@ -47,7 +47,7 @@ section#showperson {
 form {
 	@extend .pure-form;
 }
-#personeditform, #replyform, #stats form, #urladd, #statadd {
+#personeditform, #replyform, #urladd, #statadd, #newemail {
 	@extend .pure-form-stacked;
 }
 #urllist form, #statlist form {

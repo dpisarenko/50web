@@ -22,6 +22,9 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 <form action="/person/<%= @person.id %>/stat" method="post" id="statadd">
 	<input name="key" placeholder="key">
 	<input name="value" placeholder="value">
+<% if @email %>
+	<input type="hidden" name="email_id" value="<%= @email.id %>">
+<% end %>
 	<input type="submit" value="add stat">
 </form>
 <% if @person.stats.count > 0 %>
@@ -82,7 +85,7 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 
 <div id="emails">
 <h4>emails:</h4>
-<form action="/person/<%= @person.id %>/email" method="post">
+<form action="/person/<%= @person.id %>/email" method="post" id="newemail">
 <% if @profiles.count == 1 %>
 	<input type="hidden" name="profile" value="<%= @profiles[0] %>">
 <% else %>
