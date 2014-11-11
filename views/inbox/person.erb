@@ -6,7 +6,9 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 <input name="company" placeholder="company" value="<%=h @person.company %>">
 <input name="city" placeholder="city" value="<%=h @person.city %>">
 <input name="state" placeholder="state" value="<%=h @person.state %>">
-<input name="country" placeholder="country" value="<%= @person.country %>">
+<select name="country">
+<%= Location.names.sort_by {|k,v| v}.inject('<option value="">… country …</option>') { |html, pair| html + '<option value="%s"%s>%s</option>' % [pair[0], (@person.country == pair[0]) ? ' selected' : '', pair[1][0,20]]} %>
+</select>
 <input name="phone" placeholder="phone" value="<%=h @person.phone %>">
 <input name="categorize_as" placeholder="categorize_as" value="<%=h @person.categorize_as %>">
 <textarea name="notes"><%=h @person.notes %></textarea>

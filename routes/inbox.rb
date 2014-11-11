@@ -1,6 +1,7 @@
 require 'sinatra/base'
 
 require 'a50c/peep'
+require 'd50b/peeps'  # for Location.names
 
 class Inbox < Sinatra::Base
 
