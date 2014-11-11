@@ -17,18 +17,90 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 <input type="submit" value="update">
 </form>
 
+<div id="stats">
 <h4>stats:</h4>
-<% @person.stats.each do |stat| %>
-	<%= stat.name %> = <%=h stat.value %>
+<form action="/person/<%= @person.id %>/stat" method="post" id="statadd">
+	<input name="key" placeholder="key">
+	<input name="value" placeholder="value">
+	<input type="submit" value="add stat">
+</form>
+<% if @person.stats.count > 0 %>
+	<ul id="statlist">
+	<% @person.stats.each do |stat| %>
+		<li>
+		<form action="/stat/<%= stat.id %>/delete" method="post">
+		<% if @email %>
+			<input type="hidden" name="email_id" value="<%= @email.id %>">
+		<% else %>
+			<input type="hidden" name="person_id" value="<%= @person.id %>">
+		<% end %>
+		<input type="submit" value="×">
+		</form>
+		<%= stat.created_at[0,10] %> <%= stat.name %>: <%=h stat.value %>
+		</li>
+	<% end %>
+	</ul>
 <% end %>
+</div>
 
+<div id="urls">
 <h4>urls:</h4>
-<% @person.urls.each do |url| %>
-	<%= url.url %>
+<form action="/person/<%= @person.id %>/url" method="post" id="urladd">
+	<input name="url" placeholder="url">
+	<input type="submit" value="add url">
+</form>
+<% if @person.urls.count > 0 %>
+	<ul id="urllist">
+	<% @person.urls.each do |url| %>
+		<li>
+			<form action="/url/<%= url.id %>/delete" method="post">
+			<% if @email %>
+				<input type="hidden" name="email_id" value="<%= @email.id %>">
+			<% else %>
+				<input type="hidden" name="person_id" value="<%= @person.id %>">
+			<% end %>
+			<input type="submit" value="×">
+			</form>
+			<form action="/url/<%= url.id %>" method="post">
+			<% if @email %>
+				<input type="hidden" name="email_id" value="<%= @email.id %>">
+			<% else %>
+				<input type="hidden" name="person_id" value="<%= @person.id %>">
+			<% end %>
+			<% if url.main %>
+				<input type="hidden" name="star" value="f"><input type="submit" value="★">
+			<% else %>
+				<input type="hidden" name="star" value="t"><input type="submit" value="☆">
+			<% end %>
+			<a href="<%=h url.url %>"><%=h url.url %></a>
+			</form>
+		</li>
+	<% end %>
+	</ul>
 <% end %>
+</div>
 
+<div id="emails">
 <h4>emails:</h4>
-<% @person.emails.each do |email| %>
-	<%= email.subject %>
+<form action="/person/<%= @person.id %>/email" method="post">
+<% if @profiles.count == 1 %>
+	<input type="hidden" name="profile" value="<%= @profiles[0] %>">
+<% else %>
+	<select name="profile">
+		<%= @profiles.inject('') {|html, val| html + '<option value="%s">%s</a>' % [val, val]} %>
+	</select>
 <% end %>
+	<input name="subject" placeholder="subject">
+	<textarea name="body"></textarea>
+	<input type="submit" value="send new email">
+</form>
+<% if @person.emails.count > 0 %>
+	<ul>
+	<% @person.emails.each do |email| %>
+		<li><a href="/email/<%= email.id %>"><%= email.created_at[0,10] %></a><br>
+		<%=h email.subject %></li>
+	<% end %>
+	</ul>
+<% end %>
+</div>
 

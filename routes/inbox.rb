@@ -66,6 +66,7 @@ class Inbox < Sinatra::Base
   get %r{\A/email/([0-9]+)\Z} do |id|
     @email = @p.open_email(id) || halt(404)
     @person = @p.get_person(@email.person.id)
+    @profiles = @p.profiles
     @pagetitle = 'email %d' % id
     erb :email
   end
@@ -112,7 +113,8 @@ class Inbox < Sinatra::Base
 
   get %r{\A/person/([0-9]+)\Z} do |id|
     @person = @p.get_person(id) || halt(404)
-    @emails = @p.emails_for_person(id)
+    @emails = @p.emails_for_person(id).reverse
+    @profiles = @p.profiles
     @pagetitle = 'person %d' % id
     erb :personfull
   end
@@ -125,5 +127,58 @@ class Inbox < Sinatra::Base
       redirect to('/person/%d' % id)
     end
   end
+
+  post %r{\A/person/([0-9]+)/url\Z} do |id|
+    @p.add_url(id, params[:url])
+    if params[:email_id]
+      redirect to('/email/%d' % params[:email_id])
+    else
+      redirect to('/person/%d' % id)
+    end
+  end
+
+  post %r{\A/person/([0-9]+)/stat\Z} do |id|
+    @p.add_stat(id, params[:key], params[:value])
+    if params[:email_id]
+      redirect to('/email/%d' % params[:email_id])
+    else
+      redirect to('/person/%d' % id)
+    end
+  end
+
+  post %r{\A/person/([0-9]+)/email\Z} do |id|
+    @p.new_email_to(id, params[:body], params[:subject], params[:profile])
+    redirect to('/person/%d' % id)
+  end
+
+  post %r{\A/url/([0-9]+)/delete\Z} do |id|
+    @p.delete_url(id)
+    if params[:email_id]
+      redirect to('/email/%d' % params[:email_id])
+    else
+      redirect to('/person/%d' % params[:person_id])
+    end
+  end
+
+  post %r{\A/stat/([0-9]+)/delete\Z} do |id|
+    @p.delete_stat(id)
+    if params[:email_id]
+      redirect to('/email/%d' % params[:email_id])
+    else
+      redirect to('/person/%d' % params[:person_id])
+    end
+  end
+
+  post %r{\A/url/([0-9]+)\Z} do |id|
+    @p.star_url(id) if params[:star] == 't'
+    @p.unstar_url(id) if params[:star] == 'f'
+    @p.update_url(id, params[:url]) if params[:url]
+    if params[:email_id]
+      redirect to('/email/%d' % params[:email_id])
+    else
+      redirect to('/person/%d' % params[:person_id])
+    end
+  end
+
 end
 

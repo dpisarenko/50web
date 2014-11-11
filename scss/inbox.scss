@@ -44,11 +44,14 @@ section#showperson {
 	@extend .pure-u-lg-1-5;
 	background-color: #ffd;
 }
-form#emailform, form#personeditform, form#replyform {
+form {
 	@extend .pure-form;
 }
-form#personeditform, form#replyform {
+#personeditform, #replyform, #stats form, #urladd, #statadd {
 	@extend .pure-form-stacked;
+}
+#urllist form, #statlist form {
+	display: inline;
 }
 form#emailform textarea {
 	height: 20em;
@@ -67,4 +70,11 @@ input.longtext {
 }
 .hidden {
 	display: none;
+}
+#showperson ul {
+	padding: 0;
+	li {
+		list-style-type: none;
+		margin-bottom: 0.5em;
+	}
 }
