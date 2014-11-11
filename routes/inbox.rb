@@ -23,6 +23,22 @@ class Inbox < Sinatra::Base
     def h(text)
       Rack::Utils.escape_html(text)
     end
+
+    def redirect_to_email_or_person(email_id, person_id)
+      if email_id
+        redirect to('/email/%d' % email_id)
+      else
+        redirect to('/person/%d' % person_id)
+      end
+    end
+
+    def redirect_to_email_or_home(email)
+      if email
+        redirect to('/email/%d' % email.id)
+      else
+        redirect to('/')
+      end
+    end
   end
 
   before do
@@ -80,11 +96,7 @@ class Inbox < Sinatra::Base
 
   post '/next_unopened' do
     email = @p.next_unopened_email(params[:profile], params[:category])
-    if email
-      redirect to('/email/%d' % email.id)
-    else
-      redirect to('/')
-    end
+    redirect_to_email_or_home(email)
   end
 
   get %r{\A/email/([0-9]+)\Z} do |id|
@@ -113,21 +125,13 @@ class Inbox < Sinatra::Base
   post %r{\A/email/([0-9]+)/close\Z} do |id|
     @p.close_email(id)
     email = @p.next_unopened_email(params[:profile], params[:category])
-    if email
-      redirect to('/email/%d' % email.id)
-    else
-      redirect to('/')
-    end
+    redirect_to_email_or_home(email)
   end
 
   post %r{\A/email/([0-9]+)/reply\Z} do |id|
     @p.reply_to_email(id, params[:reply])
     email = @p.next_unopened_email(params[:profile], params[:category])
-    if email
-      redirect to('/email/%d' % email.id)
-    else
-      redirect to('/')
-    end
+    redirect_to_email_or_home(email)
   end
 
   post %r{\A/email/([0-9]+)/not_my\Z} do |id|
@@ -145,29 +149,17 @@ class Inbox < Sinatra::Base
 
   post %r{\A/person/([0-9]+)\Z} do |id|
     @p.update_person(id, params)
-    if params[:email_id]
-      redirect to('/email/%d' % params[:email_id])
-    else
-      redirect to('/person/%d' % id)
-    end
+    redirect_to_email_or_person(params[:email_id], id)
   end
 
   post %r{\A/person/([0-9]+)/url\Z} do |id|
     @p.add_url(id, params[:url])
-    if params[:email_id]
-      redirect to('/email/%d' % params[:email_id])
-    else
-      redirect to('/person/%d' % id)
-    end
+    redirect_to_email_or_person(params[:email_id], id)
   end
 
   post %r{\A/person/([0-9]+)/stat\Z} do |id|
     @p.add_stat(id, params[:key], params[:value])
-    if params[:email_id]
-      redirect to('/email/%d' % params[:email_id])
-    else
-      redirect to('/person/%d' % id)
-    end
+    redirect_to_email_or_person(params[:email_id], id)
   end
 
   post %r{\A/person/([0-9]+)/email\Z} do |id|
@@ -177,31 +169,19 @@ class Inbox < Sinatra::Base
 
   post %r{\A/url/([0-9]+)/delete\Z} do |id|
     @p.delete_url(id)
-    if params[:email_id]
-      redirect to('/email/%d' % params[:email_id])
-    else
-      redirect to('/person/%d' % params[:person_id])
-    end
+    redirect_to_email_or_person(params[:email_id], params[:person_id])
   end
 
   post %r{\A/stat/([0-9]+)/delete\Z} do |id|
     @p.delete_stat(id)
-    if params[:email_id]
-      redirect to('/email/%d' % params[:email_id])
-    else
-      redirect to('/person/%d' % params[:person_id])
-    end
+    redirect_to_email_or_person(params[:email_id], params[:person_id])
   end
 
   post %r{\A/url/([0-9]+)\Z} do |id|
     @p.star_url(id) if params[:star] == 't'
     @p.unstar_url(id) if params[:star] == 'f'
     @p.update_url(id, params[:url]) if params[:url]
-    if params[:email_id]
-      redirect to('/email/%d' % params[:email_id])
-    else
-      redirect to('/person/%d' % params[:person_id])
-    end
+    redirect_to_email_or_person(params[:email_id], params[:person_id])
   end
 
   # to avoid external sites seeing my internal links:
