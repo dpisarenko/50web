@@ -42,7 +42,7 @@ class MusicThoughtsWeb < Sinatra::Base
     @dir = (@lang == 'ar') ? 'rtl' : 'ltr'
     R18n.set(@env['lang'])
     @rel_alternate = page_in_other_languages(@env, @lang)
-    @mt = A50C::MusicThoughts.new('http://127.0.0.1:9000', @lang)
+    @mt = A50C::MusicThoughts.new('http://127.0.0.1:5000', @lang)
     @rand1 = @mt.thought_random
     #@categories = @mt.categories
   end

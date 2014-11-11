@@ -24,7 +24,7 @@ Assume each site has its own domain.  Each has its own nginx config.
 Upside: All sites' href links are root-level.  Managing links into subdirectories would have been a mess.
 Downside: Separate SSL certificates.
 
-For each domain that uses client-side JavaScript, nginx proxy /api/xxx to localhost:9000 as needed.
+For each domain that uses client-side JavaScript, nginx proxy /api/xxx to localhost:5000 as needed.
 (Internal a50c gem doesn't need any proxy, since it's accessing API via localhost.)
 
 TODO: get each Sinatra app on its own internal port number, so they don't need to be mounted at subdirectories.
