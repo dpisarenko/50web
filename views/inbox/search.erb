@@ -1,0 +1,34 @@
+<section id="search">
+<h2>search</h2>
+
+<form action="/search" method="get">
+	<input name="q">
+	<input type="submit" value="search">
+</form>
+
+<% if @q %>
+	<h2>Results for “<%=h @q %>”</h2>
+	<% if @results.count == 0 %>
+		<p>None.</p>
+	<% else %>
+		<ul>
+		<% @results.each do |p| %>
+			<li>
+				<a href="/person/<%= p.id %>"><%= p.id %></a> »
+				(<%= p.email_count %> emails) »
+				<%=h p.name %> —
+				<%=h p.email %>
+			</li>
+		<% end %>
+		</ul>
+	<% end %>
+
+	<h2>Add new person:</h2>
+	<form action="/person" method="post" id="addperson">
+		<input name="name" placeholder="name">
+		<input type="email" name="email" placeholder="email">
+		<input type="submit" value="add person">
+	</form>
+<% end %>
+
+</section>

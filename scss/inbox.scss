@@ -14,6 +14,7 @@ nav#navigation {
 	background-color: #000;
 	a {
 		color: #fff;
+		margin-right: 2em;
 	}
 	ul {
 		margin: 0;
@@ -26,7 +27,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#home, section#unknown, section#emails {
+section#home, section#unknown, section#emails, section#search {
 	@extend .pure-u-1;
 }
 section#showemail {
@@ -47,7 +48,7 @@ section#showperson {
 form {
 	@extend .pure-form;
 }
-#personeditform, #replyform, #urladd, #statadd, #newemail {
+#personeditform, #replyform, #urladd, #statadd, #newemail, #addperson {
 	@extend .pure-form-stacked;
 }
 #urllist form, #statlist form {

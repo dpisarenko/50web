@@ -139,6 +139,11 @@ class Inbox < Sinatra::Base
     redirect '/'
   end
 
+  post '/person' do
+    person = @p.new_person(params[:name], params[:email])
+    redirect to('/person/%d' % person.id)
+  end
+
   get %r{\A/person/([0-9]+)\Z} do |id|
     @person = @p.get_person(id) || halt(404)
     @emails = @p.emails_for_person(id).reverse
@@ -188,6 +193,13 @@ class Inbox < Sinatra::Base
   # <a href="/link?url=http://someothersite.com">someothersite.com</a>
   get '/link' do
     redirect to(params[:url])
+  end
+
+  get '/search' do
+    @q = (params[:q]) ? params[:q] : false
+    @results = @p.person_search(@q) if @q
+    @pagetitle = 'search'
+    erb :search
   end
 
 end
