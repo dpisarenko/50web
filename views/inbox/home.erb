@@ -1,4 +1,9 @@
 <section id="home">
+
+<% if @unknowns_count > 0 %>
+	<h2>Unknowns: <a href="/unknown"><%= @unknowns_count %></a></h2>
+<% end %>
+
 <% @unopened_email_count.each do |profile, cat_counts| %>
 	<h2><%= profile %></h2>
 	<ul>

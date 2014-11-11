@@ -23,7 +23,7 @@
 		<label>category: <input name="category" value="<%=h @email.category %>"></label>
 		<input type="submit" value="update">
 	</form>
-	<p>headers: <%= h(@email.headers).gsub("\n", '<br>') %></p>
+	<p>headers:<br><%= h(@email.headers).gsub("\n", '<br>') %></p>
 	<form action="/email/<%= @email.id %>/delete" method="post"><input type="submit" value="DELETE EMAIL"></form>
 	<p>
 		created_at: <%= @email.created_at %> by <a href="/emailer/<%= @email.created_by.id %>"><%= @email.created_by.name %></a><br>
@@ -48,7 +48,7 @@
 	</p>
 </div>
 
-<% unless @email.outgoing %>
+<% unless @email.outgoing != false %>
 <div id="emailactions">
 	<form action="/email/<%= @email.id %>/unread" method="post"><input type="submit" value="make new"></form>
 	<form action="/email/<%= @email.id %>/close" method="post">

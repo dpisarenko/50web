@@ -1,0 +1,49 @@
+<section id="unknown">
+
+<h2><%=h @unknown.their_email %></h2>
+<h2><%=h @unknown.their_name %></h2>
+<p><%= h(@unknown.headers).gsub("\n", '<br>') %></p>
+<h3><%=h @unknown.subject %></h3>
+<p><%= h(@unknown.body).gsub("\n", '<br>') %></p>
+
+<hr>
+
+<form action="/unknown/<%= @unknown.id %>" method="post">
+	<input type="submit" value="new person">
+</form>
+
+<hr>
+<form action="/unknown" method="get">
+	<input name="search">
+	<input type="submit" value="search">
+</form>
+
+<% if @search %>
+	<h2>Search results for “<%=h @search %>”</h2>
+	<% if @results.count == 0 %>
+		<p>None.</p>
+	<% else %>
+		<ul id="searchresults">
+		<% @results.each do |p| %>
+			<li>
+				<form action="/unknown/<%= @unknown.id %>" method="post">
+					<input type="hidden" name="person_id" value="<%= p.id %>">
+					<input type="submit" value="use">
+				</form>
+				(<%= p.email_count %> emails) »
+				<a href="/person/<%= p.id %>">see</a> » 
+				<%=h p.name %> — 
+				<%=h p.email %>
+			</li>
+		<% end %>
+		</ul>
+	<% end %>
+<% end %>
+
+<hr>
+
+<form action="/unknown/<%= @unknown.id %>/delete" method="post">
+	<input type="submit" value="DELETE">
+</form>
+
+</section>

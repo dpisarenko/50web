@@ -44,8 +44,32 @@ class Inbox < Sinatra::Base
   get '/' do
     @unopened_email_count = @p.unopened_email_count
     @open_emails = @p.open_emails
+    @unknowns_count = @p.unknowns_count['count']
     @pagetitle = 'inbox'
     erb :home
+  end
+
+  get '/unknown' do
+    @unknown = @p.next_unknown
+    redirect to('/') unless @unknown
+    @search = (params[:search]) ? params[:search] : nil
+    @results = @p.person_search(@search) if @search
+    @pagetitle = 'unknown'
+    erb :unknown
+  end
+ 
+  post %r{\A/unknown/([0-9]+)\Z} do |email_id|
+    if params[:person_id]
+      @p.unknown_is_person(email_id, params[:person_id])
+    else
+      @p.unknown_is_new_person(email_id)
+    end
+    redirect to('/unknown')
+  end
+
+  post %r{\A/unknown/([0-9]+)/delete\Z} do |email_id|
+    @p.delete_unknown(email_id)
+    redirect to('/unknown')
   end
 
   get '/unopened' do
@@ -178,6 +202,12 @@ class Inbox < Sinatra::Base
     else
       redirect to('/person/%d' % params[:person_id])
     end
+  end
+
+  # to avoid external sites seeing my internal links:
+  # <a href="/link?url=http://someothersite.com">someothersite.com</a>
+  get '/link' do
+    redirect to(params[:url])
   end
 
 end

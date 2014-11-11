@@ -26,7 +26,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#home {
+section#home, section#unknown, section#emails {
 	@extend .pure-u-1;
 }
 section#showemail {
@@ -59,7 +59,7 @@ form#emailform textarea {
 form#replyform textarea {
 	height: 10em;
 }
-#emailactions form {
+#emailactions form, #searchresults form {
 	display: inline;
 }
 input.longtext {

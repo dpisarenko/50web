@@ -17,7 +17,6 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 <input type="submit" value="update">
 </form>
 
-<div id="stats">
 <h4>stats:</h4>
 <form action="/person/<%= @person.id %>/stat" method="post" id="statadd">
 	<input name="key" placeholder="key">
@@ -44,12 +43,13 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 	<% end %>
 	</ul>
 <% end %>
-</div>
 
-<div id="urls">
 <h4>urls:</h4>
 <form action="/person/<%= @person.id %>/url" method="post" id="urladd">
 	<input name="url" placeholder="url">
+<% if @email %>
+	<input type="hidden" name="email_id" value="<%= @email.id %>">
+<% end %>
 	<input type="submit" value="add url">
 </form>
 <% if @person.urls.count > 0 %>
@@ -75,15 +75,13 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 			<% else %>
 				<input type="hidden" name="star" value="t"><input type="submit" value="☆">
 			<% end %>
-			<a href="<%=h url.url %>"><%=h url.url %></a>
+			<a href="/link?url=<%=h url.url %>"><%=h url.url.gsub(%r{^https?://}, '') %></a>
 			</form>
 		</li>
 	<% end %>
 	</ul>
 <% end %>
-</div>
 
-<div id="emails">
 <h4>emails:</h4>
 <form action="/person/<%= @person.id %>/email" method="post" id="newemail">
 <% if @profiles.count == 1 %>
@@ -105,5 +103,4 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 	<% end %>
 	</ul>
 <% end %>
-</div>
 
