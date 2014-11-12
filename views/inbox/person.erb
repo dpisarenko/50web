@@ -99,7 +99,7 @@ id: <a href="/person/<%= @person.id %>"><%= @person.id %></a>
 </form>
 <% if @person.emails.count > 0 %>
 	<ul>
-	<% @person.emails.each do |email| %>
+	<% @person.emails.reverse.each do |email| %>
 		<li><a href="/email/<%= email.id %>"><%= email.created_at[0,10] %></a><br>
 		<%=h email.subject %></li>
 	<% end %>
