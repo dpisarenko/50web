@@ -14,3 +14,15 @@
 	<input type="submit" value="comments.dev">
 </form>
 
+<form action="http://inbox.live/api_cookie" method="post">
+	<input type="hidden" name="api_key" value="<%= @my.key %>">
+	<input type="hidden" name="api_pass" value="<%= @my.pass %>">
+	<input type="submit" value="inbox.live">
+</form>
+
+<form action="http://comments.live/api_cookie" method="post">
+	<input type="hidden" name="api_key" value="<%= @my.key %>">
+	<input type="hidden" name="api_pass" value="<%= @my.pass %>">
+	<input type="submit" value="comments.live">
+</form>
+
