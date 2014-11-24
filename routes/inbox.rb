@@ -104,6 +104,8 @@ class Inbox < Sinatra::Base
     @email = @p.open_email(id) || halt(404)
     @person = @p.get_person(@email.person.id)
     @profiles = @p.profiles
+    @formletters = @p.formletters
+    @reply = (params[:formletter]) ? @p.get_formletter_for_person(params[:formletter], @email.person.id).body : ''
     @pagetitle = 'email %d' % id
     erb :email
   end

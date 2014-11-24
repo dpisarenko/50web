@@ -62,8 +62,16 @@
 	<form id="replyform" action="/email/<%= @email.id %>/reply" method="post">
 		<input type="hidden" name="profile" value="<%= @email.profile %>">
 		<input type="hidden" name="category" value="<%= @email.category %>">
-		<textarea name="reply" id="reply"></textarea>
+		<textarea name="reply" id="reply"><%=h @reply %></textarea>
 		<input type="submit" value="reply">
+	</form>
+
+	<br><form action="/email/<%= @email.id %>" method="get">
+		<select name="formletter">
+		<option value="0" selected>get formletter</option>
+<%= @formletters.inject('') {|html, fl| html + '<option value="%d">%s</option>' % [fl.id, fl.title]} %>
+		<input type="submit" value="get formletter">
+		</select>
 	</form>
 </div>
 <script>
