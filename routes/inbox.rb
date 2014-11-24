@@ -203,5 +203,36 @@ class Inbox < Sinatra::Base
     erb :search
   end
 
+  get '/formletters' do
+    @formletters = @p.formletters
+    @pagetitle = 'form letters'
+    erb :formletters
+  end
+
+  post '/formletters' do
+    res = @p.add_formletter(params[:title])
+    if res
+      redirect to('/formletter/%d' % res.id)
+    else
+      redirect to('/formletters')
+    end
+  end
+
+  get %r{\A/formletter/([0-9]+)\Z} do |id|
+    @formletter = @p.get_formletter(id) || halt(404)
+    @pagetitle = 'formletter %d' % id
+    erb :formletter
+  end
+
+  post %r{\A/formletter/([0-9]+)\Z} do |id|
+    @p.update_formletter(id, params)
+    redirect to('/formletter/%d' % id)
+  end
+
+  post %r{\A/formletter/([0-9]+)/delete\Z} do |id|
+    @p.delete_formletter(id)
+    redirect to('/formletters')
+  end
+
 end
 

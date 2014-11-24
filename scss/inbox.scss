@@ -27,7 +27,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#home, section#unknown, section#emails, section#search {
+section#home, section#unknown, section#emails, section#search, section#formletters {
 	@extend .pure-u-1;
 }
 section#showemail {
@@ -48,13 +48,13 @@ section#showperson {
 form {
 	@extend .pure-form;
 }
-#personeditform, #replyform, #urladd, #statadd, #newemail, #addperson {
+#personeditform, #replyform, #urladd, #statadd, #newemail, #addperson, #editformletter {
 	@extend .pure-form-stacked;
 }
 #urllist form, #statlist form {
 	display: inline;
 }
-form#emailform textarea {
+form#emailform textarea, form#editformletter textarea {
 	height: 30em;
 }
 form#replyform textarea {
