@@ -236,5 +236,42 @@ class Inbox < Sinatra::Base
     redirect to('/formletters')
   end
 
+  get '/countries' do
+    @countries = @p.country_count
+    @pagetitle = 'countries'
+    erb :where_countries
+  end
+
+  get %r{\A/states/([A-Z][A-Z])\Z} do |country_code|
+    @country = country_code
+    @states = @p.state_count(country_code)
+    @pagetitle = 'states for %s' % Location.name(country_code)
+    erb :where_states
+  end
+
+  get %r{\A/cities/([A-Z][A-Z])\Z} do |country_code|
+    @country = country_code
+    @cities = @p.city_count(country_code)
+    @state = nil
+    @pagetitle = 'cities for %s' % Location.name(country_code)
+    erb :where_cities
+  end
+
+  get %r{\A/cities/([A-Z][A-Z])/(\S+)\Z} do |country_code, state_name|
+    @country = country_code
+    @cities = @p.city_count(country_code, state_name)
+    @state = state_name
+    @pagetitle = 'cities for %s, %s' % [state_name, Location.name(country_code)]
+    erb :where_cities
+  end
+
+  get %r{\A/where/([A-Z][A-Z])} do |country_code|
+    city = params[:city]
+    state = params[:state]
+    @people = @p.where(country_code, city, state)
+    @pagetitle = 'People in %s' % [city, state, Location.name(country_code)].compact.join(', ')
+    erb :people
+  end
+
 end
 

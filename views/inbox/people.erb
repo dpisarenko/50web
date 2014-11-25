@@ -1,0 +1,18 @@
+<section id="people">
+<h1><%=h @pagetitle %></h1>
+<% if @people.count == 0 %>
+	<p>(no people)</p>
+<% else %>
+<table>
+	<tr><th>go</th><th>name</th><th>email</th><th># emails</th></tr>
+<% @people.each do |person| %>
+	<tr>
+		<td><a href="/person/<%= person.id %>"><%= person.id %></a></td>
+		<td><%=h person.name %></td>
+		<td><%=h person.email %></td>
+		<td><%=h person.email_count %></td>
+	</tr>
+<% end %>
+</table>
+<% end %>
+</section>
