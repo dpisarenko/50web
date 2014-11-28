@@ -1,0 +1,14 @@
+<section id="stats">
+
+<h2>Stat key count:</h2>
+<table>
+<% @stats.each do |k, v| %>
+	<tr>
+		<td><a href="/stats/<%= k %>"><%= k %></a></td>
+		<td><%= v %></td>
+	</tr>
+<% end %>
+</table>
+
+</section>
+

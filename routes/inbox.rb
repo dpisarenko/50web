@@ -273,5 +273,27 @@ class Inbox < Sinatra::Base
     erb :people
   end
 
+  get %r{^/stats/(\S+)/(\S+)$} do |statkey, statvalue| 
+    @stats = @p.stats_with_key_value(statkey, statvalue)
+    @statkey = statkey
+    @valuecount = @p.statvalues_count(statkey)
+    @pagetitle = '%s = %s' % [statkey, statvalue]
+    erb :stats_people
+  end
+
+  get %r{^/stats/(\S+)$} do |statkey| 
+    @stats = @p.stats_with_key(statkey)
+    @statkey = statkey
+    @valuecount = @p.statvalues_count(statkey)
+    @pagetitle = statkey
+    erb :stats_people
+  end
+
+  get '/stats' do
+    @stats = @p.statkeys_count
+    @pagetitle = 'stats'
+    erb :stats_count
+  end
+
 end
 
