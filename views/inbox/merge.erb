@@ -1,0 +1,52 @@
+<section id="merge">
+<h2>Merger</h2>
+<p class="small">When one person has multiple entries in our database, because of different email addresses, merge them into one.</p>
+
+<form action="/merge" method="get">
+	<input type="hidden" name="ids" value="<%= @ids.join(',') %>">
+	<input name="q">
+	<input type="submit" value="search">
+</form>
+
+<% if @people.count > 0 %>
+	<h3>Merge queue:</h3>
+	<ul>
+	<% @people.each do |p| %>
+		<li>
+			<a href="/person/<%= p.id %>"><%= p.id %></a> »
+			(<%= p.email_count %> emails) »
+			<%=h p.name %> —
+			<%=h p.email %>
+			<form action="/merge/<%= p.id %>" method="post">
+			<% (@ids - [p.id]).each do |id| %>
+				<input type="hidden" name="ids[]" value="<%= id %>">
+			<% end %>
+			<input type="submit" value="merge into this one"></form><br>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+
+<% if @results %>
+	<h3>Search results:</h3>
+	<% if @results.count == 0 %>
+		<p>None.</p>
+	<% else %>
+		<ul>
+		<% @results.each do |p| %>
+			<li>
+				<a href="/person/<%= p.id %>"><%= p.id %></a> »
+				(<%= p.email_count %> emails) »
+				<%=h p.name %> —
+				<%=h p.email %>
+				<% unless @ids.include? p.id %>
+					» <strong><a href="/merge?ids=<%= (@ids + [p.id]).join(',') %>">MERGE</a></strong>
+				<% end %>
+			</li>
+		<% end %>
+		</ul>
+	<% end %>
+<% end %>
+
+</section>
+

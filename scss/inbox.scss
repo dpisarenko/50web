@@ -27,7 +27,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats {
+section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats, section#merge {
 	@extend .pure-u-1;
 }
 section#showemail {

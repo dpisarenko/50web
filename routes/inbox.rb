@@ -53,8 +53,6 @@ class Inbox < Sinatra::Base
       response.set_cookie('api_key', value: params[:api_key], path: '/')
       response.set_cookie('api_pass', value: params[:api_pass], path: '/')
       redirect '/'
-    else
-      redirect 'https://50.io/'  # TODO: dev domain?
     end
   end
 
@@ -293,6 +291,20 @@ class Inbox < Sinatra::Base
     @stats = @p.statkeys_count
     @pagetitle = 'stats'
     erb :stats_count
+  end
+
+  get '/merge' do
+    @ids = params[:ids].nil? ? [] : params[:ids].split(',').map(&:to_i)
+    # turn ids into people, but remove false/not-found ones
+    @people = @ids.map {|id| @p.get_person(id)}.select {|x| x}
+    @results = (params[:q]) ? @p.person_search(params[:q]) : false
+    @pagetitle = 'merge'
+    erb :merge
+  end
+
+  post %r{^/merge/([0-9]+)$} do |id|
+    @p.merge_into_person(id, params[:ids]) if params[:ids].instance_of?(Array)
+    redirect to('/person/%d' % id)
   end
 
 end
