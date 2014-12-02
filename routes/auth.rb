@@ -1,5 +1,4 @@
 require 'sinatra/base'
-
 require 'a50c/auth'
 
 class AuthWeb < Sinatra::Base
@@ -7,7 +6,6 @@ class AuthWeb < Sinatra::Base
   configure do
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/auth') }
-#    set :port, 7000
   end
 
   before do
@@ -28,6 +26,5 @@ class AuthWeb < Sinatra::Base
     end
   end
 
-#  run!
 end
 
