@@ -1,5 +1,6 @@
 require 'sinatra/base'
 
+require 'a50c/auth'
 require 'a50c/peep'
 require 'd50b/peeps'  # for Location.names
 
@@ -12,9 +13,7 @@ class Inbox < Sinatra::Base
 
   helpers do
     def protected!
-      unless has_cookie?
-        halt 401  # TODO: go to 50.io login page
-      end
+      redirect to('/login') unless has_cookie?
     end
 
     def has_cookie?
@@ -43,13 +42,37 @@ class Inbox < Sinatra::Base
   end
 
   before do
-    protected! unless request.path_info == '/api_cookie'
+    protected! unless ['/api_cookie', '/login'].include?(request.path_info)
     @p = A50C::Peep.new(request.cookies['api_key'], request.cookies['api_pass'])
   end
 
+  get '/login' do
+    @pagetitle = 'log in'
+    erb :login
+  end
+
+  post '/login' do
+    redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
+    a = A50C::Auth.new
+    if res = a.auth(params[:email], params[:password])
+      # TODO: domain: host, secure: true, httponly: true
+      response.set_cookie('api_key', value: res.key, path: '/')
+      response.set_cookie('api_pass', value: res.pass, path: '/')
+      redirect to('/')
+    else
+      redirect to('/login')
+    end
+  end
+
+  get '/logout' do
+    response.set_cookie('api_key', value: '', path: '/', expires: Time.at(0))
+    response.set_cookie('api_pass', value: '', path: '/', expires: Time.at(0))
+    redirect to('/login')
+  end
+
+  # TODO: remove if/when not needed
   post '/api_cookie' do
     if String(params[:api_key]).length == 8 && String(params[:api_pass]).length == 8
-      # TODO: domain, SSL, expiration
       response.set_cookie('api_key', value: params[:api_key], path: '/')
       response.set_cookie('api_pass', value: params[:api_pass], path: '/')
       redirect '/'

@@ -27,7 +27,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats, section#merge {
+section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats, section#merge, section#login {
 	@extend .pure-u-1;
 }
 section#showemail {
@@ -48,7 +48,7 @@ section#showperson {
 form {
 	@extend .pure-form;
 }
-#personeditform, #replyform, #urladd, #statadd, #newemail, #addperson, #editformletter {
+#personeditform, #replyform, #urladd, #statadd, #newemail, #addperson, #editformletter, section#login form {
 	@extend .pure-form-stacked;
 }
 #urllist form, #statlist form {
