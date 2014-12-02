@@ -73,7 +73,7 @@ class Inbox < Sinatra::Base
     erb :unknown
   end
  
-  post %r{\A/unknown/([0-9]+)\Z} do |email_id|
+  post %r{^/unknown/([0-9]+)$} do |email_id|
     if params[:person_id]
       @p.unknown_is_person(email_id, params[:person_id])
     else
@@ -82,7 +82,7 @@ class Inbox < Sinatra::Base
     redirect to('/unknown')
   end
 
-  post %r{\A/unknown/([0-9]+)/delete\Z} do |email_id|
+  post %r{^/unknown/([0-9]+)/delete$} do |email_id|
     @p.delete_unknown(email_id)
     redirect to('/unknown')
   end
@@ -98,7 +98,7 @@ class Inbox < Sinatra::Base
     redirect_to_email_or_home(email)
   end
 
-  get %r{\A/email/([0-9]+)\Z} do |id|
+  get %r{^/email/([0-9]+)$} do |id|
     @email = @p.open_email(id) || halt(404)
     @person = @p.get_person(@email.person.id)
     @profiles = @p.profiles
@@ -108,34 +108,34 @@ class Inbox < Sinatra::Base
     erb :email
   end
 
-  post %r{\A/email/([0-9]+)\Z} do |id|
+  post %r{^/email/([0-9]+)$} do |id|
     @p.update_email(id, params)
     redirect to('/email/%d' % id)
   end
 
-  post %r{\A/email/([0-9]+)/delete\Z} do |id|
+  post %r{^/email/([0-9]+)/delete$} do |id|
     @p.delete_email(id)
     redirect '/'
   end
 
-  post %r{\A/email/([0-9]+)/unread\Z} do |id|
+  post %r{^/email/([0-9]+)/unread$} do |id|
     @p.unread_email(id)
     redirect '/'
   end
 
-  post %r{\A/email/([0-9]+)/close\Z} do |id|
+  post %r{^/email/([0-9]+)/close$} do |id|
     @p.close_email(id)
     email = @p.next_unopened_email(params[:profile], params[:category])
     redirect_to_email_or_home(email)
   end
 
-  post %r{\A/email/([0-9]+)/reply\Z} do |id|
+  post %r{^/email/([0-9]+)/reply$} do |id|
     @p.reply_to_email(id, params[:reply])
     email = @p.next_unopened_email(params[:profile], params[:category])
     redirect_to_email_or_home(email)
   end
 
-  post %r{\A/email/([0-9]+)/not_my\Z} do |id|
+  post %r{^/email/([0-9]+)/not_my$} do |id|
     @p.not_my_email(id)
     redirect '/'
   end
@@ -145,7 +145,7 @@ class Inbox < Sinatra::Base
     redirect to('/person/%d' % person.id)
   end
 
-  get %r{\A/person/([0-9]+)\Z} do |id|
+  get %r{^/person/([0-9]+)$} do |id|
     @person = @p.get_person(id) || halt(404)
     @emails = @p.emails_for_person(id).reverse
     @profiles = @p.profiles
@@ -153,37 +153,37 @@ class Inbox < Sinatra::Base
     erb :personfull
   end
 
-  post %r{\A/person/([0-9]+)\Z} do |id|
+  post %r{^/person/([0-9]+)$} do |id|
     @p.update_person(id, params)
     redirect_to_email_or_person(params[:email_id], id)
   end
 
-  post %r{\A/person/([0-9]+)/url\Z} do |id|
+  post %r{^/person/([0-9]+)/url$} do |id|
     @p.add_url(id, params[:url])
     redirect_to_email_or_person(params[:email_id], id)
   end
 
-  post %r{\A/person/([0-9]+)/stat\Z} do |id|
+  post %r{^/person/([0-9]+)/stat$} do |id|
     @p.add_stat(id, params[:key], params[:value])
     redirect_to_email_or_person(params[:email_id], id)
   end
 
-  post %r{\A/person/([0-9]+)/email\Z} do |id|
+  post %r{^/person/([0-9]+)/email$} do |id|
     @p.new_email_to(id, params[:body], params[:subject], params[:profile])
     redirect to('/person/%d' % id)
   end
 
-  post %r{\A/url/([0-9]+)/delete\Z} do |id|
+  post %r{^/url/([0-9]+)/delete$} do |id|
     @p.delete_url(id)
     redirect_to_email_or_person(params[:email_id], params[:person_id])
   end
 
-  post %r{\A/stat/([0-9]+)/delete\Z} do |id|
+  post %r{^/stat/([0-9]+)/delete$} do |id|
     @p.delete_stat(id)
     redirect_to_email_or_person(params[:email_id], params[:person_id])
   end
 
-  post %r{\A/url/([0-9]+)\Z} do |id|
+  post %r{^/url/([0-9]+)$} do |id|
     @p.star_url(id) if params[:star] == 't'
     @p.unstar_url(id) if params[:star] == 'f'
     @p.update_url(id, params[:url]) if params[:url]
@@ -218,18 +218,18 @@ class Inbox < Sinatra::Base
     end
   end
 
-  get %r{\A/formletter/([0-9]+)\Z} do |id|
+  get %r{^/formletter/([0-9]+)$} do |id|
     @formletter = @p.get_formletter(id) || halt(404)
     @pagetitle = 'formletter %d' % id
     erb :formletter
   end
 
-  post %r{\A/formletter/([0-9]+)\Z} do |id|
+  post %r{^/formletter/([0-9]+)$} do |id|
     @p.update_formletter(id, params)
     redirect to('/formletter/%d' % id)
   end
 
-  post %r{\A/formletter/([0-9]+)/delete\Z} do |id|
+  post %r{^/formletter/([0-9]+)/delete$} do |id|
     @p.delete_formletter(id)
     redirect to('/formletters')
   end
@@ -240,14 +240,14 @@ class Inbox < Sinatra::Base
     erb :where_countries
   end
 
-  get %r{\A/states/([A-Z][A-Z])\Z} do |country_code|
+  get %r{^/states/([A-Z][A-Z])$} do |country_code|
     @country = country_code
     @states = @p.state_count(country_code)
     @pagetitle = 'states for %s' % Location.name(country_code)
     erb :where_states
   end
 
-  get %r{\A/cities/([A-Z][A-Z])\Z} do |country_code|
+  get %r{^/cities/([A-Z][A-Z])$} do |country_code|
     @country = country_code
     @cities = @p.city_count(country_code)
     @state = nil
@@ -255,7 +255,7 @@ class Inbox < Sinatra::Base
     erb :where_cities
   end
 
-  get %r{\A/cities/([A-Z][A-Z])/(\S+)\Z} do |country_code, state_name|
+  get %r{^/cities/([A-Z][A-Z])/(\S+)$} do |country_code, state_name|
     @country = country_code
     @cities = @p.city_count(country_code, state_name)
     @state = state_name
@@ -263,7 +263,7 @@ class Inbox < Sinatra::Base
     erb :where_cities
   end
 
-  get %r{\A/where/([A-Z][A-Z])} do |country_code|
+  get %r{^/where/([A-Z][A-Z])} do |country_code|
     city = params[:city]
     state = params[:state]
     @people = @p.where(country_code, city, state)
