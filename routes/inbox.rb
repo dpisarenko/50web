@@ -55,9 +55,9 @@ class Inbox < Sinatra::Base
     redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
     a = A50C::Auth.new
     if res = a.auth(params[:email], params[:password])
-      # TODO: domain: host, secure: true, httponly: true
-      response.set_cookie('api_key', value: res.key, path: '/')
-      response.set_cookie('api_pass', value: res.pass, path: '/')
+      # TODO: domain: host
+      response.set_cookie('api_key', value: res.key, path: '/', secure: true, httponly: true)
+      response.set_cookie('api_pass', value: res.pass, path: '/', secure: true, httponly: true)
       redirect to('/')
     else
       redirect to('/login')
@@ -65,16 +65,16 @@ class Inbox < Sinatra::Base
   end
 
   get '/logout' do
-    response.set_cookie('api_key', value: '', path: '/', expires: Time.at(0))
-    response.set_cookie('api_pass', value: '', path: '/', expires: Time.at(0))
+    response.set_cookie('api_key', value: '', path: '/', expires: Time.at(0), secure: true, httponly: true)
+    response.set_cookie('api_pass', value: '', path: '/', expires: Time.at(0), secure: true, httponly: true)
     redirect to('/login')
   end
 
   # TODO: remove if/when not needed
   post '/api_cookie' do
     if String(params[:api_key]).length == 8 && String(params[:api_pass]).length == 8
-      response.set_cookie('api_key', value: params[:api_key], path: '/')
-      response.set_cookie('api_pass', value: params[:api_pass], path: '/')
+      response.set_cookie('api_key', value: params[:api_key], path: '/', secure: true, httponly: true)
+      response.set_cookie('api_pass', value: params[:api_pass], path: '/', secure: true, httponly: true)
       redirect '/'
     end
   end

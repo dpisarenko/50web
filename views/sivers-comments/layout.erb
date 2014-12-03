@@ -10,6 +10,9 @@
 
 <%= yield %>
 
+<% if has_cookie? %>
+	<p><a href="/logout">log out</a></p>
+<% end %>
 </body>
 </html>
 
