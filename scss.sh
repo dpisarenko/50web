@@ -1,1 +1,1 @@
-scss -t compressed --sourcemap=none --watch scss/inbox.scss:public/css/inbox.css
+scss -t compressed --sourcemap=none --watch scss/muckwork-client.scss:public/css/muckwork-client.css

@@ -9,7 +9,7 @@ class ModAuth < Sinatra::Base
     end
 
     def has_cookie?
-      request.cookies['api_key'] && request.cookies['api_pass']
+      request.cookies['person_id'] && request.cookies['api_key'] && request.cookies['api_pass']
     end
   end
 
@@ -26,6 +26,7 @@ class ModAuth < Sinatra::Base
     redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
     a = A50C::Auth.new
     if res = a.auth(params[:email], params[:password])
+      response.set_cookie('person_id', value: res.person_id, path: '/', secure: true, httponly: true)
       response.set_cookie('api_key', value: res.key, path: '/', secure: true, httponly: true)
       response.set_cookie('api_pass', value: res.pass, path: '/', secure: true, httponly: true)
       redirect to('/')
@@ -35,6 +36,7 @@ class ModAuth < Sinatra::Base
   end
 
   get '/logout' do
+    response.set_cookie('person_id', value: '', path: '/', expires: Time.at(0), secure: true, httponly: true)
     response.set_cookie('api_key', value: '', path: '/', expires: Time.at(0), secure: true, httponly: true)
     response.set_cookie('api_pass', value: '', path: '/', expires: Time.at(0), secure: true, httponly: true)
     redirect to('/login')

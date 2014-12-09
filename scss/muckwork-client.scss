@@ -1,0 +1,31 @@
+@import 'pure/base.scss';
+@import 'pure/grids.scss';
+@import 'pure/grids-responsive.scss';
+@import 'pure/forms.scss';
+@import 'pure/menus.scss';
+
+nav#navigation {
+	@extend .pure-menu-horizontal;
+	background-color: #000;
+	a {
+		color: #fff;
+		margin-right: 2em;
+	}
+	ul {
+		margin: 0;
+	}
+}
+#content {
+	@extend .pure-g;
+	width: 98%;
+	margin: 0 auto;
+	font-family: Arial;
+	font-size: 13px;
+}
+section#login, section#home, section#account {
+	@extend .pure-u-1;
+}
+form {
+	@extend .pure-form;
+	@extend .pure-form-stacked;
+}
