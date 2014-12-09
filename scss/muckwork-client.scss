@@ -29,3 +29,6 @@ form {
 	@extend .pure-form;
 	@extend .pure-form-stacked;
 }
+label {
+	padding-top: 1em;
+}

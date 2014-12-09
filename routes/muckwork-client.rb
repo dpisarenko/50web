@@ -16,8 +16,10 @@ class MuckworkClientWeb < ModAuth
   end
 
   before do
-    @mc = A50C::MuckworkClient.new(request.cookies['api_key'], request.cookies['api_pass'])
-    @client = @mc.get_client
+    if has_cookie?
+      @mc = A50C::MuckworkClient.new(request.cookies['api_key'], request.cookies['api_pass'])
+      @client = @mc.get_client
+    end
   end
 
   get '/' do
