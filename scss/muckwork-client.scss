@@ -22,7 +22,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#login, section#home, section#account {
+section#login, section#home, section#account, section#project, section#payment {
 	@extend .pure-u-1;
 }
 form {

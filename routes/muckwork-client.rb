@@ -24,6 +24,8 @@ class MuckworkClientWeb < ModAuth
 
   get '/' do
     @pagetitle = 'Muckwork Client'
+    @projects = @mc.get_projects
+    @payments = @mc.payments
     erb :home
   end
 
@@ -35,6 +37,34 @@ class MuckworkClientWeb < ModAuth
   post '/account' do
     @mc.update_client(params)
     redirect to('/account')
+  end
+
+  get %r{\A/project/([0-9]+)\Z} do |id|
+    @project = @mc.get_project(id)
+    redirect to('/') unless @project
+    @pagetitle = @project.title
+    erb :project
+  end
+
+  post %r{\A/project/([0-9]+)\Z} do |id|
+    @mc.update_project(id, params[:title], params[:description])
+    redirect to("/project/#{id}")
+  end
+
+  post '/projects' do
+    p = @mc.create_project(params[:title], params[:description])
+    if p
+      redirect to("/project/#{p.id}")
+    else
+      redirect to('/')
+    end
+  end
+
+  get %r{\A/payment/([0-9]+)\Z} do |id|
+    @payment = @mc.payment(id)
+    redirect to('/') unless @payment
+    @pagetitle = 'payment %d' % id
+    erb :payment
   end
 
 end
