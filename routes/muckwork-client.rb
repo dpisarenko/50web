@@ -46,6 +46,11 @@ class MuckworkClientWeb < ModAuth
     erb :project
   end
 
+  post %r{\A/project/([0-9]+)/approve\Z} do |id|
+    @mc.approve_project(id)
+    redirect to("/project/#{id}")
+  end
+
   post %r{\A/project/([0-9]+)\Z} do |id|
     @mc.update_project(id, params[:title], params[:description])
     redirect to("/project/#{id}")

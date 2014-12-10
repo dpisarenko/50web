@@ -11,6 +11,12 @@
 		<input type="submit" value="update">
 	</form>
 <% else %>
+	<% if @project.status == 'QUOTED' %>
+		<h3>Do you approve of the quote?</h3>
+		<form action="/project/<%= @project.id %>/approve" method="post">
+			<input type="submit" value="YES">
+		</form>
+	<% end %>
 	<h2>Project facts:</h2>
 	<dl>
 		<dt>title</dt>
@@ -42,7 +48,7 @@
 			<br>created at: <%= task.created_at %>
 			<br>started at: <%= task.started_at %>
 			<br>finished at: <%= task.finished_at %>
-			<br>Worker: <%=h worker.name if worker %>
+			<br>Worker: <%=h task.worker.name if task.worker %>
 		</li>
 	<% end %>
 	</ol>
