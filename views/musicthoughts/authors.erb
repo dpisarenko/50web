@@ -1,7 +1,7 @@
 <h1><%= t.top_s.to_s % t.authors.to_s %></h1>
 <ul>
 <% @authors.each do |author| %>
-	<li><a href="/author/<%= author.id %>"><%= author.name %></a> <small>(<%= author.thought_count %>)</small></li>
+	<li><a href="/author/<%= author[:id] %>"><%= author[:name] %></a> <small>(<%= author[:howmany] %>)</small></li>
 <% end %>
 </ul>
 

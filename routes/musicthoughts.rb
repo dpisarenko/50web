@@ -54,7 +54,7 @@ class MusicThoughtsWeb < Sinatra::Base
     end
   end
 
-  get %r{\A/t/([0-9]+)\Z} do |id|
+  get %r{^/t/([0-9]+)} do |id|
     @thought = @mt.thought(id)
     redirect '/' if @thought.nil?
     @pagetitle = (t.author_quote_quote % [@thought[:author][:name], snip_for_lang(@thought[:thought], @lang)])
@@ -74,9 +74,9 @@ class MusicThoughtsWeb < Sinatra::Base
   get %r{^/cat/([0-9]+)} do |id|
     @category = @mt.category(id)
     redirect '/' if @category.nil?
-    @pagetitle = t.musicthoughts + ' - ' + @category.name
+    @pagetitle = t.musicthoughts + ' - ' + @category[:category]
     @bodyid = 'cat'
-    @thoughts = @category.thoughts.shuffle
+    @thoughts = @category[:thoughts]
     erb :category
   end
 
@@ -94,8 +94,8 @@ class MusicThoughtsWeb < Sinatra::Base
   get %r{^/author/([0-9]+)} do |id|
     @author = @mt.author(id)
     redirect '/author' if @author.nil?
-    @thoughts = @author.thoughts.shuffle
-    @pagetitle = @author.name + ' ' + t.musicthoughts
+    @thoughts = @author[:thoughts].shuffle
+    @pagetitle = @author[:name] + ' ' + t.musicthoughts
     @bodyid = 'author'
     erb :author
   end
@@ -110,8 +110,8 @@ class MusicThoughtsWeb < Sinatra::Base
   get %r{^/contributor/([0-9]+)} do |id|
     @contributor = @mt.contributor(id)
     redirect '/contributor' if @contributor.nil?
-    @thoughts = @contributor.thoughts.shuffle
-    @pagetitle = @contributor.name + ' ' + t.musicthoughts
+    @thoughts = @contributor[:thoughts].shuffle
+    @pagetitle = @contributor[:name] + ' ' + t.musicthoughts
     @bodyid = 'contributor'
     erb :contributor
   end
@@ -130,7 +130,7 @@ class MusicThoughtsWeb < Sinatra::Base
     if params[:q]
       @searchterm = params[:q].strip
       @pagetitle = @searchterm + ' ' + @pagetitle
-      @results = @mt.search(@searchterm)
+      @results = @mt.search(@searchterm) # TODO
     end
     erb :search
   end
