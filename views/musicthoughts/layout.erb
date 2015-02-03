@@ -54,9 +54,9 @@
 </ul>
 </nav>
 
-<blockquote cite="http://musicthoughts.com/t/<%= @rand1.id %>">
-	<q><%= @rand1.thought %></q>
-	<cite><a href="/t/<%= @rand1.id %>"><%= @rand1.author.name %></a></cite>
+<blockquote cite="http://musicthoughts.com/t/<%= @rand1[:id] %>">
+	<q><%= @rand1[:thought] %></q>
+	<cite><a href="/t/<%= @rand1[:id] %>"><%= @rand1[:author][:name] %></a></cite>
 </blockquote>
 </footer>
 

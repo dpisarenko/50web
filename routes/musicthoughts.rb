@@ -42,9 +42,8 @@ class MusicThoughtsWeb < Sinatra::Base
     @dir = (@lang == 'ar') ? 'rtl' : 'ltr'
     R18n.set(@env['lang'])
     @rel_alternate = page_in_other_languages(@env, @lang)
-    @mt = A50C::MusicThoughts.new('http://127.0.0.1:5000', @lang)
+    @mt = A50C::MusicThoughts.new('live-local', @lang)
     @rand1 = @mt.thought_random
-    #@categories = @mt.categories
   end
 
   ['/', '/home'].each do |r|
@@ -55,21 +54,21 @@ class MusicThoughtsWeb < Sinatra::Base
     end
   end
 
-  get '/t/:id' do
-    @thought = @mt.thought(params[:id])
+  get %r{\A/t/([0-9]+)\Z} do |id|
+    @thought = @mt.thought(id)
     redirect '/' if @thought.nil?
-    @pagetitle = (t.author_quote_quote % [@thought.author.name, snip_for_lang(@thought.thought, @lang)])
+    @pagetitle = (t.author_quote_quote % [@thought[:author][:name], snip_for_lang(@thought[:thought], @lang)])
     @bodyid = 't'
-    @authorlink = '<a href="/author/%d">%s</a>' % [@thought.author.id, @thought.author.name]
-    if @thought.source_url.to_s.length > 0
-      @authorlink += (' ' + t.from + ' ' + @thought.source_url)
+    @authorlink = '<a href="/author/%d">%s</a>' % [@thought[:author][:id], @thought[:author][:name]]
+    if String(@thought[:source_url]).length > 0
+      @authorlink += (' ' + t.from + ' ' + @thought[:source_url])
     end
-    @contriblink = ('<a href="/contributor/%d">%s</a>' % [@thought.contributor.id, @thought.contributor.name])
+    @contriblink = ('<a href="/contributor/%d">%s</a>' % [@thought[:contributor][:id], @thought[:contributor][:name]])
     erb :thought
   end
 
   get '/t' do
-    redirect('/t/%d' % @rand1.id, 307)
+    redirect('/t/%d' % @rand1[:id], 307)
   end
 
   get %r{^/cat/([0-9]+)} do |id|
