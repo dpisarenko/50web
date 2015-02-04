@@ -1,4 +1,4 @@
-<h1><%= @author.name %></h1>
+<h1><%=h @author[:name] %></h1>
 <ul>
 <% @thoughts.each do |thought| %>
 	<li>

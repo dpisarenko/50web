@@ -8,6 +8,7 @@ require 'r18n-core'
 include R18n::Helpers
 R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
+
 require 'a50c/musicthoughts'
 
 class MusicThoughtsWeb < Sinatra::Base
@@ -17,6 +18,12 @@ class MusicThoughtsWeb < Sinatra::Base
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/musicthoughts') }
   end
+
+	helpers do
+		def h(str)
+			str.encode(str.encoding, :xml => :attr)[1...-1]
+		end
+	end
 
   # returns hash of langcode => url
   def page_in_other_languages(env, lang)

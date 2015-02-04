@@ -8,34 +8,34 @@
 
 <% if @results %>
 
-<% if @results[:categories].size > 0 %>
+<% if @results[:categories] %>
 <h2><%= t.categories %></h2>
 <ul>
 <% @results[:categories].each do |x| %>
-	<li><a href="/cat/<%= x.id %>"><%= x.name %></a></li>
+	<li><a href="/cat/<%= x[:id] %>"><%=h x[:category] %></a></li>
 <% end %>
 </ul>
 <% end %>
 
-<% if @results[:authors].size > 0 %>
+<% if @results[:authors] %>
 <h2><%= t.authors %></h2>
 <ul>
 <% @results[:authors].each do |x| %>
-	<li><a href="/author/<%= x.id %>"><%= x.name %></a></li>
+	<li><a href="/author/<%= x[:id] %>"><%=h x[:name] %></a></li>
 <% end %>
 </ul>
 <% end %>
 
-<% if @results[:contributors].size > 0 %>
+<% if @results[:contributors] %>
 <h2><%= t.contributors %></h2>
 <ul>
 <% @results[:contributors].each do |x| %>
-	<li><a href="/contributor/<%= x.id %>"><%= x.name %></a></li>
+	<li><a href="/contributor/<%= x[:id] %>"><%=h x[:name] %></a></li>
 <% end %>
 </ul>
 <% end %>
 
-<% if @results[:thoughts].size > 0 %>
+<% if @results[:thoughts] %>
 <h2><%= t.musicthoughts %></h2>
 <ul>
 <% @results[:thoughts].each do |thought| %>

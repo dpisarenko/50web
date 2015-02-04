@@ -1,4 +1,4 @@
-<h1><%= t.contributor + ': ' + @contributor.name %></h1>
+<h1><%= t.contributor + ': ' + h(@contributor[:name]) %></h1>
 <ul>
 <% @thoughts.each do |thought| %>
 	<li>
