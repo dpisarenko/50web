@@ -8,8 +8,8 @@
 
 <dl>
 <% @formletters.each do |f| %>
-	<dt><a href="/formletter/<%= f.id %>"><%= f.title %></a></dt>
-	<dd><%=h f.explanation %></dd>
+	<dt><a href="/formletter/<%= f[:id] %>"><%= f[:title] %></a></dt>
+	<dd><%=h f[:explanation] %></dd>
 <% end %>
 </dl>
 </section>

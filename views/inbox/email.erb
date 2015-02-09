@@ -2,74 +2,74 @@
 
 <div>
 	<span class="big">
-		<%=h @email.their_email %> 
-		<%=h @email.their_name %>
+		<%=h @email[:their_email] %> 
+		<%=h @email[:their_name] %>
 	</span>
 	(<a id="email_details_link" href="#" accesskey="d">show details</a>)
-	<% if @email.closed_at %>
-		closed_at: <%= @email.closed_at %> by <a href="/emailer/<%= @email.closed_by.id %>"><%= @email.closed_by.name %></a>
+	<% if @email[:closed_at] %>
+		closed_at: <%= @email[:closed_at] %> by <a href="/emailer/<%= @email[:closor][:id] %>"><%= @email[:closor][:name] %></a>
 	<% end %>
 </div>
 
-<form id="emailform" data-id="<%= @email.id %>" action="/email/<%= @email.id %>" method="post">
-		<textarea name="body"><%=h @email.body %></textarea>
-		<input name="subject" class="longtext" value="<%=h @email.subject %>">
+<form id="emailform" data-id="<%= @email[:id] %>" action="/email/<%= @email[:id] %>" method="post">
+		<textarea name="body"><%=h @email[:body] %></textarea>
+		<input name="subject" class="longtext" value="<%=h @email[:subject] %>">
 		<input type="submit" value="update">
 </form>
 
 <div id="emaildetails" class="hidden">
-	<form data-id="<%= @email.id %>" action="/email/<%= @email.id %>" method="post">
-		<label>profile: <input name="profile" value="<%=h @email.profile %>"></label>
-		<label>category: <input name="category" value="<%=h @email.category %>"></label>
+	<form data-id="<%= @email[:id] %>" action="/email/<%= @email[:id] %>" method="post">
+		<label>profile: <input name="profile" value="<%=h @email[:profile] %>"></label>
+		<label>category: <input name="category" value="<%=h @email[:category] %>"></label>
 		<input type="submit" value="update">
 	</form>
-	<p>headers:<br><%= h(@email.headers).gsub("\n", '<br>') %></p>
-	<form action="/email/<%= @email.id %>/delete" method="post"><input type="submit" value="DELETE EMAIL"></form>
+	<p>headers:<br><%= h(@email[:headers]).gsub("\n", '<br>') %></p>
+	<form action="/email/<%= @email[:id] %>/delete" method="post"><input type="submit" value="DELETE EMAIL"></form>
 	<p>
-		created_at: <%= @email.created_at %> by <a href="/emailer/<%= @email.created_by.id %>"><%= @email.created_by.name %></a><br>
-		opened_at: <%= @email.opened_at %> by <a href="/emailer/<%= @email.opened_by.id %>"><%= @email.opened_by.name %></a>
-	<% if @email.closed_at %>
-		<br>closed_at: <%= @email.closed_at %> by <a href="/emailer/<%= @email.closed_by.id %>"><%= @email.closed_by.name %></a>
+		created_at: <%= @email[:created_at] %> by <a href="/emailer/<%= @email[:creator][:id] %>"><%= @email[:creator][:name] %></a><br>
+		opened_at: <%= @email[:opened_at] %> by <a href="/emailer/<%= @email[:openor][:id] %>"><%= @email[:openor][:name] %></a>
+	<% if @email[:closed_at] %>
+		<br>closed_at: <%= @email[:closed_at] %> by <a href="/emailer/<%= @email[:closor][:id] %>"><%= @email[:closor][:name] %></a>
 	<% end %>
 	</p>
 	<p>
-	<% if @email.attachments.count > 0 %>
+	<% if @email[:attachments].count > 0 %>
 		attachments:
-		<% @email.attachments.each do |ea| %>
-			<a href="/attachments/<%=h ea.filename %>"><%=h ea.filename %></a>
+		<% @email[:attachments].each do |ea| %>
+			<a href="/attachments/<%=h ea[:filename] %>"><%=h ea[:filename] %></a>
 		<% end %>
 	<% end %>
-	<% if @email.reference_email %>
-		reference: <a href="/email/<%= @email.reference_email.id %>"><%=h @email.reference_email.created_at %></a>
+	<% if @email[:reference_id] %>
+		reference: <a href="/email/<%= @email[:reference_id] %>"><%=h @email[:reference_id] %></a>
 	<% end %>
-	<% if @email.answer_email %>
-		answer: <a href="/email/<%= @email.answer_email.id %>"><%=h @email.answer_email.created_at %></a>
+	<% if @email[:answer_id] %>
+		answer: <a href="/email/<%= @email[:answer_id] %>"><%=h @email[:answer_id] %></a>
 	<% end %>
 	</p>
 </div>
 
-<% unless @email.outgoing != false %>
+<% unless @email[:outgoing] != false %>
 <div id="emailactions">
-	<form action="/email/<%= @email.id %>/unread" method="post"><input type="submit" value="make new"></form>
-	<form action="/email/<%= @email.id %>/close" method="post">
-		<input type="hidden" name="profile" value="<%= @email.profile %>">
-		<input type="hidden" name="category" value="<%= @email.category %>">
+	<form action="/email/<%= @email[:id] %>/unread" method="post"><input type="submit" value="make new"></form>
+	<form action="/email/<%= @email[:id] %>/close" method="post">
+		<input type="hidden" name="profile" value="<%= @email[:profile] %>">
+		<input type="hidden" name="category" value="<%= @email[:category] %>">
 		<input type="submit" value="close">
 	</form>
-	<form action="/email/<%= @email.id %>/not_my" method="post"><input type="submit" value="not me"></form>
+	<form action="/email/<%= @email[:id] %>/not_my" method="post"><input type="submit" value="not me"></form>
 
 	<h3>Reply:</h3>
-	<form id="replyform" action="/email/<%= @email.id %>/reply" method="post">
-		<input type="hidden" name="profile" value="<%= @email.profile %>">
-		<input type="hidden" name="category" value="<%= @email.category %>">
+	<form id="replyform" action="/email/<%= @email[:id] %>/reply" method="post">
+		<input type="hidden" name="profile" value="<%= @email[:profile] %>">
+		<input type="hidden" name="category" value="<%= @email[:category] %>">
 		<textarea name="reply" id="reply"><%=h @reply %></textarea>
 		<input type="submit" value="reply">
 	</form>
 
-	<br><form action="/email/<%= @email.id %>" method="get">
+	<br><form action="/email/<%= @email[:id] %>" method="get">
 		<select name="formletter">
 		<option value="0" selected>get formletter</option>
-<%= @formletters.inject('') {|html, fl| html + '<option value="%d">%s</option>' % [fl.id, fl.title]} %>
+<%= @formletters.inject('') {|html, fl| html + '<option value="%d">%s</option>' % [fl[:id], fl[:title]]} %>
 		<input type="submit" value="get formletter">
 		</select>
 	</form>

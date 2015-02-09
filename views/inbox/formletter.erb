@@ -1,16 +1,15 @@
 <section id="formletters">
 
-<form id="editformletter" action="/formletter/<%= @formletter.id %>" method="post">
-	<input name="title" placeholder="title" value="<%=h @formletter.title %>">
-	<input name="explanation" placeholder="explanation" value="<%=h @formletter.explanation %>">
-	<textarea name="body" placeholder="body"><%=h @formletter.body %></textarea>
-	<input name="setcat" placeholder="setcat" value="<%=h @formletter.setcat %>">
+<form id="editformletter" action="/formletter/<%= @formletter[:id] %>" method="post">
+	<input name="title" placeholder="title" value="<%=h @formletter[:title] %>">
+	<input name="explanation" placeholder="explanation" value="<%=h @formletter[:explanation] %>">
+	<textarea name="body" placeholder="body"><%=h @formletter[:body] %></textarea>
 	<input type="submit" value="update">
 </form>
 
 <hr>
 
-<form action="/formletter/<%= @formletter.id %>/delete" method="post">
+<form action="/formletter/<%= @formletter[:id] %>/delete" method="post">
 	<input type="submit" value="delete">
 </form>
 

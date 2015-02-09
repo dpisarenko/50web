@@ -1,14 +1,14 @@
 <section id="unknown">
 
-<h2><%=h @unknown.their_email %></h2>
-<h2><%=h @unknown.their_name %></h2>
-<p><%= h(@unknown.headers).gsub("\n", '<br>') %></p>
-<h3><%=h @unknown.subject %></h3>
-<p><%= h(@unknown.body).gsub("\n", '<br>') %></p>
+<h2><%=h @unknown[:their_email] %></h2>
+<h2><%=h @unknown[:their_name] %></h2>
+<p><%= h(@unknown[:headers]).gsub("\n", '<br>') %></p>
+<h3><%=h @unknown[:subject] %></h3>
+<p><%= h(@unknown[:body]).gsub("\n", '<br>') %></p>
 
 <hr>
 
-<form action="/unknown/<%= @unknown.id %>" method="post">
+<form action="/unknown/<%= @unknown[:id] %>" method="post">
 	<input type="submit" value="new person">
 </form>
 
@@ -26,14 +26,14 @@
 		<ul id="searchresults">
 		<% @results.each do |p| %>
 			<li>
-				<form action="/unknown/<%= @unknown.id %>" method="post">
-					<input type="hidden" name="person_id" value="<%= p.id %>">
+				<form action="/unknown/<%= @unknown[:id] %>" method="post">
+					<input type="hidden" name="person_id" value="<%= p[:id] %>">
 					<input type="submit" value="use">
 				</form>
-				(<%= p.email_count %> emails) »
-				<a href="/person/<%= p.id %>">see</a> » 
-				<%=h p.name %> — 
-				<%=h p.email %>
+				(<%= p[:email_count] %> emails) »
+				<a href="/person/<%= p[:id] %>">see</a> » 
+				<%=h p[:name] %> — 
+				<%=h p[:email] %>
 			</li>
 		<% end %>
 		</ul>
@@ -42,7 +42,7 @@
 
 <hr>
 
-<form action="/unknown/<%= @unknown.id %>/delete" method="post">
+<form action="/unknown/<%= @unknown[:id] %>/delete" method="post">
 	<input type="submit" value="DELETE">
 </form>
 

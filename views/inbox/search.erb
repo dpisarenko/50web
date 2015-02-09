@@ -14,10 +14,10 @@
 		<ul>
 		<% @results.each do |p| %>
 			<li>
-				<a href="/person/<%= p.id %>"><%= p.id %></a> »
-				(<%= p.email_count %> emails) »
-				<%=h p.name %> —
-				<%=h p.email %>
+				<a href="/person/<%= p[:id] %>"><%= p[:id] %></a> »
+				(<%= p[:email_count] %> emails) »
+				<%=h p[:name] %> —
+				<%=h p[:email] %>
 			</li>
 		<% end %>
 		</ul>

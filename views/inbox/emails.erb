@@ -2,10 +2,10 @@
 <h2><%= @pagetitle %></h2>
 <ul>
 <% @emails.each do |email| %>
-	<li><a href="/email/<%= email.id %>"><%= email.id %></a> »
-		<%= email.created_at[0,10] %> —
-		<%=h email.subject %> —
-		<strong><%=h email.their_name %></strong>
+	<li><a href="/email/<%= email[:id] %>"><%= email[:id] %></a> »
+		<%= email[:created_at][0,10] %> —
+		<%=h email[:subject] %> —
+		<strong><%=h email[:their_name] %></strong>
 	</li>
 <% end %>
 </ul>

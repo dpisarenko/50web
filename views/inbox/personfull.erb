@@ -1,7 +1,7 @@
 <section id="showemail">
 <% @emails.each do |e| %>
-	<h2><a href="/email/<%= e.id %>"><%= e.created_at[0,10] %></a> <%=h e.subject %></h2>
-	<p><%= h(e.body).gsub("\n", '<br>') %></p>
+	<h2><a href="/email/<%= e[:id] %>"><%= e[:created_at][0,10] %></a> <%=h e[:subject] %></h2>
+	<p><%= h(e[:body]).gsub("\n", '<br>') %></p>
 	<hr>
 <% end %>
 </section>

@@ -12,8 +12,8 @@
 <ul>
 <% @stats.each do |stat| %>
 	<li>
-		<h3><%= '%s: <a href="/person/%d">%s</a> — %s' % [stat.created_at, stat.person.id, h(stat.person.name), stat.person.email] %></h3>
-		<p><%=h stat.value %></p>
+		<h3><%= '%s: <a href="/person/%d">%s</a> — %s' % [stat[:created_at], stat[:person][:id], h(stat[:person][:name]), stat[:person][:email]] %></h3>
+		<p><%=h stat[:value] %></p>
 	</li>
 <% end %>
 </ul>
