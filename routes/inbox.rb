@@ -1,6 +1,6 @@
 require_relative 'mod_auth'
 
-require 'a50c/peep'
+require 'a50c/peeps'
 require 'd50b/peeps'  # for Location.names
 
 class Inbox < ModAuth
@@ -39,7 +39,7 @@ class Inbox < ModAuth
   get '/' do
     @unopened_email_count = @p.unopened_email_count
     @open_emails = @p.open_emails
-    @unknowns_count = @p.unknowns_count['count']
+    @unknowns_count = @p.unknowns_count[:count]
     @pagetitle = 'inbox'
     erb :home
   end
@@ -83,7 +83,7 @@ class Inbox < ModAuth
     @person = @p.get_person(@email.person.id)
     @profiles = @p.profiles
     @formletters = @p.formletters
-    @reply = (params[:formletter]) ? @p.get_formletter_for_person(params[:formletter], @email.person.id).body : ''
+    @reply = (params[:formletter]) ? @p.get_formletter_for_person(params[:formletter], @email[:person][:id]).body : ''
     @pagetitle = 'email %d' % id
     erb :email
   end
@@ -192,7 +192,7 @@ class Inbox < ModAuth
   post '/formletters' do
     res = @p.add_formletter(params[:title])
     if res
-      redirect to('/formletter/%d' % res.id)
+      redirect to('/formletter/%d' % res[:id])
     else
       redirect to('/formletters')
     end
