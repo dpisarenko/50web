@@ -1,13 +1,11 @@
 require_relative 'mod_auth'
 
-require 'a50c/peeps'
-require 'd50b/peeps'  # for Location.names
-
 class Inbox < ModAuth
 
   configure do
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/inbox') }
+		@api = 'Peep'
   end
 
   helpers do
@@ -33,7 +31,7 @@ class Inbox < ModAuth
   end
 
   before do
-    @p = A50C::Peep.new(request.cookies['api_key'], request.cookies['api_pass'])
+    @p = A50C::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'])
   end
 
   get '/' do

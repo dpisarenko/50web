@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require 'a50c/auth'
+require 'a50c/peeps'
 
 class ModAuth < Sinatra::Base
 
@@ -14,7 +14,7 @@ class ModAuth < Sinatra::Base
   end
 
   before do
-    protected! unless ['/login'].include?(request.path_info)
+    protected! unless '/login' == request.path_info
   end
 
   get '/login' do
@@ -24,11 +24,10 @@ class ModAuth < Sinatra::Base
 
   post '/login' do
     redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
-    a = A50C::Auth.new
-    if res = a.auth(params[:email], params[:password])
-      response.set_cookie('person_id', value: res.person_id, path: '/', secure: true, httponly: true)
-      response.set_cookie('api_key', value: res.key, path: '/', secure: true, httponly: true)
-      response.set_cookie('api_pass', value: res.pass, path: '/', secure: true, httponly: true)
+    if res = A50C::Peeps.new.auth(params[:email], params[:password], @api)
+      response.set_cookie('person_id', value: res[:person_id], path: '/', secure: true, httponly: true)
+      response.set_cookie('api_key', value: res[:akey], path: '/', secure: true, httponly: true)
+      response.set_cookie('api_pass', value: res[:apass], path: '/', secure: true, httponly: true)
       redirect to('/')
     else
       redirect to('/login')
