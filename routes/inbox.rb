@@ -5,7 +5,6 @@ class Inbox < ModAuth
   configure do
     set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
     set :views, Proc.new { File.join(root, 'views/inbox') }
-		@api = 'Peep'
   end
 
   helpers do
@@ -31,7 +30,9 @@ class Inbox < ModAuth
   end
 
   before do
-    @p = A50C::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'])
+		@api = 'Peep'
+		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
+    @p = A50C::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
   end
 
   get '/' do

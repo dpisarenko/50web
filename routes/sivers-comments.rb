@@ -1,5 +1,4 @@
 require_relative 'mod_auth'
-
 require 'a50c/sivers-comments'
 
 class SiversCommentsWeb < ModAuth
@@ -10,7 +9,9 @@ class SiversCommentsWeb < ModAuth
   end
 
   before do
-    @sc = A50C::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'])
+		@api = 'SiversComments'
+		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
+    @sc = A50C::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
     @pagetitle = 'sivers-comments'
   end
 
@@ -25,7 +26,7 @@ class SiversCommentsWeb < ModAuth
   end
 
   post %r{\A/comment/([0-9]+)\Z} do |id|
-    @sc.update_comment(id, params[:html])
+    @sc.update_comment(id, params)
     redirect '/'
   end
 

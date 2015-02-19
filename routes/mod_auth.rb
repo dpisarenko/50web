@@ -13,6 +13,7 @@ class ModAuth < Sinatra::Base
     end
   end
 
+	# set @api and @livetest in child controller's before block
   before do
     protected! unless '/login' == request.path_info
   end
@@ -24,7 +25,7 @@ class ModAuth < Sinatra::Base
 
   post '/login' do
     redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
-    if res = A50C::Peeps.new.auth(params[:email], params[:password], @api)
+    if res = A50C::Peeps.new(nil, nil, @livetest).auth(params[:email], params[:password], @api)
       response.set_cookie('person_id', value: res[:person_id], path: '/', secure: true, httponly: true)
       response.set_cookie('api_key', value: res[:akey], path: '/', secure: true, httponly: true)
       response.set_cookie('api_pass', value: res[:apass], path: '/', secure: true, httponly: true)

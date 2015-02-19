@@ -1,9 +1,9 @@
 <% @comments.each do |c| %>
-	<div id="comment-<%= c.id %>">
-		<h2><a href="http://sivers.org/<%= c.uri %>"><%= c.uri %></a> — <%= c.name %> — <%= c.email %></h2>
-		<p><%= c.html %></p>
-		<a href="/comment/<%= c.id %>">edit</a>
-		<form action="/comment/<%= c.id %>/reply" method="post">
+	<div id="comment-<%= c[:id] %>">
+		<h2><a href="http://sivers.org/<%= c[:uri] %>"><%= c[:uri] %></a> — <%= c[:name] %> — <%= c[:email] %></h2>
+		<p><%= c[:html] %></p>
+		<a href="/comment/<%= c[:id] %>">edit</a>
+		<form action="/comment/<%= c[:id] %>/reply" method="post">
 			<input name="reply">
 			<input type="submit" value="reply">
 		</form>
