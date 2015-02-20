@@ -33,7 +33,7 @@
 	<% end %>
 	</p>
 	<p>
-	<% if @email[:attachments].count > 0 %>
+	<% if @email[:attachments] %>
 		attachments:
 		<% @email[:attachments].each do |ea| %>
 			<a href="/attachments/<%=h ea[:filename] %>"><%=h ea[:filename] %></a>

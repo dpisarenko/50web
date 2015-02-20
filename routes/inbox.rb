@@ -79,10 +79,12 @@ class Inbox < ModAuth
 
   get %r{^/email/([0-9]+)$} do |id|
     @email = @p.open_email(id) || halt(404)
-    @person = @p.get_person(@email[:person][:id])
+    @person = @email[:person]
     @profiles = @p.profiles
     @formletters = @p.formletters
-    @reply = (params[:formletter]) ? @p.get_formletter_for_person(params[:formletter], @email[:person][:id]).body : ''
+		@locations = @p.all_countries
+    @reply = (params[:formletter]) ?
+			@p.get_formletter_for_person(params[:formletter], @email[:person][:id]).body : ''
     @pagetitle = 'email %d' % id
     erb :email
   end

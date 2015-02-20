@@ -7,7 +7,13 @@ id: <a href="/person/<%= @person[:id] %>"><%= @person[:id] %></a>
 <input name="city" placeholder="city" value="<%=h @person[:city] %>">
 <input name="state" placeholder="state" value="<%=h @person[:state] %>">
 <select name="country">
-<%= Location.names.sort_by {|k,v| v}.inject('<option value="">… country …</option>') { |html, pair| html + '<option value="%s"%s>%s</option>' % [pair[0], (@person[:country] == pair[0]) ? ' selected' : '', pair[1][0,20]]} %>
+<%= @locations.inject('<option value="">… country …</option>') do |html, pair|
+	html + '<option value="%s"%s>%s</option>' %
+		[pair[:code],
+   		(@person[:country] == pair[:code]) ? ' selected' : '',
+   		pair[:name][0,20]]
+end
+%>
 </select>
 <input name="phone" placeholder="phone" value="<%=h @person[:phone] %>">
 <input name="categorize_as" placeholder="categorize_as" value="<%=h @person[:categorize_as] %>">
@@ -28,7 +34,7 @@ id: <a href="/person/<%= @person[:id] %>"><%= @person[:id] %></a>
 <% end %>
 	<input type="submit" value="add stat">
 </form>
-<% if @person[:stats].count > 0 %>
+<% if @person[:stats] %>
 	<ul id="statlist">
 	<% @person[:stats].each do |stat| %>
 		<li>
@@ -97,7 +103,7 @@ id: <a href="/person/<%= @person[:id] %>"><%= @person[:id] %></a>
 	<textarea name="body"></textarea>
 	<input type="submit" value="send new email">
 </form>
-<% if @person[:emails].count > 0 %>
+<% if @person[:emails] %>
 	<ul>
 	<% @person[:emails].reverse.each do |email| %>
 		<li><a href="/email/<%= email[:id] %>"><%= email[:created_at][0,10] %></a><br>
