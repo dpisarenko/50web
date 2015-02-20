@@ -22,17 +22,21 @@ name: <%= @comment[:name] %>
 email: <%= @comment[:email] %>
 </div>
 <div>
-Person email_count: <%= @comment[:person][:emails].size %>
+Person email_count: <%= (@comment[:person][:emails]) ? (@comment[:person][:emails].size) : 0 %>
 </div>
 <div>
 Person created_at: <%= @comment[:person][:created_at] %>
 </div>
-<div>
-Person userstats:
-<% @comment[:person][:stats].each do |s| %>
-	<br><%= s[:created_at] %>: <%= s[:name] %> = <%= s[:value] %>
+<% if @comment[:person][:stats] %>
+	<div>
+	Person stats:
+	<ul>
+	<% @comment[:person][:stats].each do |s| %>
+		<li><%= s[:created_at] %>: <%= s[:name] %> = <%= s[:value] %></li>
+	<% end %>
+	</ul>
+	</div>
 <% end %>
-</div>
 
 <form action="/comment/<%= @comment[:id] %>/delete" method="post"><input type="submit" value="delete"></form>
 <form action="/comment/<%= @comment[:id] %>/spam" method="post"><input type="submit" value="spam"></form>
