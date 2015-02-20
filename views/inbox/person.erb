@@ -60,7 +60,7 @@ end
 <% end %>
 	<input type="submit" value="add url">
 </form>
-<% if @person[:urls].count > 0 %>
+<% if @person[:urls] %>
 	<ul id="urllist">
 	<% @person[:urls].each do |url| %>
 		<li>

@@ -22,7 +22,7 @@ class Inbox < ModAuth
 
     def redirect_to_email_or_home(email)
       if email
-        redirect to('/email/%d' % email.id)
+        redirect to('/email/%d' % email[:id])
       else
         redirect to('/')
       end
@@ -130,6 +130,7 @@ class Inbox < ModAuth
     @person = @p.get_person(id) || halt(404)
     @emails = @p.emails_for_person(id).reverse
     @profiles = @p.profiles
+		@locations = @p.all_countries
     @pagetitle = 'person %d' % id
     erb :personfull
   end
