@@ -84,7 +84,7 @@ class Inbox < ModAuth
     @formletters = @p.formletters
 		@locations = @p.all_countries
     @reply = (params[:formletter]) ?
-			@p.get_formletter_for_person(params[:formletter], @email[:person][:id]).body : ''
+			@p.get_formletter_for_person(params[:formletter], @email[:person][:id])[:body] : ''
     @pagetitle = 'email %d' % id
     erb :email
   end
@@ -123,7 +123,7 @@ class Inbox < ModAuth
 
   post '/person' do
     person = @p.new_person(params[:name], params[:email])
-    redirect to('/person/%d' % person.id)
+    redirect to('/person/%d' % person[:id])
   end
 
   get %r{^/person/([0-9]+)$} do |id|

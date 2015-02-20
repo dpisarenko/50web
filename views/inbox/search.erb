@@ -8,7 +8,7 @@
 
 <% if @q %>
 	<h2>Results for “<%=h @q %>”</h2>
-	<% if @results.count == 0 %>
+	<% unless @results != {} %>
 		<p>None.</p>
 	<% else %>
 		<ul>
