@@ -3,8 +3,8 @@
 
 <% if @valuecount.size > 0 %>
 	<ul id="valuecount">
-	<% @valuecount.each do |k,v| %>
-		<li><a href="/stats/<%= @statkey %>/<%=h k %>"><%=h k %></a> (<%= v %>)</li>
+	<% @valuecount.each do |s| %>
+		<li><a href="/stats/<%= @statkey %>/<%=h s[:value] %>"><%=h s[:value] %></a> (<%= s[:count] %>)</li>
 	<% end %>
 	</ul><hr>
 <% end %>

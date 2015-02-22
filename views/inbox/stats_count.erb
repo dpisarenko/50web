@@ -2,10 +2,10 @@
 
 <h2>Stat key count:</h2>
 <table>
-<% @stats.each do |k, v| %>
+<% @stats.each do |s| %>
 	<tr>
-		<td><a href="/stats/<%= k %>"><%= k %></a></td>
-		<td><%= v %></td>
+		<td><a href="/stats/<%= s[:name] %>"><%= s[:name] %></a></td>
+		<td><%= s[:count] %></td>
 	</tr>
 <% end %>
 </table>
