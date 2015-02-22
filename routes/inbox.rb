@@ -277,17 +277,23 @@ class Inbox < ModAuth
   end
 
   get '/merge' do
-    @ids = params[:ids].nil? ? [] : params[:ids].split(',').map(&:to_i)
-    # turn ids into people, but remove false/not-found ones
-    @people = @ids.map {|id| @p.get_person(id)}.select {|x| x}
-    @results = (params[:q]) ? @p.person_search(params[:q]) : false
+    @id1 = params[:id1].to_i
+		@person1 = (@id1 == 0) ? nil : @p.get_person(@id1) 
+    @id2 = params[:id2].to_i
+		@person2 = (@id2 == 0) ? nil : @p.get_person(@id2) 
+		@q = params[:q]
+    @results = (@q) ? @p.person_search(@q) : false
     @pagetitle = 'merge'
     erb :merge
   end
 
   post %r{^/merge/([0-9]+)$} do |id|
-    @p.merge_into_person(id, params[:ids]) if params[:ids].instance_of?(Array)
-    redirect to('/person/%d' % id)
+    if @p.merge_into_person(id, params[:id2])
+    	redirect to('/person/%d' % id)
+		else
+			# TODO: flash error that not allowed?
+			redirect to('/merge?id1=%d&id2=%d' % [id, params[:id2]])
+		end
   end
 
 end

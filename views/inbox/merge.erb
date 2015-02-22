@@ -2,28 +2,29 @@
 <h2>Merger</h2>
 <p class="small">When one person has multiple entries in our database, because of different email addresses, merge them into one.</p>
 
-<h1>TODO: re-do this whole thing, so it's only old one into new one (winner and loser?)</h1>
-
 <form action="/merge" method="get">
-	<input type="hidden" name="ids" value="<%= @ids.join(',') %>">
+	<input type="hidden" name="id1" value="<%= @id1 %>">
 	<input name="q">
 	<input type="submit" value="search">
 </form>
 
-<% if @people.count > 0 %>
+<% if @id1 > 0 %>
 	<h3>Merge queue:</h3>
 	<ul>
-	<% @people.each do |p| %>
-		<li>
-			<a href="/person/<%= p[:id] %>"><%= p[:id] %></a> »
-			(<%= p[:email_count] %> emails) »
-			<%=h p[:name] %> —
-			<%=h p[:email] %>
-			<form action="/merge/<%= p[:id] %>" method="post">
-			<% (@ids - [p[:id]]).each do |id| %>
-				<input type="hidden" name="ids[]" value="<%= id %>">
-			<% end %>
-			<input type="submit" value="merge into this one"></form><br>
+		<li><a href="/person/<%= @id1 %>"><%= @id1 %></a> »
+		(<%= @person1[:email_count] %> emails) » <%=h @person1[:name] %> — <%=h @person1[:email] %>
+	<% if @id2 == 0 %>
+		</li>
+	<% else %>
+		<form action="/merge/<%= @id1 %>" method="post">
+		<input type="hidden" name="id2" value="<%= @id2 %>">
+		<input type="submit" value="merge into this one"></form>
+		</li>
+		<li><a href="/person/<%= @id2 %>"><%= @id2 %></a> »
+		(<%= @person2[:email_count] %> emails) » <%=h @person2[:name] %> — <%=h @person2[:email] %>
+		<form action="/merge/<%= @id2 %>" method="post">
+		<input type="hidden" name="id2" value="<%= @id1 %>">
+		<input type="submit" value="merge into this one"></form>
 		</li>
 	<% end %>
 	</ul>
@@ -36,14 +37,14 @@
 	<% else %>
 		<ul>
 		<% @results.each do |p| %>
+			<% next if [@id1,@id2].include? p[:id] %>
 			<li>
 				<a href="/person/<%= p[:id] %>"><%= p[:id] %></a> »
 				(<%= p[:email_count] %> emails) »
 				<%=h p[:name] %> —
 				<%=h p[:email] %>
-				<% unless @ids.include? p[:id] %>
-					» <strong><a href="/merge?ids=<%= (@ids + [p[:id]]).join(',') %>">MERGE</a></strong>
-				<% end %>
+				<% link = (@id1 == 0) ? "&amp;id1=#{p[:id]}" : "&amp;id1=#{@id1}&amp;id2=#{p[:id]}" %>
+				» <strong><a href="/merge?q=<%=h @q %><%= link %>">MERGE</a></strong>
 			</li>
 		<% end %>
 		</ul>
