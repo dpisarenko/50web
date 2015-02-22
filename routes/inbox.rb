@@ -219,13 +219,14 @@ class Inbox < ModAuth
   get '/countries' do
     @countries = @p.country_count
     @pagetitle = 'countries'
+		@cc = @p.country_names
     erb :where_countries
   end
 
   get %r{^/states/([A-Z][A-Z])$} do |country_code|
     @country = country_code
     @states = @p.state_count(country_code)
-    @pagetitle = 'states for %s' % Location.name(country_code)
+    @pagetitle = 'states for %s' % country_code
     erb :where_states
   end
 
@@ -233,15 +234,15 @@ class Inbox < ModAuth
     @country = country_code
     @cities = @p.city_count(country_code)
     @state = nil
-    @pagetitle = 'cities for %s' % Location.name(country_code)
-    erb :where_cities
+    @pagetitle = 'cities for %s' % country_code
+		erb :where_cities
   end
 
   get %r{^/cities/([A-Z][A-Z])/(\S+)$} do |country_code, state_name|
     @country = country_code
     @cities = @p.city_count(country_code, state_name)
     @state = state_name
-    @pagetitle = 'cities for %s, %s' % [state_name, Location.name(country_code)]
+    @pagetitle = 'cities for %s, %s' % [state_name, country_code]
     erb :where_cities
   end
 
@@ -249,7 +250,7 @@ class Inbox < ModAuth
     city = params[:city]
     state = params[:state]
     @people = @p.where(country_code, city, state)
-    @pagetitle = 'People in %s' % [city, state, Location.name(country_code)].compact.join(', ')
+    @pagetitle = 'People in %s' % [city, state, country_code].compact.join(', ')
     erb :people
   end
 

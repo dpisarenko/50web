@@ -2,14 +2,14 @@
 <h1><%=h @pagetitle %></h1>
 
 <table>
-<% @countries.each do |country_code, howmany| %>
-	<tr><td><%=h Location.name(country_code) %></td><td>
-	<% if howmany > 10000 %>
-		<a href="/states/<%= country_code %>"><%= howmany %></a>
-	<% elsif howmany < 50 %>
-		<a href="/where/<%= country_code %>"><%= howmany %></a>
+<% @countries.each do |c| %>
+	<tr><td><%=h @cc[c[:country].to_sym] %></td><td>
+	<% if c[:count] > 10000 %>
+		<a href="/states/<%= c[:country] %>"><%= c[:count] %></a>
+	<% elsif c[:count] < 50 %>
+		<a href="/where/<%= c[:country] %>"><%= c[:count] %></a>
 	<% else %>
-		<a href="/cities/<%= country_code %>"><%= howmany %></a>
+		<a href="/cities/<%= c[:country] %>"><%= c[:count] %></a>
 	<% end %>
 	</td></tr>
 <% end %>
