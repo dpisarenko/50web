@@ -1,1 +1,1 @@
-scss -t compressed --sourcemap=none --watch scss/muckwork-client.scss:public/css/muckwork-client.css
+scss -t compressed --sourcemap=none --watch scss/woodegg.scss:public/css/woodegg.css

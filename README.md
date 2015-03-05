@@ -30,3 +30,14 @@ For each domain that uses client-side JavaScript, nginx proxy /api/xxx to localh
 
 A50C::Auth gets posted email & password, and returns API key and pass values to set in cookies.  No cross-scriping worries, since it's not JavaScript.
 
+# woodegg TODO:
+
+* login
+* static home: list of countries, or questions across all countries
+* .country(cc) + .uploads(cc) : list of questions + uploads
+* .templates : list of all questions
+* .template(id) : answers & essays for all countries for that question
+* .question(id) : answers & essays for that country-specific question
+* .topic(id) : subtopics linking to template/:id
+* .upload(id) : details, transcrit, & download link for that upload
+
