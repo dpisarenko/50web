@@ -5,7 +5,7 @@
 		<h3><%= subtopic[:subtopic] %></h3>
 		<ul>
 		<% subtopic[:questions].each do |question| %>
-			<li><a href="/questions/<%= question[:id] %>"><%=h question[:question] %></a></li>
+			<li><a href="/question/<%= question[:id] %>"><%=h question[:question] %></a></li>
 		<% end %>
 		</ul>
 	<% end %>

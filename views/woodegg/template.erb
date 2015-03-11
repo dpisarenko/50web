@@ -1,26 +1,25 @@
 <h1><%=h @template[:question] %></h1>
 <% @template[:countries].each do |country| %>
 	<h2><%= country[:country] %>: <%=h country[:question] %></h2>
+	<h3>Answers:</h3>
 	<ul>
 	<% country[:answers].each do |answer| %>
-		<li>
-			<%= answer[:id] %>
-			<%= answer[:date] %>
-			<%=h answer[:answer] %>
-			<%=h answer[:sources] %>
-			<%= answer[:researcher][:id] %>
-			<%=h answer[:researcher][:name] %>
+		<li id="answer-<%= answer[:id] %>">
+			<time><%= answer[:date] %></time>
+			<p><%=h answer[:answer] %></p>
+			<cite><%=h answer[:sources] %></cite>
+			<h4>Researcher: <%=h answer[:researcher][:name] %></h4>
 		</li>
 	<% end %>
+	</ul>
+	<h3>Answers:</h3>
+	<ul>
 	<% country[:essays].each do |essay| %>
-		<li>
-			<%= essay[:id] %>
-			<%= essay[:date] %>
-			<%=h essay[:essay] %>
-			<%= essay[:writer][:id] %>
-			<%=h essay[:writer][:name] %>
-			<%= essay[:editor][:id] %>
-			<%=h essay[:editor][:name] %>
+		<li id="essay-<%= essay[:id] %>">
+			<time><%= essay[:date] %></time>
+			<p><%= h(essay[:essay]).gsub("\n", '<br>') %></p>
+			<h4>Writer: <%=h essay[:writer][:name] %></h4>
+			<h4>Editor: <%=h essay[:editor][:name] %></h4>
 		</li>
 	<% end %>
 	</ul>

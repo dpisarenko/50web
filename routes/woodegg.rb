@@ -15,6 +15,10 @@ class WoodEgg < Sinatra::Base
 				/[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok'] &&
 				@customer = @we.customer_from_cookie(request.cookies['ok'])
 		end
+
+		def h(text)
+			Rack::Utils.escape_html(text)
+		end
 	end
 
 	configure do
@@ -24,6 +28,7 @@ class WoodEgg < Sinatra::Base
 
 	before do
 		@we = A50C::WoodEgg.new((request.env['SERVER_NAME'].end_with? 'dev') ? 'test' : 'live')
+		@customer = false
 		protected! unless '/login' == request.path_info
 		@pagetitle = 'Wood Egg'
 		@country_name = {

@@ -7,6 +7,18 @@
 <link rel="stylesheet" href="/css/woodegg.css" />
 </head>
 <body>
+	<header>
+		<nav>
+			<ul id="nav">
+				<li><a href="http://woodegg.com/">woodegg.com</a></li>
+				<% if @customer %>
+					<li><a href="/home"><%=h @customer[:name] %> account</a></li>
+					<li><a href="/logout">log out</a></li>
+				<% end %>
+			</ul>
+		</nav>
+	</header>
+
 <div id="page">
 
 <section id="content">

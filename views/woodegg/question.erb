@@ -1,2 +1,24 @@
-<h1>question</h1>
+<h1><%=h @pagetitle %></h1>
+<h2>Answers:</h2>
+<ul>
+<% @question[:answers].each do |answer| %>
+	<li id="answer-<%= answer[:id] %>">
+		<time><%= answer[:date] %></time>
+		<p><%= h(answer[:answer]).gsub("\n", '<br>') %></p>
+		<cite><%=h answer[:sources] %></cite>
+		<h4>Researcher: <%=h answer[:researcher][:name] %></h4>
+	</li>
+<% end %>
+</ul>
 
+<h2>Essays:</h2>
+<ul>
+<% @question[:essays].each do |essay| %>
+	<li id="essay-<%= essay[:id] %>">
+		<time><%= essay[:date] %></time>
+		<p><%= h(essay[:essay]).gsub("\n", '<br>') %></p>
+		<h4>Writer: <%=h essay[:writer][:name] %></h4>
+		<h4>Editor: <%=h essay[:editor][:name] %></h4>
+	</li>
+<% end %>
+</ul>
