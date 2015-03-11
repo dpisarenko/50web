@@ -1,0 +1,28 @@
+<h1><%=h @template[:question] %></h1>
+<% @template[:countries].each do |country| %>
+	<h2><%= country[:country] %>: <%=h country[:question] %></h2>
+	<ul>
+	<% country[:answers].each do |answer| %>
+		<li>
+			<%= answer[:id] %>
+			<%= answer[:date] %>
+			<%=h answer[:answer] %>
+			<%=h answer[:sources] %>
+			<%= answer[:researcher][:id] %>
+			<%=h answer[:researcher][:name] %>
+		</li>
+	<% end %>
+	<% country[:essays].each do |essay| %>
+		<li>
+			<%= essay[:id] %>
+			<%= essay[:date] %>
+			<%=h essay[:essay] %>
+			<%= essay[:writer][:id] %>
+			<%=h essay[:writer][:name] %>
+			<%= essay[:editor][:id] %>
+			<%=h essay[:editor][:name] %>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+

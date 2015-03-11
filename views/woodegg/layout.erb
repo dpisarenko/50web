@@ -9,32 +9,11 @@
 <body>
 <div id="page">
 
-<header id="bighead">
-<hgroup>
-<h1><a href="/"><%= t.musicthoughts %></a></h1>
-<h2><%= t.musicthoughts_slogan %></h2>
-</hgroup>
-
-<nav id="nav">
-<ul>
-	<li><a href="/new"><%= t.new %></a></li>
-	<li><a href="/author"><%= t.authors %></a></li>
-	<li><a href="/contributor"><%= t.contributors %></a></li>
-	<li><a href="/t"><%= t.random_thought %></a></li>
-	<li><a href="/search"><%= t.search %></a></li>
-	<li><a href="/add"><%= t.add_thought %></a></li>
-</ul>
-</nav>
-</header>
-
 <section id="content">
 
 <%= yield %>
 
 </section>
-
-<footer>
-</footer>
 
 </div>
 </body>

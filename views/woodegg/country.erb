@@ -1,0 +1,13 @@
+<h1><%= @pagetitle %></h1>
+<% @country.each do |topic| %>
+	<h2><%= topic[:topic] %></h2>
+	<% topic[:subtopics].each do |subtopic| %>
+		<h3><%= subtopic[:subtopic] %></h3>
+		<ul>
+		<% subtopic[:questions].each do |question| %>
+			<li><a href="/questions/<%= question[:id] %>"><%=h question[:question] %></a></li>
+		<% end %>
+		</ul>
+	<% end %>
+<% end %>
+
