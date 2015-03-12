@@ -1,25 +1,21 @@
 <h1><%=h @template[:question] %></h1>
 <% @template[:countries].each do |country| %>
-	<h2><%= country[:country] %>: <%=h country[:question] %></h2>
-	<h3>Answers:</h3>
-	<ul>
-	<% country[:answers].each do |answer| %>
-		<li id="answer-<%= answer[:id] %>">
-			<time><%= answer[:date] %></time>
-			<p><%=h answer[:answer] %></p>
-			<cite><%=h answer[:sources] %></cite>
-			<h4>Researcher: <%=h answer[:researcher][:name] %></h4>
-		</li>
-	<% end %>
-	</ul>
-	<h3>Answers:</h3>
-	<ul>
+	<h2><a href="/question/<%= country[:id] %>"><%= @country_name[country[:country]] %></a>: <%=h country[:question] %></h2>
+	<h3>Essays:</h3>
+	<ul class="essays">
 	<% country[:essays].each do |essay| %>
 		<li id="essay-<%= essay[:id] %>">
 			<time><%= essay[:date] %></time>
-			<p><%= h(essay[:essay]).gsub("\n", '<br>') %></p>
-			<h4>Writer: <%=h essay[:writer][:name] %></h4>
-			<h4>Editor: <%=h essay[:editor][:name] %></h4>
+			<p><%= Kramdown::Document.new(essay[:essay]).to_html %></p>
+			<% unless @template[:id] == 0 %>
+				<% if essay[:writer] %>
+				<div><cite>Writer: <%=h essay[:writer][:name] %></cite></div>
+				<% end %>
+				<% if essay[:editor] %>
+				<div><cite>Editor: <%=h essay[:editor][:name] %></cite></div>
+				<% end %>
+			<% end %>
+			<hr>
 		</li>
 	<% end %>
 	</ul>

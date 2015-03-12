@@ -2,12 +2,23 @@
 <% @country.each do |topic| %>
 	<h2><%= topic[:topic] %></h2>
 	<% topic[:subtopics].each do |subtopic| %>
-		<h3><%= subtopic[:subtopic] %></h3>
-		<ul>
-		<% subtopic[:questions].each do |question| %>
-			<li><a href="/question/<%= question[:id] %>"><%=h question[:question] %></a></li>
+		<% if subtopic[:questions] %>
+			<h3><%= subtopic[:subtopic] %></h3>
+			<ul>
+			<% subtopic[:questions].each do |question| %>
+				<li><a href="/question/<%= question[:id] %>"><%=h question[:question] %></a></li>
+			<% end %>
+			</ul>
 		<% end %>
-		</ul>
 	<% end %>
 <% end %>
 
+<% if @uploads %>
+	<h1>File downloads:</h1>
+	<ul>
+	<% @uploads.each do |u| %>
+		<li><a href="/upload/<%= u[:id] %>"><%= u[:filename] %></a>
+		<em><%=h u[:notes] %></em></li>
+	<% end %>
+	</ul>
+<% end %>

@@ -1,24 +1,36 @@
 <h1><%=h @pagetitle %></h1>
-<h2>Answers:</h2>
-<ul>
-<% @question[:answers].each do |answer| %>
-	<li id="answer-<%= answer[:id] %>">
-		<time><%= answer[:date] %></time>
-		<p><%= h(answer[:answer]).gsub("\n", '<br>') %></p>
-		<cite><%=h answer[:sources] %></cite>
-		<h4>Researcher: <%=h answer[:researcher][:name] %></h4>
+<% if @question[:answers] %>
+	<h2>Research:</h2>
+	<ul class="answers">
+	<% @question[:answers].each do |answer| %>
+		<li id="answer-<%= answer[:id] %>">
+			<time><%= answer[:date] %></time>
+			<p><%= h(answer[:answer]).gsub("\n", '<br>') %></p>
+			<% if String(answer[:sources]).size > 0 %>
+			<cite>Source: <%=h answer[:sources] %></cite>
+			<% end %>
+			<div><cite>Researcher: <%=h answer[:researcher][:name] %></cite></div>
+			<hr>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+<h2>Essays:</h2>
+<ul class="essays">
+<% @question[:essays].each do |essay| %>
+	<li id="essay-<%= essay[:id] %>">
+		<time><%= essay[:date] %></time>
+		<p><%= Kramdown::Document.new(essay[:essay]).to_html %></p>
+		<% unless @question[:template_id] == 0 %>
+			<% if essay[:writer] %>
+			<div><cite>Writer: <%=h essay[:writer][:name] %></cite></div>
+			<% end %>
+			<% if essay[:editor] %>
+			<div><cite>Editor: <%=h essay[:editor][:name] %></cite></div>
+			<% end %>
+		<% end %>
+		<hr>
 	</li>
 <% end %>
 </ul>
 
-<h2>Essays:</h2>
-<ul>
-<% @question[:essays].each do |essay| %>
-	<li id="essay-<%= essay[:id] %>">
-		<time><%= essay[:date] %></time>
-		<p><%= h(essay[:essay]).gsub("\n", '<br>') %></p>
-		<h4>Writer: <%=h essay[:writer][:name] %></h4>
-		<h4>Editor: <%=h essay[:editor][:name] %></h4>
-	</li>
-<% end %>
-</ul>

@@ -1,21 +1,10 @@
 require 'sinatra/base'
 require 'a50c/woodegg'
+require 'kramdown'
 
 class WoodEgg < Sinatra::Base
 
-	# copying from mod_auth.rb but without api_keys
-	# extract into separate module if I use this again
 	helpers do
-		def protected!
-			redirect to('/login') unless has_cookie?
-		end
-
-		def has_cookie?
-			request.cookies['ok'] &&
-				/[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok'] &&
-				@customer = @we.customer_from_cookie(request.cookies['ok'])
-		end
-
 		def h(text)
 			Rack::Utils.escape_html(text)
 		end
@@ -27,27 +16,14 @@ class WoodEgg < Sinatra::Base
 	end
 
 	before do
-		@we = A50C::WoodEgg.new((request.env['SERVER_NAME'].end_with? 'dev') ? 'test' : 'live')
-		@customer = false
-		protected! unless '/login' == request.path_info
+		@we = A50C::WoodEgg.new
+		unless '/login' == request.path_info
+			unless @customer = @we.customer_from_cookie(request.cookies['ok'])
+				redirect to('/login')
+			end
+		end
 		@pagetitle = 'Wood Egg'
-		@country_name = {
-			'KH' => 'Cambodia',
-			'CN' => 'China',
-			'HK' => 'Hong Kong',
-			'IN' => 'India',
-			'ID' => 'Indonesia',
-			'JP' => 'Japan',
-			'KR' => 'Korea',
-			'MY' => 'Malaysia',
-			'MN' => 'Mongolia',
-			'MM' => 'Myanmar',
-			'PH' => 'Philippines',
-			'SG' => 'Singapore',
-			'LK' => 'Sri Lanka',
-			'TW' => 'Taiwan',
-			'TH' => 'Thailand',
-			'VN' => 'Vietnam'}
+		@country_name= {'KH'=>'Cambodia','CN'=>'China','HK'=>'Hong Kong','IN'=>'India','ID'=>'Indonesia','JP'=>'Japan','KR'=>'Korea','MY'=>'Malaysia','MN'=>'Mongolia','MM'=>'Myanmar','PH'=>'Philippines','SG'=>'Singapore','LK'=>'Sri Lanka','TW'=>'Taiwan','TH'=>'Thailand','VN'=>'Vietnam'}
 	end
 
 	get '/login' do
