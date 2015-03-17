@@ -36,21 +36,13 @@ class WoodEgg < Sinatra::Base
 		erb :login
 	end
 
-	get '/register' do
-		@pagetitle = 'thank you'
-		erb :register
-	end
-
 	post '/register' do
 		unless params[:password] && (/\S+@\S+\.\S+/ === params[:email]) && String(params[:name]).size > 1 && String(params[:proof]).size > 10
 			redirect to('/login')
 		end
-		if x = @we.register(params)
-			response.set_cookie('ok', value: x[:cookie], path: '/', secure: true, httponly: true)
-			redirect to('/home')
-		else
-			redirect to('/login')
-		end
+		@person = @we.register(params)
+		@pagetitle = 'thank you'
+		erb :register
 	end
 
 	post '/login' do

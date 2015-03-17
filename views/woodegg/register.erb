@@ -1,29 +1,14 @@
-<section id="login">
+<section id="register">
 
-<h1>log in</h1>
-<p>(If you already registered and have logged in before.)</p>
-<form action="/login" method="post" name="login">
-	<input type="email" name="email" placeholder="email">
-	<input type="password" name="password" placeholder="password">
-	<input type="submit" value="log in">
-</form>
-<script>
-document.login.email.focus();
-</script>
+<h1>Thank you <%=h(@person[:address])%>!</h1>
 
-<h1>register</h1>
-<p>(If you bought a Wood Egg book, but have never logged in.)</p>
-<form action="/register" method="post" id="registerform">
-	<label for="r_name">Your Name:</label>
-	<input type="text" name="name" id="r_name" placeholder="name">
-	<label for="r_email">Your Email:</label>
-	<input type="email" name="email" id="r_email" placeholder="email">
-	<label for="r_password">Create a new password:</label>
-	<input type="password" name="password" id="r_password" placeholder="password">
-	<label for="r_proof">Proof of Wood Egg book purchase: (order number, receipt, anything)</label>
-	<input type="text" name="proof" id="r_proof" placeholder="proof">
-	<br>
-	<input type="submit" value="register">
-</form>
+<p>I process all registrations by hand, every day or two. But if you want me to hurry, just <a href="http://woodegg.com/contact">email me</a>.</p>
+
+<p>I will email <strong><%=h(@person[:email])%></strong> from <strong>we@woodegg.com</strong>.</p>
+
+<p>Once I do, you can log in and have full access.</p>
+
+<p><em> - Derek Sivers, owner, Wood Egg</em></p>
+<a href="http://sivers.org/"><img alt="Derek Sivers" width="200" height="200" src="/images/DerekSivers-20141119-200.jpg"></a>
 
 </section>
