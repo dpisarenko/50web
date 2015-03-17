@@ -4,6 +4,9 @@ require 'kramdown'
 
 class WoodEgg < Sinatra::Base
 
+	log = File.new('/tmp/WoodEgg.log', 'a+')
+	log.sync = true
+
 	helpers do
 		def h(text)
 			Rack::Utils.escape_html(text)
@@ -11,11 +14,13 @@ class WoodEgg < Sinatra::Base
 	end
 
 	configure do
+		enable :logging
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new { File.join(root, 'views/woodegg') }
 	end
 
 	before do
+		env['rack.errors'] = log
 		@we = B50D::WoodEgg.new
 		unless ['/login', '/register'].include? request.path_info
 			unless @customer = @we.customer_from_cookie(request.cookies['ok'])

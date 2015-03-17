@@ -1,14 +1,19 @@
 require_relative 'mod_auth'
 require 'b50d/sivers-comments'
 
-class SiversCommentsWeb < ModAuth
+class SiversComments < ModAuth
+
+	log = File.new('/tmp/SiversComments.log', 'a+')
+	log.sync = true
 
 	configure do
+		enable :logging
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new { File.join(root, 'views/sivers-comments') }
 	end
 
 	before do
+		env['rack.errors'] = log
 		@api = 'SiversComments'
 		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
 		@sc = B50D::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)

@@ -11,12 +11,20 @@ R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
 require 'b50d/musicthoughts'
 
-class MusicThoughtsWeb < Sinatra::Base
+class MusicThoughts < Sinatra::Base
 	use Langur
 
+	log = File.new('/tmp/MusicThoughts.log', 'a+')
+	log.sync = true
+
 	configure do
+		enable :logging
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new { File.join(root, 'views/musicthoughts') }
+	end
+
+	before do
+		env['rack.errors'] = log
 	end
 
 	helpers do

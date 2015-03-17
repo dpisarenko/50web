@@ -15,6 +15,7 @@ class ModAuth < Sinatra::Base
 
 	# set @api and @livetest in child controller's before block
 	before do
+		env['rack.errors'] = log
 		protected! unless '/login' == request.path_info
 	end
 

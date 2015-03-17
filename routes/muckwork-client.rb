@@ -2,9 +2,13 @@ require_relative 'mod_auth'
 
 require 'b50d/muckwork-client'
 
-class MuckworkClientWeb < ModAuth
+class MuckworkClient < ModAuth
+
+	log = File.new('/tmp/MuckworkClient.log', 'a+')
+	log.sync = true
 
 	configure do
+		enable :logging
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new { File.join(root, 'views/muckwork-client') }
 	end
@@ -16,6 +20,7 @@ class MuckworkClientWeb < ModAuth
 	end
 
 	before do
+		env['rack.errors'] = log
 		if has_cookie?
 			@mc = B50D::MuckworkClient.new(request.cookies['api_key'], request.cookies['api_pass'])
 			@client = @mc.get_client

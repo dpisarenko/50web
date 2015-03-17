@@ -2,7 +2,11 @@ require_relative 'mod_auth'
 
 class Inbox < ModAuth
 
+	log = File.new('/tmp/Inbox.log', 'a+')
+	log.sync = true
+
 	configure do
+		enable :logging
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new { File.join(root, 'views/inbox') }
 	end
@@ -30,6 +34,7 @@ class Inbox < ModAuth
 	end
 
 	before do
+		env['rack.errors'] = log
 		@api = 'Peep'
 		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
 		@p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
