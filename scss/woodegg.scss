@@ -1,6 +1,8 @@
 @import 'pure/base.scss';
 @import 'pure/menus-core.scss';
 @import 'pure/menus-horizontal.scss';
+@import 'pure/forms-nr.scss';
+@import 'pure/buttons.scss';
 
 nav {
 	background-color: #700;
@@ -11,6 +13,7 @@ nav {
 		@extend .pure-menu-heading;
 		@extend .pure-menu-link;
 		color: #fff;
+		margin-left: 10px;
 		margin-right: 2em;
 		font-weight: bold;
 	}
@@ -33,3 +36,16 @@ ul.essays > li, ul.answers > li {
 	margin-bottom: 4em;
 }
 
+form {
+	@extend .pure-form;
+}
+form#registerform {
+	@extend .pure-form-stacked;
+	label {
+		margin-top: 1em;
+	}
+}
+input[type="submit"] {
+	@extend .pure-button;
+	@extend .pure-button-primary;
+}

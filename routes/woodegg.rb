@@ -17,7 +17,7 @@ class WoodEgg < Sinatra::Base
 
 	before do
 		@we = B50D::WoodEgg.new
-		unless '/login' == request.path_info
+		unless ['/login', '/register'].include? request.path_info
 			unless @customer = @we.customer_from_cookie(request.cookies['ok'])
 				redirect to('/login')
 			end
@@ -29,6 +29,23 @@ class WoodEgg < Sinatra::Base
 	get '/login' do
 		@pagetitle = 'log in'
 		erb :login
+	end
+
+	get '/register' do
+		@pagetitle = 'thank you'
+		erb :register
+	end
+
+	post '/register' do
+		unless params[:password] && (/\S+@\S+\.\S+/ === params[:email]) && String(params[:name]).size > 1 && String(params[:proof]).size > 10
+			redirect to('/login')
+		end
+		if x = @we.register(params)
+			response.set_cookie('ok', value: x[:cookie], path: '/', secure: true, httponly: true)
+			redirect to('/home')
+		else
+			redirect to('/login')
+		end
 	end
 
 	post '/login' do
