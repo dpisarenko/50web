@@ -16,8 +16,9 @@ class SiversComments < ModAuth
 		env['rack.errors'] = log
 		@api = 'SiversComments'
 		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
-		@sc = B50D::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
-		@pagetitle = 'sivers-comments'
+		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
+			@sc = B50D::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
+		end
 	end
 
 	get '/' do

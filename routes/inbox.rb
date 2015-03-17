@@ -37,7 +37,9 @@ class Inbox < ModAuth
 		env['rack.errors'] = log
 		@api = 'Peep'
 		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
-		@p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
+		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
+			@p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
+		end
 	end
 
 	get '/' do
