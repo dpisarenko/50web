@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require 'a50c/woodegg'
+require 'b50d/woodegg'
 require 'kramdown'
 
 class WoodEgg < Sinatra::Base
@@ -16,7 +16,7 @@ class WoodEgg < Sinatra::Base
 	end
 
 	before do
-		@we = A50C::WoodEgg.new
+		@we = B50D::WoodEgg.new
 		unless '/login' == request.path_info
 			unless @customer = @we.customer_from_cookie(request.cookies['ok'])
 				redirect to('/login')

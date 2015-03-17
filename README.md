@@ -1,15 +1,6 @@
 # 50web
 
-Websites in Sinatra using a50c gem to access 50apis API.  I think this will include:
-
-* musicthoughts.com
-* sivers-comments
-* inbox
-* musicthoughts.net (admin)
-* muckwork.com (client)
-* muckwork.biz (manager)
-* muckwork.net (worker)
-* … etc. for songtest, cyrano, and future ideas
+Websites in Sinatra using a50c (or b50d) gem to access PostgreSQL APIs.
 
 ## why?
 
@@ -24,20 +15,9 @@ Upside: All sites' href links are root-level.  Managing links into subdirectorie
 Downside: Separate SSL certificates.  Fair trade.
 
 For each domain that uses client-side JavaScript, nginx proxy /api/xxx to localhost:5000 as needed.
-(Internal a50c gem doesn't need any proxy, since it's accessing API via localhost.)
+(Internal a50c/b50d gem doesn't need any proxy, since it's accessing API via localhost.)
 
 ## auth?
 
 A50C::Auth gets posted email & password, and returns API key and pass values to set in cookies.  No cross-scriping worries, since it's not JavaScript.
-
-# woodegg TODO:
-
-* login
-* static home: list of countries, or questions across all countries
-* .country(cc) + .uploads(cc) : list of questions + uploads
-* .templates : list of all questions
-* .template(id) : answers & essays for all countries for that question
-* .question(id) : answers & essays for that country-specific question
-* .topic(id) : subtopics linking to template/:id
-* .upload(id) : details, transcrit, & download link for that upload
 

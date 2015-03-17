@@ -1,6 +1,6 @@
 require_relative 'mod_auth'
 
-require 'a50c/muckwork-client'
+require 'b50d/muckwork-client'
 
 class MuckworkClientWeb < ModAuth
 
@@ -17,7 +17,7 @@ class MuckworkClientWeb < ModAuth
 
 	before do
 		if has_cookie?
-			@mc = A50C::MuckworkClient.new(request.cookies['api_key'], request.cookies['api_pass'])
+			@mc = B50D::MuckworkClient.new(request.cookies['api_key'], request.cookies['api_pass'])
 			@client = @mc.get_client
 		end
 	end

@@ -32,7 +32,7 @@ class Inbox < ModAuth
 	before do
 		@api = 'Peep'
 		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
-		@p = A50C::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
+		@p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
 	end
 
 	get '/' do

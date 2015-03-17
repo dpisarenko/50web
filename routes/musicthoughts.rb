@@ -9,7 +9,7 @@ include R18n::Helpers
 R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
 
-require 'a50c/musicthoughts'
+require 'b50d/musicthoughts'
 
 class MusicThoughtsWeb < Sinatra::Base
 	use Langur
@@ -49,7 +49,7 @@ class MusicThoughtsWeb < Sinatra::Base
 		@dir = (@lang == 'ar') ? 'rtl' : 'ltr'
 		R18n.set(@env['lang'])
 		@rel_alternate = page_in_other_languages(@env, @lang)
-		@mt = A50C::MusicThoughts.new('live-local', @lang)
+		@mt = B50D::MusicThoughts.new('live', @lang)
 		@rand1 = @mt.thought_random
 	end
 

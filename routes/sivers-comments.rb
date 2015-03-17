@@ -1,5 +1,5 @@
 require_relative 'mod_auth'
-require 'a50c/sivers-comments'
+require 'b50d/sivers-comments'
 
 class SiversCommentsWeb < ModAuth
 
@@ -11,7 +11,7 @@ class SiversCommentsWeb < ModAuth
 	before do
 		@api = 'SiversComments'
 		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
-		@sc = A50C::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
+		@sc = B50D::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
 		@pagetitle = 'sivers-comments'
 	end
 
