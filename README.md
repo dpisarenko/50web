@@ -21,3 +21,21 @@ For each domain that uses client-side JavaScript, nginx proxy /api/xxx to localh
 
 A50C::Auth gets posted email & password, and returns API key and pass values to set in cookies.  No cross-scriping worries, since it's not JavaScript.
 
+# Lat — TODO:
+
+### home:
+
+* add concept form
+* create pairing
+* list of tags : link to /tagged/X
+
+### edit concept:
+
+* update concept
+* add/edit/delete url
+* add/edit/delete tag
+
+### tagged:
+
+* tagged/tag = list of concepts
+
