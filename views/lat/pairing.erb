@@ -1,2 +1,28 @@
-<h1><%= @pairing[:id] %></h1>
+<div>
+	<%= @pairing[:id] %> :
+	<%= @pairing[:created_at] %>
+</div>
+
+<form action="/pairing/<%= @pairing[:id] %>" method="post">
+	<textarea name="thoughts"><%=h(@pairing[:thoughts])%></textarea>
+	<input type="submit" value="update thought">
+</form>
+
+<form action="/pairing/<%= @pairing[:id] %>/tag" method="post">
+	<input type="text" name="tag" placeholder="tag">
+	<input type="submit" value="add tag to both concepts">
+</form>
+
+<h2>Concept 1</h2>
+<% @concept = @pairing[:concept1] %>
+<%= erb :concept %>
+
+<h2>Concept 2</h2>
+<% @concept = @pairing[:concept2] %>
+<%= erb :concept %>
+
+
+<form action="/pairing/<%= @pairing[:id] %>/delete" method="post">
+	<input type="submit" value="delete pairing"> (why would you?)
+</form>
 

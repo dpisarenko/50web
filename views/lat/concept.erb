@@ -1,2 +1,55 @@
-<h1><%= @concept[:id] %></h1>
+<div>
+	<%= @concept[:id] %> :
+	<%= @concept[:created_at] %>
+</div>
+
+<form action="/concept/<%= @concept[:id] %>" method="post">
+	<input type="text" name="title" value="<%=h(@concept[:title])%>">
+	<textarea name="concept"><%=h(@concept[:concept])%></textarea>
+	<input type="submit" value="update">
+</form>
+
+<% if @concept[:urls] %>
+	<ul>
+	<% @concept[:urls].each do |u| %>
+		<li><a href="<%=h(u[:url])%>"><%=h(u[:url])%></a>
+			<form action="/concept/<%= @concept[:id] %>/url/<%= u[:id] %>" method="post">
+				<input type="text" name="url" value="<%=h u[:url] %>">
+				<input type="text" name="notes" value="<%=h u[:notes] %>">
+				<input type="submit" value="update URL">
+			</form>
+			<form action="/concept/<%= @concept[:id] %>/url/<%= u[:id] %>/delete" method="post">
+				<input type="submit" value="delete">
+			</form>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+<form action="/concept/<%= @concept[:id] %>/url" method="post">
+	<input type="text" name="url" placeholder="url">
+	<input type="text" name="notes" placeholder="notes">
+	<input type="submit" value="add url">
+</form>
+
+<% if @concept[:tags] %>
+	<ul>
+	<% @concept[:tags].each do |t| %>
+		<li><a href="/tagged/<%=h(t[:tag])%>"><%=h(t[:tag])%></a>
+			<form action="/concept/<%= @concept[:id] %>/tag/<%= t[:id] %>/delete" method="post">
+				<input type="submit" value="delete">
+			</form>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+<form action="/concept/<%= @concept[:id] %>/tag" method="post">
+	<input type="text" name="tag" placeholder="tag">
+	<input type="submit" value="add tag">
+</form>
+
+<hr>
+
+<form action="/concept/<%= @concept[:id] %>/delete" method="post">
+	<input type="submit" value="delete entire concept">
+</form>
 

@@ -29,6 +29,15 @@ nav {
 
 section#content {
 	margin-left: 10px;
+	ul {
+		padding: 0;
+	}
+	li {
+		list-style-type: none;
+	}
+	td {
+		padding: 1em 0.5em;
+	}
 }
 
 form {

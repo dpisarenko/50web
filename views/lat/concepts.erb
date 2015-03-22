@@ -1,0 +1,9 @@
+<table>
+<% @concepts.each do |c| %> 
+	<tr>
+		<td><a href="/concept/<%= c[:id] %>"><%= c[:created_at] %></a></td>
+		<td><%=h c[:title] %></td>
+		<td><%=h c[:concept] %></td>
+	</tr>
+<% end %>
+</table>

@@ -1,0 +1,9 @@
+<table>
+<% @pairings.each do |p| %> 
+	<tr>
+		<td><a href="/pairing/<%= p[:id] %>"><%= p[:created_at] %></a></td>
+		<td><%=h p[:concept1] %></td>
+		<td><%=h p[:concept2] %></td>
+	</tr>
+<% end %>
+</table>
