@@ -1,7 +1,7 @@
 <h1><a href="/country/<%= @upload[:country] %>"><%= @country_name[@upload[:country]] %></a> file download:</h1>
 
 <p>Date: <%= @upload[:date] %></p>
-<p>File name: <%= @upload[:filename] %></p>
+<p>Download: <a href="/download/<%= '%d/%s' % [@upload[:id], @upload[:filename]] %>"><%= @upload[:filename] %></a></p>
 <p>Notes: <%= @upload[:notes] %></p>
 
 <% if String(@upload[:transcription]).size > 10 %>
