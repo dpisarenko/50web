@@ -48,7 +48,7 @@ class WoodEgg < Sinatra::Base
 	post '/login' do
 		redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
 		if x = @we.login(params[:email], params[:password])
-			response.set_cookie('ok', value: x[:cookie], path: '/', secure: true, httponly: true)
+			response.set_cookie('ok', value:x[:cookie], path:'/', secure:true, httponly:true)
 			redirect to('/home')
 		else
 			redirect to('/login')
@@ -56,7 +56,7 @@ class WoodEgg < Sinatra::Base
 	end
 
 	get '/logout' do
-		response.set_cookie('ok', value: '', path: '/', expires: Time.at(0), secure: true, httponly: true)
+		response.set_cookie('ok', value:'', path:'/', expires:Time.at(0), secure:true, httponly:true)
 		redirect to('/login')
 	end
 
