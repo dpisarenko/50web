@@ -1,3 +1,4 @@
 *.swp
 *.pid
 .sass-cache
+configs/*.rb

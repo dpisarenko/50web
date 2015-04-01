@@ -1,0 +1,14 @@
+  <h1>Please make a password:</h1>
+  
+  <p>
+  Sorry for the trouble, but please create a password, to make sure this is only for you.
+  </p>
+  
+  <form action="/u/password" method="post">
+    <input type="hidden" name="person_id" value="<%= @person_id %>">
+    <input type="hidden" name="newpass" value="<%= @newpass %>">
+    <label for="password">New Password:</label>
+    <input type="password" name="password" id="password" value=""><br>
+    <input type="submit" name="submit" value="OK - GO">
+  </form>
+
