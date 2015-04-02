@@ -1,8 +1,8 @@
-require 'sinatra/base'
 require_relative '../configs/sivers.org.rb'
 require_relative '../lib/form_filter.rb'
 require 'b50d/peeps'
 require 'b50d/sivers-comments'
+require 'sinatra/base'
 
 PP = B50D::Peeps.new(API_KEY, API_PASS)
 SC = B50D::SiversComments.new(API_KEY, API_PASS)
@@ -107,11 +107,8 @@ class SiversOrg < Sinatra::Base
 		redirect '/sorry?for=badurlid' unless p = PP.get_person_newpass(person_id, newpass)
 		redirect '/sorry?for=shortpass' unless params[:password].to_s.size >= 4
 		p = PP.set_password(p[:id], params[:password])
-		if %w(sivers.org sivers.dev example.org).include? request.env['SERVER_NAME']
-			# TODO: a little ugly. would need to separate cookie_from_id(person_id, host)
-			ok = PP.cookie_from_login(p[:email], params[:password], request.env['SERVER_NAME'])
-			response.set_cookie('ok', value: ok[:cookie], path: '/', httponly: true)
-		end
+		ok = PP.cookie_from_id(p[:id], request.env['SERVER_NAME'])
+		response.set_cookie('ok', value: ok[:cookie], path: '/', httponly: true)
 		redirect '/ayw/list'
 	end
 
@@ -124,9 +121,8 @@ class SiversOrg < Sinatra::Base
 
 	# PASSWORD: email posted here. send password reset link
 	post '/u/forgot' do
-		# TODO: p = PP.get_person_email(params[:email])
-		redirect '/sorry?for=noemail' unless p
-		# TODO: PP.set_person_newpass(p[:id])
+		redirect '/sorry?for=noemail' unless p = PP.get_person_email(params[:email])
+		PP.make_newpass(p[:id])
 		b = PP.get_formletter_for_person(1, p[:id])
 		PP.new_email_to(p[:id], b[:body],
 			"#{p[:address]} - your password reset link", 'derek@sivers')
@@ -137,7 +133,8 @@ class SiversOrg < Sinatra::Base
 	# (if you are reading this, yes the codeword is here. it's intentionally not very secret.)
 	post '/ayw/proof' do
 		redirect '/sorry?for=aywcode' unless /utopia/i === params[:code]
-		# TODO: ?? p = AYW.update(request.env)
+		redirect '/pdf' unless p = PP.new_person(params[:name], params[:email])
+		PP.add_stat(p[:id], 'ayw', 'a')
 		b = PP.get_formletter_for_person(4, p[:id])
 		PP.new_email_to(p[:id], b[:body],
 			"#{p[:address]} - your MP3 download link", 'derek@sivers')
