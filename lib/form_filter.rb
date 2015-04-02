@@ -51,7 +51,7 @@ module FormFilter
 		def ip_is_spammer?(env)
 			ip = env['REMOTE_ADDR']
 			addr = '%s.%s.dnsbl.httpbl.org' %
-				[C50E.config[:project_honeypot_key], ip.split('.').reverse.join('.')]
+				[HONEYPOT, ip.split('.').reverse.join('.')]
 			begin
 				Timeout::timeout(1) do
 					response = Resolv::DNS.new.getaddress(addr).to_s
@@ -78,8 +78,7 @@ module FormFilter
 				comment_content: env['rack.request.form_hash']['comment'],
 				blog_charset: 'UTF-8'}
 			params.each {|k,v| params[k] = URI.encode_www_form_component(v)}
-			key = C50E.config[:akismet]
-			uri = URI("http://#{key}.rest.akismet.com/1.1/comment-check")
+			uri = URI("http://#{AKISMET}.rest.akismet.com/1.1/comment-check")
 			'true' != Net::HTTP.post_form(uri, params).body
 		end
 

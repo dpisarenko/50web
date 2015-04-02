@@ -104,7 +104,8 @@ class SiversOrg < Sinatra::Base
 
 	# PASSWORD: posted here to make/change it. then log in with cookie
 	post '/u/password' do
-		redirect '/sorry?for=badurlid' unless p = PP.get_person_newpass(person_id, newpass)
+		p = PP.get_person_newpass(params[:person_id], params[:newpass])
+		redirect '/sorry?for=badurlid' unless p
 		redirect '/sorry?for=shortpass' unless params[:password].to_s.size >= 4
 		p = PP.set_password(p[:id], params[:password])
 		ok = PP.cookie_from_id(p[:id], request.env['SERVER_NAME'])
@@ -133,7 +134,7 @@ class SiversOrg < Sinatra::Base
 	# (if you are reading this, yes the codeword is here. it's intentionally not very secret.)
 	post '/ayw/proof' do
 		redirect '/sorry?for=aywcode' unless /utopia/i === params[:code]
-		redirect '/pdf' unless p = PP.new_person(params[:name], params[:email])
+		redirect '/a' unless p = PP.new_person(params[:name], params[:email])
 		PP.add_stat(p[:id], 'ayw', 'a')
 		b = PP.get_formletter_for_person(4, p[:id])
 		PP.new_email_to(p[:id], b[:body],
