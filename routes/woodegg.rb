@@ -40,7 +40,9 @@ class WoodEgg < Sinatra::Base
 		unless params[:password] && (/\S+@\S+\.\S+/ === params[:email]) && String(params[:name]).size > 1 && String(params[:proof]).size > 10
 			redirect to('/login')
 		end
-		@person = @we.register(params)
+		unless @person = @we.register(params)
+			redirect to('/login')
+		end
 		@pagetitle = 'thank you'
 		erb :register
 	end
