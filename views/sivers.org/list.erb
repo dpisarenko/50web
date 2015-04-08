@@ -1,29 +1,34 @@
 <!-- email list -->
 
-  <h1>email list</h1>
-  <p>If you want me to email you articles and opportunities from my site, please say so here:</p>
-  
-  <form action="/list" method="post">
-  
-    <label for="name">Your Name</label>
-    <input type="text" name="name" id="name" value="<%= @show_name %>"/>
-    
-    <label for="email">Your Email <span class="small">(kept private! never shared.)</span></label>
-    <input type="email" name="email" id="email" value="<%= @show_email %>"/>
-    
-    <h2><label for="listype">how often?</label></h2>
-    <div id="listype">
-      <input type="radio" name="listype" id="listypeall" value="all" checked="checked">
-      <label for="listypeall"><strong>SOME</strong>: a small email when I post something new</label><br>
-      	
-      <input type="radio" name="listype" id="listypesome" value="some">
-      <label for="listypesome"><strong>RARELY</strong>: only rare big announcements</label><br>
-      
-      <input type="radio" name="listype" id="listypenone" value="none">
-      <label for="listypenone"><strong>NEVER</strong>: never / unsubscribe</label>
-    </div>
-    
-    <input type="submit" name="submit" value="OK - DO IT!">
+<h1>email list</h1>
+<p>If you be on (or off) my private email list, please say so here:</p>
 
-  </form>
+<form action="/list" method="post">
+
+<label for="name">Your Name</label>
+<input type="text" name="name" id="name" value="<%= @show_name %>"/>
+
+<label for="email">Your Email <span class="small">(kept private! never shared.)</span></label>
+<input type="email" name="email" id="email" value="<%= @show_email %>"/>
+
+<h2><label for="listype">how often?</label></h2>
+<div id="listype">
+	<label for="listypeall">
+	<input type="radio" name="listype" id="listypeall" value="all" checked="checked">
+	<strong>SOME</strong>: a small email when I post something new
+	</label>
+
+	<label for="listypesome">
+	<input type="radio" name="listype" id="listypesome" value="some">
+	<strong>RARELY</strong>: only rare big announcements
+	</label>
+
+	<label for="listypenone">
+	<input type="radio" name="listype" id="listypenone" value="none">
+	<strong>NEVER</strong>: never / unsubscribe
+	</label>
+</div>
+
+<input type="submit" name="submit" value="OK - DO IT!">
+</form>
 
