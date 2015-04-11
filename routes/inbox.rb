@@ -192,6 +192,12 @@ class Inbox < ModAuth
 		erb :search
 	end
 
+	get %r{^/sent/([0-9]+)$} do |howmany|
+		@emails = @p.sent_emails(howmany)
+		@pagetitle = 'most recent %d emails sent' % [howmany]
+		erb :emails
+	end
+
 	get '/formletters' do
 		@formletters = @p.formletters
 		@pagetitle = 'form letters'

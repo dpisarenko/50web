@@ -1,5 +1,5 @@
-require_relative '../configs/sivers.org.rb'
 require_relative '../lib/form_filter.rb'
+require 'b50d-config.rb'
 require 'b50d/peeps'
 require 'b50d/sivers-comments'
 require 'sinatra/base'
