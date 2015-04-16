@@ -35,8 +35,9 @@ class Inbox < ModAuth
 
 	before do
 		env['rack.errors'] = log
+		# shared ModAuth requires @api and @livetest:
 		@api = 'Peep'
-		@livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
+		@livetest = 'live' # (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
 		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
 			@p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
 		end

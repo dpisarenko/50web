@@ -2,15 +2,17 @@
 <h1><%=h @pagetitle %></h1>
 
 <table>
-<% @cities.each do |city, howmany| %>
-	<tr><td><%=h city %></td><td>
+<% @cities.each do |c| %>
+	<tr><td><%=h c[:city] %></td><td>
 	<% if @state %>
-		<a href="/where/<%= @country %>?city=<%=h city %>&amp;state=<%=h @state %>"><%= howmany %></a>
+		<a href="/where/<%= @country %>?city=<%=h c[:city] %>&amp;state=<%=h @state %>"><%= c[:count] %></a>
 	<% else %>
-		<a href="/where/<%= @country %>?city=<%=h city %>"><%= howmany %></a>
+		<a href="/where/<%= @country %>?city=<%=h c[:city] %>"><%= c[:count] %></a>
 	<% end %>
 	</td></tr>
 <% end %>
 </table>
+
+<p>… or <a href="/where/<%= @country %>">ALL people in <%= @country %></a></p>
 
 </section>
