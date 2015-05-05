@@ -148,6 +148,11 @@ class Inbox < ModAuth
 		redirect_to_email_or_person(params[:email_id], id)
 	end
 
+	post %r{^/person/([0-9]+)/annihilate$} do |id|
+		@p.annihilate_person(id)
+		redirect '/'
+	end
+
 	post %r{^/person/([0-9]+)/url$} do |id|
 		@p.add_url(id, params[:url])
 		redirect_to_email_or_person(params[:email_id], id)
