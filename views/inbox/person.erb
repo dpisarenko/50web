@@ -1,5 +1,6 @@
 <form id="personeditform" data-id="<%= @person[:id] %>" action="/person/<%= @person[:id] %>" method="post">
 id: <a href="/person/<%= @person[:id] %>"><%= @person[:id] %></a>
+ ☀ <%= @person[:created_at] %>
 <input name="name" placeholder="name" value="<%=h @person[:name] %>">
 <input type="email" name="email" placeholder="email" value="<%=h @person[:email] %>">
 <input name="address" placeholder="address" value="<%=h @person[:address] %>">

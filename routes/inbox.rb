@@ -80,6 +80,12 @@ class Inbox < ModAuth
 		erb :emails
 	end
 
+	get '/unemailed' do
+		@people = @p.unemailed_people
+		@pagetitle = 'unemailed'
+		erb :people
+	end
+
 	post '/next_unopened' do
 		email = @p.next_unopened_email(params[:profile], params[:category])
 		redirect_to_email_or_home(email)
