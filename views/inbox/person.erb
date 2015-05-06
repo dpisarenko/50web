@@ -26,6 +26,10 @@ end
 <input type="submit" value="update">
 </form>
 
+<% if @tables %>
+	<p>✿ <%= @tables.join(', ') %></p>
+<% end %>
+
 <h4>stats:</h4>
 <form action="/person/<%= @person[:id] %>/stat" method="post" id="statadd">
 	<input name="key" placeholder="key">

@@ -143,6 +143,7 @@ class Inbox < ModAuth
 	get %r{^/person/([0-9]+)$} do |id|
 		@person = @p.get_person(id) || halt(404)
 		@emails = @p.emails_for_person(id).reverse
+		@tables = @p.tables_with_person(id).sort
 		@profiles = @p.profiles
 		@locations = @p.all_countries
 		@pagetitle = 'person %d' % id
