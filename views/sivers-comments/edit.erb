@@ -10,7 +10,7 @@ id: <%= @comment[:id] %>
 uri: <%= @comment[:uri] %>
 </div>
 <div>
-person_id: <%= @comment[:person_id] %>
+person_id: <a href="<%= INP % @comment[:person_id] %>"><%= @comment[:person_id] %></a>
 </div>
 <div>
 created_at: <%= @comment[:created_at] %>

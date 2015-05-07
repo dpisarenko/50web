@@ -1,4 +1,5 @@
 require_relative 'mod_auth'
+require 'b50d-config.rb'  # SCP
 
 class Inbox < ModAuth
 
@@ -144,6 +145,10 @@ class Inbox < ModAuth
 		@person = @p.get_person(id) || halt(404)
 		@emails = @p.emails_for_person(id).reverse
 		@tables = @p.tables_with_person(id).sort
+		@tables.map! do |t|
+			(t == 'sivers.comments') ?
+				('<a href="' + (SCP % id) + '">sivers.comments</a>') : t
+		end
 		@profiles = @p.profiles
 		@locations = @p.all_countries
 		@pagetitle = 'person %d' % id
