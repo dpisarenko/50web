@@ -95,7 +95,7 @@ class WoodEgg < Sinatra::Base
 
 	get %r{\A/download/([0-9]+)/WoodEgg.*\Z} do |id|
 		up = @we.upload(id) || halt(404)
-		send_file "/srv/http/uploads/#{up[:filename]}",
+		send_file "/var/www/htdocs/uploads/#{up[:filename]}",
 			filename: up[:filename].gsub(/^r[0-9]{3}/, 'WoodEgg')
 	end
 
