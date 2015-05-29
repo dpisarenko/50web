@@ -62,6 +62,11 @@ class WoodEgg < Sinatra::Base
 		redirect to('/login')
 	end
 
+	get '/' do
+		@pagetitle = 'HOME'
+		erb :home
+	end
+
 	get '/home' do
 		@pagetitle = 'HOME'
 		erb :home
