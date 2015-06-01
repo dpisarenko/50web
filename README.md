@@ -21,3 +21,7 @@ For each domain that uses client-side JavaScript, nginx proxy /api/xxx to localh
 
 A50C::Auth gets posted email & password, and returns API key and pass values to set in cookies.  No cross-scriping worries, since it's not JavaScript.
 
+# TODO
+
+Clean MusicThoughts CSS
+
