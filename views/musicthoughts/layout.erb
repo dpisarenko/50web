@@ -3,13 +3,11 @@
 <head>
 <meta charset="utf-8">
 <title><%= @pagetitle %></title>
-<meta name="viewport" content="width=device-width" />
-<link rel="stylesheet" href="/css/normalize.css" />
-<link rel="stylesheet" href="/css/app-<%= @dir %>.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/musicthoughts-201505.css" />
 <% @rel_alternate.each do |l, u| %>
 <link rel="alternate" hreflang="<%= l %>" href="<%= u %>" />
 <% end %>
-<script src="/js/vendor/custom.modernizr.js"></script>
 </head>
 <body id="<%= @bodyid %>">
 <div id="page">
@@ -78,11 +76,6 @@ if(langforms.addEventListener) {
 } else {
 	langforms.attachEvent('onclick', submitClick);
 }
-</script>
-<script src="/js/vendor/jquery.js"></script>
-<script src="/js/foundation/foundation.js"></script>
-<script>
-$(document).foundation();
 </script>
 </body>
 </html>

@@ -1,0 +1,105 @@
+@import 'pure/base.scss';
+@import 'pure/menus-core.scss';
+@import 'pure/menus-horizontal.scss';
+
+@charset "UTF-8";
+@font-face{font-family:'Cabin';src:local("Cabin Regular"),local("Cabin-Regular"),url("Cabin-Regular.eot");src:url("Cabin-Regular.eot?#iefix") format("embedded-opentype"),url("Cabin-Regular.woff") format("woff"),url("Cabin-Regular.ttf") format("truetype"),url("Cabin-Regular.svg#Cabin") format("svg");font-weight:400;font-style:normal}@font-face{font-family:'Old Standard TT';src:local("Old Standard TT Regular"),local("OldStandardTT-Regular"),url("OldStandardTT-Regular.eot");src:url("OldStandardTT-Regular.eot?#iefix") format("embedded-opentype"),url("OldStandardTT-Regular.woff") format("woff"),url("OldStandardTT-Regular.ttf") format("truetype"),url("OldStandardTT-Regular.svg#old_standard_ttregular") format("svg");font-weight:400;font-style:normal}
+
+body {
+	color: #222;
+	a {
+		color: #900;
+	}
+	h1,h2,h3,h4,h5,h6 {
+		font-family: "Old Standard TT", Georgia, serif;
+		font-weight: bold;
+		font-style: normal;
+		color: #222;
+		text-rendering: optimizeLegibility;
+		margin-top: 0.2em;
+		margin-bottom: 0.5em;
+		line-height: 1.2125em
+	}
+}
+
+nav {
+	padding: 5px 0;
+	@extend .pure-menu;
+	@extend .pure-menu-horizontal;
+	a {
+		@extend .pure-menu-heading;
+		@extend .pure-menu-link;
+		margin-right: 1em;
+	}
+	ul {
+		@extend .pure-menu-list;
+		li {
+			@extend .pure-menu-item;
+			a {
+				@extend .pure-menu-link;
+			}
+		}
+	}
+}
+
+div#page {
+	margin: 0 auto;
+	max-width: 40em;
+	ul {
+		padding: 0;
+	}
+	li {
+		list-style-type: none;
+	}
+	blockquote {
+		margin: 2em 0;
+	}
+	:lang(ar)>q {
+		quotes:'“' '”' '‘' '’';
+	}
+	:lang(en)>q {
+		quotes:'“' '”' '‘' '’';
+	}
+	:lang(pt)>q {
+		quotes:'“' '”' '‘' '’';
+	}
+	:lang(zh)>q {
+		quotes:'“' '”' '‘' '’';
+	}
+	:lang(fr)>q {
+		quotes:'« ' ' »' '“' '”';
+	}
+	:lang(it)>q {
+		quotes:'«' '»' '“' '”';
+	}
+	:lang(ru)>q {
+		quotes:'«' '»' '“' '”';
+	}
+	:lang(es)>q {
+		quotes:'«' '»' '“' '”';
+	}
+	:lang(de)>q {
+		quotes:'„' '“' '‚' '‘';
+	}
+	:lang(ja)>q {
+		quotes:'「' '」' '『' '』';
+	}
+	q:before {
+		content:open-quote;
+	}
+	q:after {
+		content:close-quote;
+	}
+}
+
+#bighead {
+	h1 {
+		a {
+			text-decoration: none;
+		}
+	}
+	h2 {
+		font-weight: normal;
+	}
+}
+
