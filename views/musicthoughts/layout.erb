@@ -39,16 +39,9 @@
 <footer id="bigfoot">
 <nav id="langforms">
 <ul>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="en"><a href="/home/en">English</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="es"><a href="/home/es">Español</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="fr"><a href="/home/fr">Français</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="de"><a href="/home/de">Deutsch</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="it"><a href="/home/it">Italiano</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="pt"><a href="/home/pt">Português</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="ru"><a href="/home/ru">Русский</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="ar"><a href="/home/ar">العربية</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="ja"><a href="/home/ja">日本</a></form></li>
-	<li><form action="/lang" method="post"><input type="hidden" name="lang" value="zh"><a href="/home/zh">中文</a></form></li>
+<% @languages.each do |lang_code, lang_show| %><% if @rel_alternate[lang_code] %>
+	<li><a href="<%= @rel_alternate[lang_code] %>"><%= lang_show %></a></li>
+<% end %><% end %>
 </ul>
 </nav>
 
@@ -59,24 +52,6 @@
 </footer>
 
 </div>
-<script type="text/javascript">
-function submitClick(event) {
-	var event = event || window.event;
-	var target = event.target || event.srcElement;
-	if(event.preventDefault) {
-		event.preventDefault();
-	} else {
-		event.returnValue = false;
-	}
-	target.previousSibling.form.submit();
-}
-var langforms = document.getElementById('langforms');
-if(langforms.addEventListener) {
-	langforms.addEventListener('click', submitClick, false);
-} else {
-	langforms.attachEvent('onclick', submitClick);
-}
-</script>
 </body>
 </html>
 

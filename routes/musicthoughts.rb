@@ -1,18 +1,12 @@
 require 'sinatra/base'
 
-require 'langur'
-LANGUAGES = %w(ar de en es fr it ja pt ru zh)
-LangCode.only(LANGUAGES)
-
 require 'r18n-core'
 include R18n::Helpers
 R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
-
 require 'b50d/musicthoughts'
 
 class MusicThoughts < Sinatra::Base
-	use Langur
 
 	log = File.new('/tmp/MusicThoughts.log', 'a+')
 	log.sync = true
@@ -23,10 +17,6 @@ class MusicThoughts < Sinatra::Base
 		set :views, Proc.new { File.join(root, 'views/musicthoughts') }
 	end
 
-	before do
-		env['rack.errors'] = log
-	end
-
 	helpers do
 		def h(str)
 			str.encode(str.encoding, :xml => :attr)[1...-1]
@@ -34,11 +24,12 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	# returns hash of langcode => url
-	def page_in_other_languages(env, lang)
+	def page_in_other_languages(req, lang, langhash)
 		others = {}
-		(LANGUAGES - [lang]).each do |l|
-			pathinfo = (env['PATH_INFO'] == '/') ? '/home' : env['PATH_INFO']
-			others[l] = 'http://' + env['HTTP_HOST'] + pathinfo + '/' + l	# TODO: SSL?
+		tld = req.host.include?('dev') ? 'dev' : 'com'
+		(langhash.keys - [lang]).each do |l|
+			subdomain = (l == 'en') ? '' : "#{l}."
+			others[l] = 'http://%smusicthoughts.%s%s' % [subdomain, tld, req.path]
 		end
 		others
 	end
@@ -53,10 +44,24 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	before do
-		@lang = @env['lang']
+		env['rack.errors'] = log
+		@languages = {'en' => 'English',
+			'es' => 'Español',
+			'fr' => 'Français',
+			'de' => 'Deutsch',
+			'it' => 'Italiano',
+			'pt' => 'Português',
+			'ru' => 'Русский',
+			'ar' => 'العربية',
+			'ja' => '日本',
+			'zh' => '中文'}
+		# Nginx should only be routing these 2-letter language subdomains 
+		# If found at beginning of URL, use as lang.  Otherwise 'en'.
+		m = /^([a-z]{2})\./.match request.host
+		@lang = m ? m[1] : 'en'
+		R18n.set(@lang)
 		@dir = (@lang == 'ar') ? 'rtl' : 'ltr'
-		R18n.set(@env['lang'])
-		@rel_alternate = page_in_other_languages(@env, @lang)
+		@rel_alternate = page_in_other_languages(request, @lang, @languages)
 		@mt = B50D::MusicThoughts.new('live', @lang)
 		@rand1 = @mt.thought_random
 	end
@@ -71,7 +76,7 @@ class MusicThoughts < Sinatra::Base
 
 	get %r{^/t/([0-9]+)} do |id|
 		@thought = @mt.thought(id)
-		redirect '/' if @thought.nil?
+		redirect to('/') if @thought.nil?
 		@pagetitle = (t.author_quote_quote % [@thought[:author][:name], snip_for_lang(@thought[:thought], @lang)])
 		@bodyid = 't'
 		@authorlink = '<a href="/author/%d">%s</a>' % [@thought[:author][:id], @thought[:author][:name]]
@@ -83,12 +88,12 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get '/t' do
-		redirect('/t/%d' % @rand1[:id], 307)
+		redirect to('/t/%d' % @rand1[:id]), 307
 	end
 
 	get %r{^/cat/([0-9]+)} do |id|
 		@category = @mt.category(id)
-		redirect '/' if @category.nil?
+		redirect to('/') if @category.nil?
 		@pagetitle = t.musicthoughts + ' - ' + @category[:category]
 		@bodyid = 'cat'
 		@thoughts = @category[:thoughts]
@@ -96,7 +101,7 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get '/cat' do
-		redirect '/'
+		redirect to('/')
 	end
 
 	get '/new' do
@@ -108,7 +113,7 @@ class MusicThoughts < Sinatra::Base
 
 	get %r{^/author/([0-9]+)} do |id|
 		@author = @mt.author(id)
-		redirect '/author' if @author.nil?
+		redirect to('/author') if @author.nil?
 		@thoughts = @author[:thoughts].shuffle
 		@pagetitle = @author[:name] + ' ' + t.musicthoughts
 		@bodyid = 'author'
@@ -124,7 +129,7 @@ class MusicThoughts < Sinatra::Base
 
 	get %r{^/contributor/([0-9]+)} do |id|
 		@contributor = @mt.contributor(id)
-		redirect '/contributor' if @contributor.nil?
+		redirect to('/contributor') if @contributor.nil?
 		@thoughts = @contributor[:thoughts].shuffle
 		@pagetitle = @contributor[:name] + ' ' + t.musicthoughts
 		@bodyid = 'contributor'
@@ -160,7 +165,7 @@ class MusicThoughts < Sinatra::Base
 		if ['موسيقى', 'Musik', 'musik', 'music', 'música', 'musique', 'musica', '音楽', 'музыка'].include? params[:verify]
 			@mt.add(params)
 		end
-		redirect '/thanks'
+		redirect to('/thanks')
 	end
 
 	get '/thanks' do
