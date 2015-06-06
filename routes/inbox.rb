@@ -95,12 +95,13 @@ class Inbox < ModAuth
 	get %r{^/email/([0-9]+)$} do |id|
 		@email = @p.open_email(id) || halt(404)
 		@person = @email[:person]
+		@clash = (@email[:their_email] != @person[:email])
 		@profiles = @p.profiles
 		@formletters = @p.formletters
 		@locations = @p.all_countries
 		@reply = (params[:formletter]) ?
 			@p.get_formletter_for_person(params[:formletter], @email[:person][:id])[:body] : ''
-		@pagetitle = 'email %d' % id
+		@pagetitle = 'email %d from %s' % [id, @person[:name]]
 		erb :email
 	end
 
@@ -151,7 +152,7 @@ class Inbox < ModAuth
 		end
 		@profiles = @p.profiles
 		@locations = @p.all_countries
-		@pagetitle = 'person %d' % id
+		@pagetitle = 'person %d = %s' % [id, @person[:name]]
 		erb :personfull
 	end
 
@@ -178,6 +179,12 @@ class Inbox < ModAuth
 	post %r{^/person/([0-9]+)/email$} do |id|
 		@p.new_email_to(id, params[:body], params[:subject], params[:profile])
 		redirect to('/person/%d' % id)
+	end
+
+	post %r{^/person/([0-9]+)/match/([0-9]+)$} do |person_id, email_id|
+		e = @p.open_email(email_id)
+		@p.update_person(person_id, {email: e[:their_email]})
+		redirect to('/email/%d' % email_id)
 	end
 
 	post %r{^/url/([0-9]+)/delete$} do |id|

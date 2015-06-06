@@ -28,9 +28,9 @@ class MuckworkClient < ModAuth
 	end
 
 	get '/' do
-		@pagetitle = 'Muckwork Client'
 		@projects = @mc.get_projects
 		@payments = @mc.payments
+		@pagetitle = 'Muckwork Client'
 		erb :home
 	end
 

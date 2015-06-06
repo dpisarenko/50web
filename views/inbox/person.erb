@@ -1,3 +1,8 @@
+<% if @email && @clash %>
+	<form action="/person/<%= @person[:id] %>/match/<%= @email[:id] %>" method="post">
+		<input type="submit" value="match email" style="color: #fff; background-color: #900; font-size: 1.2em;">
+	</form>
+<% end %>
 <form id="personeditform" data-id="<%= @person[:id] %>" action="/person/<%= @person[:id] %>" method="post">
 id: <a href="/person/<%= @person[:id] %>"><%= @person[:id] %></a>
  ☀ <%= @person[:created_at] %>
