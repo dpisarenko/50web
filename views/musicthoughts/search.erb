@@ -10,7 +10,7 @@
 
 <% if @results[:categories] %>
 <h2><%= t.categories %></h2>
-<ul>
+<ul class="linklist">
 <% @results[:categories].each do |x| %>
 	<li><a href="/cat/<%= x[:id] %>"><%=h x[:category] %></a></li>
 <% end %>
@@ -19,7 +19,7 @@
 
 <% if @results[:authors] %>
 <h2><%= t.authors %></h2>
-<ul>
+<ul class="linklist">
 <% @results[:authors].each do |x| %>
 	<li><a href="/author/<%= x[:id] %>"><%=h x[:name] %></a></li>
 <% end %>
@@ -28,7 +28,7 @@
 
 <% if @results[:contributors] %>
 <h2><%= t.contributors %></h2>
-<ul>
+<ul class="linklist">
 <% @results[:contributors].each do |x| %>
 	<li><a href="/contributor/<%= x[:id] %>"><%=h x[:name] %></a></li>
 <% end %>
