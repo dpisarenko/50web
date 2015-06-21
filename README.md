@@ -23,5 +23,4 @@ A50C::Auth gets posted email & password, and returns API key and pass values to 
 
 # TODO
 
-Clean MusicThoughts CSS
 
