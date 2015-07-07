@@ -2,6 +2,8 @@
 
 Websites in Sinatra using b50d gem to access PostgreSQL APIs.
 
+MusicThoughts is now bypassing b50d and calling the PostgreSQL API functions directly.  If they're really going to stay on the same server, this can't hurt, but if they might go over HTTP + REST API then it should probably go back to a library wrapper, right?  Either way, point is: avoiding the library helps me ensure there's not more necessary stuff going on in the library, that the PostgreSQL API functions are really handling everything possible.  This will make it easier to switch to another language when needed, with minimal rewriting.
+
 ## why?
 
 Before, these would have each been separate repositories, but I'm trying the approach of putting them all into one.  Why?
