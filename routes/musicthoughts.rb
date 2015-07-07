@@ -76,8 +76,11 @@ class MusicThoughts < Sinatra::Base
 
 	get %r{^/t/([0-9]+)} do |id|
 		@thought = @mt.thought(id)
+		@author = @thought[:author]
 		redirect to('/') if @thought.nil?
-		@pagetitle = (t.author_quote_quote % [@thought[:author][:name], snip_for_lang(@thought[:thought], @lang)])
+		@pagetitle = (t.author_quote_quote %
+			[@author[:name],
+			snip_for_lang(@thought[:thought], @lang)])
 		@bodyid = 't'
 		@authorlink = '<a href="/author/%d">%s</a>' % [@thought[:author][:id], @thought[:author][:name]]
 		if String(@thought[:source_url]).length > 0
