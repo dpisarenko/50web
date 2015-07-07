@@ -4,7 +4,7 @@ require 'r18n-core'
 include R18n::Helpers
 R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
-require 'b50d/musicthoughts'
+require '../lib/db2js.rb'
 
 class MusicThoughts < Sinatra::Base
 
@@ -62,8 +62,8 @@ class MusicThoughts < Sinatra::Base
 		R18n.set(@lang)
 		@dir = (@lang == 'ar') ? 'rtl' : 'ltr'
 		@rel_alternate = page_in_other_languages(request, @lang, @languages)
-		@mt = B50D::MusicThoughts.new('live', @lang)
-		@rand1 = @mt.thought_random
+		@db = DB2JS.new('musicthoughts', 'live')
+		@rand1 = @db.js('random_thought($1)', [@lang])
 	end
 
 	['/', '/home'].each do |r|
@@ -75,9 +75,9 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get %r{^/t/([0-9]+)} do |id|
-		@thought = @mt.thought(id)
+		@thought = @db.js('get_thought($1, $2)', [@lang, id])
+		redirect to('/') unless @thought
 		@author = @thought[:author]
-		redirect to('/') if @thought.nil?
 		@pagetitle = (t.author_quote_quote %
 			[@author[:name],
 			snip_for_lang(@thought[:thought], @lang)])
@@ -95,8 +95,8 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get %r{^/cat/([0-9]+)} do |id|
-		@category = @mt.category(id)
-		redirect to('/') if @category.nil?
+		@category = @db.js('category($1, $2)', [@lang, id])
+		redirect to('/') unless @category
 		@pagetitle = t.musicthoughts + ' - ' + @category[:category]
 		@bodyid = 'cat'
 		@thoughts = @category[:thoughts]
@@ -108,15 +108,15 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get '/new' do
-		@thoughts = @mt.thoughts_new
+		@thoughts = @db.js('new_thoughts($1, $2)', [@lang, 20])
 		@pagetitle = t.new + ' ' + t.musicthoughts
 		@bodyid = 'new'
 		erb :new
 	end
 
 	get %r{^/author/([0-9]+)} do |id|
-		@author = @mt.author(id)
-		redirect to('/author') if @author.nil?
+		@author = @db.js('get_author($1, $2)', [@lang, id])
+		redirect to('/author') unless @author
 		@thoughts = @author[:thoughts].shuffle
 		@pagetitle = @author[:name] + ' ' + t.musicthoughts
 		@bodyid = 'author'
@@ -124,15 +124,15 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get '/author' do
-		@authors = @mt.authors_top
+		@authors = @db.js('top_authors($1)', [20])
 		@pagetitle = t.musicthoughts + ' ' + t.authors
 		@bodyid = 'authors'
 		erb :authors
 	end
 
 	get %r{^/contributor/([0-9]+)} do |id|
-		@contributor = @mt.contributor(id)
-		redirect to('/contributor') if @contributor.nil?
+		@contributor = @db.js('get_contributor($1, $2)', [@lang, id])
+		redirect to('/contributor') unless @contributor
 		@thoughts = @contributor[:thoughts].shuffle
 		@pagetitle = @contributor[:name] + ' ' + t.musicthoughts
 		@bodyid = 'contributor'
@@ -140,7 +140,7 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	get '/contributor' do
-		@contributors = @mt.contributors_top
+		@contributors = @db.js('top_contributors($1)', [20])
 		@pagetitle = t.musicthoughts + ' ' + t.contributors
 		@bodyid = 'contributors'
 		erb :contributors
@@ -153,7 +153,7 @@ class MusicThoughts < Sinatra::Base
 		if params[:q]
 			@searchterm = params[:q].strip
 			@pagetitle = @searchterm + ' ' + @pagetitle
-			@results = @mt.search(@searchterm) # TODO
+			@results = @db.js('search($1, $2)', [@lang, @searchterm])
 		end
 		erb :search
 	end
@@ -166,7 +166,16 @@ class MusicThoughts < Sinatra::Base
 
 	post '/add' do
 		if ['موسيقى', 'Musik', 'musik', 'music', 'música', 'musique', 'musica', '音楽', 'музыка'].include? params[:verify]
-			@mt.add(params)
+			@db.js('add_thought($1, $2, $3, $4, $5, $6, $7, $8, $9)', [
+				@lang,
+				params[:thought],
+				params[:contributor_name],
+				params[:contributor_email],
+				params[:contributor_url],
+				params[:contributor_place],
+				params[:author_name],
+				'',  #source_url
+				'{}']) #category_ids
 		end
 		redirect to('/thanks')
 	end
