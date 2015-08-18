@@ -172,7 +172,8 @@ class SiversOrg < Sinatra::Base
 	get %r{\A/ayw/download/([A-Za-z-]+.zip)\Z} do |zipfile|
 		redirect '/sorry?for=login' unless PP.get_person_cookie(request.cookies['ok'])
 		redirect '/ayw/list' unless %w(AnythingYouWant.zip CLASSICAL-AnythingYouWant.zip COUNTRY-AnythingYouWant.zip FOLK-AnythingYouWant.zip JAZZ-AnythingYouWant.zip OTHER-AnythingYouWant.zip POP-AnythingYouWant.zip ROCK-AnythingYouWant.zip SAMPLER-AnythingYouWant.zip SINGSONG-AnythingYouWant.zip URBAN-AnythingYouWant.zip WORLD-AnythingYouWant.zip).include? zipfile
-		send_file "/var/www/htdocs/downloads/#{zipfile}"
+		# send_file "/var/www/htdocs/downloads/#{zipfile}"
+		redirect "/file/#{zipfile}"
 	end
 
 end
