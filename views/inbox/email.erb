@@ -24,9 +24,15 @@
 		<input type="submit" value="update">
 	</form>
 	<p>headers:<br><%= h(@email[:headers]).gsub("\n", '<br>') %></p>
+
+	<form action="/email/<%= @email[:id] %>" method="post">
+		<input type="text" name="person_id" value="<%= @email[:person][:id] %>" size="5">
+	<input type="submit" value="change person_id"></form>
+
 	<% unless @email[:answer_id] || @email[:reference_id] %>
 		<form action="/email/<%= @email[:id] %>/delete" method="post"><input type="submit" value="DELETE EMAIL"></form>
 	<% end %>
+
 	<p>
 		created_at: <%= @email[:created_at] %> by <a href="/emailer/<%= @email[:creator][:id] %>"><%= @email[:creator][:name] %></a><br>
 		opened_at: <%= @email[:opened_at] %> by <a href="/emailer/<%= @email[:openor][:id] %>"><%= @email[:openor][:name] %></a>
