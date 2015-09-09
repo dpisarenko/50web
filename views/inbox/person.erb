@@ -71,16 +71,22 @@ function killStat(s) {
 </form>
 <ul id="urllist"></ul>
 <script>
+function formUrl(u) {
+	return('<form data-post="/url/' + u.id + '/delete.json" data-after="killUrl">' +
+	'<input type="submit" name="submit" value="x"></form>' +
+	'<form data-post="/url/' + u.id + '.json" data-after="updateUrl">' +
+	'<input type="hidden" name="star" value="' + (u.main ? 'f' : 't') + '">' +
+	'<input type="submit" name="submit" value="' + (u.main ? '★' : '☆') + '">' +
+	'<a href="/link?url=' + encodeURI(u.url) + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>');
+}
 function listUrl(u) {
 	var li = document.createElement('li');
 	li.id = 'url-' + u.id;
-	li.innerHTML = '<form data-post="/url/' + u.id + '/delete.json" data-after="killUrl">' +
-		'<input type="submit" name="submit" value="x"></form>' +
-		'<form data-post="/url/' + u.id + '.json" data-after="updateUrl">' +  // TODO: updateUrl
-		'<input type="hidden" name="star" value="' + (u.main ? 'f' : 't') + '">' +
-		'<input type="submit" name="submit" value="' + (u.main ? '★' : '☆') + '">' +
-		'<a href="/link?url=' + encodeURI(u.url) + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>';
+	li.innerHTML = formUrl(u);
 	document.getElementById('urllist').appendChild(li);
+}
+function updateUrl(u) {
+	document.getElementById('url-' + u.id).innerHTML = formUrl(u);
 }
 function killUrl(u) {
 	document.getElementById('urllist').removeChild(document.getElementById('url-' + u.id));
@@ -136,13 +142,18 @@ function ajaxIt(form) {
 }
 
 // ajax ALL the forms!!!!  (OK, just the ones with a data-post attribute)
-var forms = document.forms;
-var l = forms.length;
-for(var i=0; i < l; i++) {
-	var f = forms[i];
-	if(f.getAttribute('data-post')) {
-		ajaxIt(f);
+function ajaxAll() {
+	var forms = document.forms;
+	var l = forms.length;
+	for(var i=0; i < l; i++) {
+		var f = forms[i];
+		if(f.getAttribute('data-post')) {
+			ajaxIt(f);
+		}
 	}
 }
+
+// TODO: ajaxIt for new forms added by eventListener
+ajaxAll();
 
 </script>

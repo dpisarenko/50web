@@ -193,11 +193,12 @@ class Inbox < ModAuth
 		@p.delete_stat(id).to_json
 	end
 
-	post %r{^/url/([0-9]+)$} do |id|
-		@p.star_url(id) if params[:star] == 't'
-		@p.unstar_url(id) if params[:star] == 'f'
-		@p.update_url(id, params[:url]) if params[:url]
-		redirect_to_email_or_person(params[:email_id], params[:person_id])
+	post %r{^/url/([0-9]+).json$} do |id|
+		if params[:star] == 't'
+			@p.star_url(id).to_json
+		elsif params[:star] == 'f'
+			@p.unstar_url(id).to_json
+		end
 	end
 
 	# to avoid external sites seeing my internal links:
