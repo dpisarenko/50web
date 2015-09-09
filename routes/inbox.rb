@@ -166,14 +166,12 @@ class Inbox < ModAuth
 		redirect '/'
 	end
 
-	post %r{^/person/([0-9]+)/url$} do |id|
-		@p.add_url(id, params[:url])
-		redirect_to_email_or_person(params[:email_id], id)
+	post %r{^/person/([0-9]+)/url.json$} do |id|
+		@p.add_url(id, params[:url]).to_json
 	end
 
-	post %r{^/person/([0-9]+)/stat$} do |id|
-		@p.add_stat(id, params[:key], params[:value])
-		redirect_to_email_or_person(params[:email_id], id)
+	post %r{^/person/([0-9]+)/stat.json$} do |id|
+		@p.add_stat(id, params[:key], params[:value]).to_json
 	end
 
 	post %r{^/person/([0-9]+)/email$} do |id|
@@ -187,14 +185,12 @@ class Inbox < ModAuth
 		redirect to('/email/%d' % email_id)
 	end
 
-	post %r{^/url/([0-9]+)/delete$} do |id|
-		@p.delete_url(id)
-		redirect_to_email_or_person(params[:email_id], params[:person_id])
+	post %r{^/url/([0-9]+)/delete.json$} do |id|
+		@p.delete_url(id).to_json
 	end
 
-	post %r{^/stat/([0-9]+)/delete$} do |id|
-		@p.delete_stat(id)
-		redirect_to_email_or_person(params[:email_id], params[:person_id])
+	post %r{^/stat/([0-9]+)/delete.json$} do |id|
+		@p.delete_stat(id).to_json
 	end
 
 	post %r{^/url/([0-9]+)$} do |id|

@@ -36,69 +36,52 @@ end
 <% end %>
 
 <h4>stats:</h4>
-<form action="/person/<%= @person[:id] %>/stat" method="post" id="statadd">
+<form id="statadd" data-post="/person/<%= @person[:id] %>/stat.json" data-after="listStat">
 	<input name="key" placeholder="key">
 	<input name="value" placeholder="value">
-<% if @email %>
-	<input type="hidden" name="email_id" value="<%= @email[:id] %>">
-<% end %>
-	<input type="submit" value="add stat">
+	<input id="stataddbutton" type="submit" name="submit" value="add stat">
 </form>
+<ul id="statlist"></ul>
+<script>
+function listStat(s) {
+	var li = document.createElement('li');
+	li.innerHTML = '<form data-post="/stat/' + s.id + '/delete.json">' +
+		'<input type="submit" name="submit" value="x"></form>' +
+		s.created_at.substring(0,10) + ' ' +
+		s.name + ': ' +
+		s.value;  // TODO: html escape
+	document.getElementById('statlist').appendChild(li);
+}
 <% if @person[:stats] %>
-	<ul id="statlist">
 	<% @person[:stats].each do |stat| %>
-		<li>
-		<form action="/stat/<%= stat[:id] %>/delete" method="post">
-		<% if @email %>
-			<input type="hidden" name="email_id" value="<%= @email[:id] %>">
-		<% else %>
-			<input type="hidden" name="person_id" value="<%= @person[:id] %>">
-		<% end %>
-		<input type="submit" value="×">
-		</form>
-		<%= stat[:created_at][0,10] %> <%= stat[:name] %>: <%=h stat[:value] %>
-		</li>
+		listStat(<%= stat.to_json %>);
 	<% end %>
-	</ul>
 <% end %>
+</script>
 
 <h4>urls:</h4>
-<form action="/person/<%= @person[:id] %>/url" method="post" id="urladd">
+<form id="urladd" data-post="/person/<%= @person[:id] %>/url.json" data-after="listUrl">
 	<input name="url" placeholder="url">
-<% if @email %>
-	<input type="hidden" name="email_id" value="<%= @email[:id] %>">
-<% end %>
-	<input type="submit" value="add url">
+	<input id="urladdbutton" type="submit" name="submit" value="add url">
 </form>
+<ul id="urllist"></ul>
+<script>
+function listUrl(u) {
+	var li = document.createElement('li');
+	li.innerHTML = '<form data-post="/url/' + u.id + '/delete.json">' +
+		'<input type="submit" name="submit" value="x"></form>' +
+		'<form data-post="/url/' + u.id + '.json">' + 
+		'<input type="hidden" name="star" value="' + (u.main ? 'f' : 't') + '">' +
+		'<input type="submit" name="submit" value="' + (u.main ? '★' : '☆') + '">' +
+		'<a href="/link?url=' + u.url + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>';
+	document.getElementById('urllist').appendChild(li);
+}
 <% if @person[:urls] %>
-	<ul id="urllist">
 	<% @person[:urls].each do |url| %>
-		<li>
-			<form action="/url/<%= url[:id] %>/delete" method="post">
-			<% if @email %>
-				<input type="hidden" name="email_id" value="<%= @email[:id] %>">
-			<% else %>
-				<input type="hidden" name="person_id" value="<%= @person[:id] %>">
-			<% end %>
-			<input type="submit" value="×">
-			</form>
-			<form action="/url/<%= url[:id] %>" method="post">
-			<% if @email %>
-				<input type="hidden" name="email_id" value="<%= @email[:id] %>">
-			<% else %>
-				<input type="hidden" name="person_id" value="<%= @person[:id] %>">
-			<% end %>
-			<% if url[:main] %>
-				<input type="hidden" name="star" value="f"><input type="submit" value="★">
-			<% else %>
-				<input type="hidden" name="star" value="t"><input type="submit" value="☆">
-			<% end %>
-			<a href="/link?url=<%=h url[:url] %>"><%=h url[:url].gsub(%r{^https?://}, '') %></a>
-			</form>
-		</li>
+		listUrl(<%= url.to_json %>);
 	<% end %>
-	</ul>
 <% end %>
+</script>
 
 <h4>emails:</h4>
 <form action="/person/<%= @person[:id] %>/email" method="post" id="newemail">
@@ -122,3 +105,27 @@ end
 	</ul>
 <% end %>
 
+<script>
+
+function ajaxIt(form) {
+	var url = form.getAttribute('data-post');
+	// use window[functionName] to get function from string
+	var after = window[form.getAttribute('data-after')];
+	form.elements['submit'].addEventListener('click', function(e) {
+		e.preventDefault();
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4) {
+				after(JSON.parse(xhr.responseText));
+				form.reset();
+			}
+		};
+		xhr.open('post', url, true);
+		xhr.send(new FormData(form));
+	}, false);
+}
+
+ajaxIt(document.getElementById('urladd'));
+ajaxIt(document.getElementById('statadd'));
+
+</script>
