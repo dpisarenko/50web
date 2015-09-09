@@ -45,13 +45,18 @@ end
 <script>
 function listStat(s) {
 	var li = document.createElement('li');
-	li.innerHTML = '<form data-post="/stat/' + s.id + '/delete.json">' +
+	li.id = 'stat-' + s.id;
+	li.innerHTML = '<form data-post="/stat/' + s.id + '/delete.json" data-after="killStat">' +
 		'<input type="submit" name="submit" value="x"></form>' +
 		s.created_at.substring(0,10) + ' ' +
 		s.name + ': ' +
 		s.value;  // TODO: html escape
 	document.getElementById('statlist').appendChild(li);
 }
+function killStat(s) {
+	document.getElementById('statlist').removeChild(document.getElementById('stat-' + s.id));
+}
+
 <% if @person[:stats] %>
 	<% @person[:stats].each do |stat| %>
 		listStat(<%= stat.to_json %>);
@@ -68,14 +73,19 @@ function listStat(s) {
 <script>
 function listUrl(u) {
 	var li = document.createElement('li');
-	li.innerHTML = '<form data-post="/url/' + u.id + '/delete.json">' +
+	li.id = 'url-' + u.id;
+	li.innerHTML = '<form data-post="/url/' + u.id + '/delete.json" data-after="killUrl">' +
 		'<input type="submit" name="submit" value="x"></form>' +
-		'<form data-post="/url/' + u.id + '.json">' + 
+		'<form data-post="/url/' + u.id + '.json" data-after="updateUrl">' +  // TODO: updateUrl
 		'<input type="hidden" name="star" value="' + (u.main ? 'f' : 't') + '">' +
 		'<input type="submit" name="submit" value="' + (u.main ? '★' : '☆') + '">' +
-		'<a href="/link?url=' + u.url + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>';
+		'<a href="/link?url=' + encodeURI(u.url) + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>';
 	document.getElementById('urllist').appendChild(li);
 }
+function killUrl(u) {
+	document.getElementById('urllist').removeChild(document.getElementById('url-' + u.id));
+}
+
 <% if @person[:urls] %>
 	<% @person[:urls].each do |url| %>
 		listUrl(<%= url.to_json %>);
@@ -125,7 +135,14 @@ function ajaxIt(form) {
 	}, false);
 }
 
-ajaxIt(document.getElementById('urladd'));
-ajaxIt(document.getElementById('statadd'));
+// ajax ALL the forms!!!!  (OK, just the ones with a data-post attribute)
+var forms = document.forms;
+var l = forms.length;
+for(var i=0; i < l; i++) {
+	var f = forms[i];
+	if(f.getAttribute('data-post')) {
+		ajaxIt(f);
+	}
+}
 
 </script>
