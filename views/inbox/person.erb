@@ -1,3 +1,37 @@
+<script>
+
+function activate(form) {
+	var url = form.getAttribute('data-post');
+	// use window[functionName] to get function from string
+	var after = window[form.getAttribute('data-after')];
+	var postit = function(e) {
+		e.preventDefault();
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4) {
+				after(JSON.parse(xhr.responseText));
+				form.reset();
+			}
+		};
+		xhr.open('post', url, true);
+		xhr.send(new FormData(form));
+	};
+	form.elements['submit'].addEventListener('click', postit, false);
+}
+
+function activateForms(node) {
+	if(node.nodeName == 'FORM' && node.getAttribute('data-post')) {
+		activate(node);
+	} else {
+		var l = node.children.length;
+		for(var i=0; i < l; i++) {
+			activateForms(node.children[i]);
+		}
+	}
+}
+
+</script>
+
 <% if @email && @clash %>
 	<form action="/person/<%= @person[:id] %>/match/<%= @email[:id] %>" method="post">
 		<input type="submit" value="match email" style="color: #fff; background-color: #900; font-size: 1.2em;">
@@ -35,14 +69,17 @@ end
 	<p>✿ <%= @tables.join(', ') %></p>
 <% end %>
 
+<div id="stats">
 <h4>stats:</h4>
-<form id="statadd" data-post="/person/<%= @person[:id] %>/stat.json" data-after="listStat">
+<form id="statadd" data-post="/person/<%= @person[:id] %>/stat.json" data-after="addStat">
 	<input name="key" placeholder="key">
 	<input name="value" placeholder="value">
 	<input id="stataddbutton" type="submit" name="submit" value="add stat">
 </form>
 <ul id="statlist"></ul>
 <script>
+activate(document.getElementById('statadd'));
+
 function listStat(s) {
 	var li = document.createElement('li');
 	li.id = 'stat-' + s.id;
@@ -51,26 +88,37 @@ function listStat(s) {
 		s.created_at.substring(0,10) + ' ' +
 		s.name + ': ' +
 		s.value;  // TODO: html escape
-	document.getElementById('statlist').appendChild(li);
+	var list = document.getElementById('statlist');
+	list.appendChild(li);
+	return li;
+}
+function addStat(s) {
+	var li = listStat(s);
+	activateForms(li);
 }
 function killStat(s) {
-	document.getElementById('statlist').removeChild(document.getElementById('stat-' + s.id));
+	var li = document.getElementById('stat-' + s.id);
+	document.getElementById('statlist').removeChild(li);
 }
 
 <% if @person[:stats] %>
 	<% @person[:stats].each do |stat| %>
-		listStat(<%= stat.to_json %>);
+		addStat(<%= stat.to_json %>);
 	<% end %>
 <% end %>
 </script>
+</div>
 
+<div id="urls">
 <h4>urls:</h4>
-<form id="urladd" data-post="/person/<%= @person[:id] %>/url.json" data-after="listUrl">
+<form id="urladd" data-post="/person/<%= @person[:id] %>/url.json" data-after="addUrl">
 	<input name="url" placeholder="url">
 	<input id="urladdbutton" type="submit" name="submit" value="add url">
 </form>
 <ul id="urllist"></ul>
 <script>
+activate(document.getElementById('urladd'));
+
 function formUrl(u) {
 	return('<form data-post="/url/' + u.id + '/delete.json" data-after="killUrl">' +
 	'<input type="submit" name="submit" value="x"></form>' +
@@ -83,21 +131,31 @@ function listUrl(u) {
 	var li = document.createElement('li');
 	li.id = 'url-' + u.id;
 	li.innerHTML = formUrl(u);
-	document.getElementById('urllist').appendChild(li);
+	var list = document.getElementById('urllist');
+	list.appendChild(li);
+	return li;
+}
+function addUrl(u) {
+	var li = listUrl(u);
+	activateForms(li);
 }
 function updateUrl(u) {
-	document.getElementById('url-' + u.id).innerHTML = formUrl(u);
+	var li = document.getElementById('url-' + u.id);
+	li.innerHTML = formUrl(u);
+	activateForms(li);
 }
 function killUrl(u) {
-	document.getElementById('urllist').removeChild(document.getElementById('url-' + u.id));
+	var li = document.getElementById('url-' + u.id);
+	document.getElementById('urllist').removeChild(li);
 }
 
 <% if @person[:urls] %>
 	<% @person[:urls].each do |url| %>
-		listUrl(<%= url.to_json %>);
+		addUrl(<%= url.to_json %>);
 	<% end %>
 <% end %>
 </script>
+</div>
 
 <h4>emails:</h4>
 <form action="/person/<%= @person[:id] %>/email" method="post" id="newemail">
@@ -121,39 +179,3 @@ function killUrl(u) {
 	</ul>
 <% end %>
 
-<script>
-
-function ajaxIt(form) {
-	var url = form.getAttribute('data-post');
-	// use window[functionName] to get function from string
-	var after = window[form.getAttribute('data-after')];
-	form.elements['submit'].addEventListener('click', function(e) {
-		e.preventDefault();
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if(xhr.readyState == 4) {
-				after(JSON.parse(xhr.responseText));
-				form.reset();
-			}
-		};
-		xhr.open('post', url, true);
-		xhr.send(new FormData(form));
-	}, false);
-}
-
-// ajax ALL the forms!!!!  (OK, just the ones with a data-post attribute)
-function ajaxAll() {
-	var forms = document.forms;
-	var l = forms.length;
-	for(var i=0; i < l; i++) {
-		var f = forms[i];
-		if(f.getAttribute('data-post')) {
-			ajaxIt(f);
-		}
-	}
-}
-
-// TODO: ajaxIt for new forms added by eventListener
-ajaxAll();
-
-</script>
