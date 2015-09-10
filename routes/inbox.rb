@@ -235,6 +235,10 @@ class Inbox < ModAuth
 		end
 	end
 
+	get %r{^/person/([0-9]+)/formletter/([0-9]+).json$} do |person_id, formletter_id|
+		@p.get_formletter_for_person(formletter_id, person_id).to_json
+	end
+
 	get %r{^/formletter/([0-9]+)$} do |id|
 		@formletter = @p.get_formletter(id) || halt(404)
 		@pagetitle = 'formletter %d' % id

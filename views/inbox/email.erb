@@ -74,15 +74,30 @@
 		<input type="submit" value="reply">
 	</form>
 
-	<br><form action="/email/<%= @email[:id] %>" method="get">
-		<select name="formletter">
-		<option value="0" selected>get formletter</option>
+	<br>
+	<select id="formletterselect" name="formletter">
+	<option value="0" selected>get formletter</option>
 <%= @formletters.inject('') {|html, fl| html + '<option value="%d">%s</option>' % [fl[:id], fl[:title]]} %>
-		<input type="submit" value="get formletter">
-		</select>
-	</form>
+	</select>
 </div>
 <script>
+function getFormLetter(e) {
+	var id = this.value;
+	var url = '/person/<%= @email[:person][:id] %>/formletter/' + id + '.json';
+	var textarea = document.getElementById('reply');
+	if (id > 0) {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4) {
+				var formletter = JSON.parse(xhr.responseText);
+				textarea.value = formletter.body;
+			}
+		};
+		xhr.open('get', url, true);
+		xhr.send();
+	}
+}
+document.getElementById('formletterselect').addEventListener('change', getFormLetter, false);
 document.getElementById('reply').focus();
 </script>
 <% end %>
