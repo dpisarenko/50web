@@ -24,7 +24,7 @@
 	<h2>open emails:</h2>
 	<ul>
 	<% @open_emails.each do |email| %>
-		<li><a href="/email/<%= email[:id] %>"><%= email[:subject] %></li>
+		<li><a href="/email/<%= email[:id] %>"><%= email[:subject] %></a> <em>(opened by <%= email[:name] %>)</em></li>
 	<% end %>
 	</ul>
 <% end %>
