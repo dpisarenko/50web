@@ -132,7 +132,7 @@ class MusicThoughts < Sinatra::Base
 
 	get '/author' do
 		#@authors = @db.js('top_authors($1)', [20])
-		@authors = @mt.authors_top(20)
+		@authors = @mt.authors_top
 		@pagetitle = t.musicthoughts + ' ' + t.authors
 		@bodyid = 'authors'
 		erb :authors
