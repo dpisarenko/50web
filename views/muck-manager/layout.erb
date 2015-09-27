@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title><%= @pagetitle %></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/muck-manager.css">
+</head>
+<body>
+<nav id="navigation">
+	<ul>
+		<li><a href="/">MuckWork MANAGER</a></li>
+	<% if has_cookie? %>
+		<li><a href="/logout">log out</a></li>
+	<% end %>
+	</ul>
+</nav>
+<div id="content">
+
+<%= yield %>
+
+</div>
+</body>
+</html>
+

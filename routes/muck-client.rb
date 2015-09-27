@@ -1,16 +1,16 @@
 require_relative 'mod_auth'
 
-require 'b50d/muckwork-client'
+require 'b50d/muckwork'
 
-class MuckworkClient < ModAuth
+class MuckClientWeb < ModAuth
 
-	log = File.new('/tmp/MuckworkClient.log', 'a+')
+	log = File.new('/tmp/MuckClientWeb.log', 'a+')
 	log.sync = true
 
 	configure do
 		enable :logging
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
-		set :views, Proc.new { File.join(root, 'views/muckwork-client') }
+		set :views, Proc.new { File.join(root, 'views/muck-client') }
 	end
 
 	helpers do
