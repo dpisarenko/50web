@@ -33,7 +33,7 @@
 		<dt>quoted at</dt>
 		<dd><%= @project[:quoted_at] %></dd>
 		<dt>quoted amount:</dt>
-		<dd><%= '%d cents of %s' % [@project[:quoted_money][:cents], @project[:quoted_money][:currency]] %></dd>
+		<dd><%= '%d cents of %s' % [@project[:quoted_money][:cents].to_i, @project[:quoted_money][:currency]] %></dd>
 		<dt>approved at</dt>
 		<dd><%= @project[:approved_at] %></dd>
 		<dt>started at</dt>
@@ -41,7 +41,7 @@
 		<dt>finished at</dt>
 		<dd><%= @project[:finished_at] %></dd>
 		<dt>final amount:</dt>
-		<dd><%= '%d cents of %s' % [@project[:final_money][:cents], @project[:final_money][:currency]] %></dd>
+		<dd><%= '%d cents of %s' % [@project[:final_money][:cents].to_i, @project[:final_money][:currency]] %></dd>
 	</dl>
 	<h3>Tasks:</h3>
 	<ol>
