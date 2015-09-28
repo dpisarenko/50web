@@ -1,29 +1,36 @@
 <section id="account">
 
-<h1>Update your info:</h1>
+<h1>For now:</h1>
+<form action="/account" method="post">
+	<label for="client_currency">currency:</label>
+	<input type="text" name="currency" id="client_currency" value="<%=h @client[:currency] %>">
+	<input type="submit" value="update">
+</form>
+
+<h1>TODO:</h1>
 
 <form action="/account" method="post">
 	<label for="client_name">your name:</label>
-	<input name="name" id="client_name" value="<%=h @client.name %>">
+	<input name="name" id="client_name" value="<%=h @client[:name] %>">
 	<label for="client_address">how should we address you?:</label>
-	<input name="address" id="client_address" value="<%=h @client.address %>">
+	<input name="address" id="client_address" value="<%=h @client[:address] %>">
 	<label for="client_email">your email:</label>
-	<input type="email" name="email" id="client_email" value="<%=h @client.email %>">
+	<input type="email" name="email" id="client_email" value="<%=h @client[:email] %>">
 	<label for="client_company">company name:</label>
-	<input name="company" id="client_company" value="<%=h @client.company %>">
+	<input name="company" id="client_company" value="<%=h @client[:company] %>">
 	<label for="client_city">your city:</label>
-	<input name="city" id="client_city" value="<%=h @client.city %>">
+	<input name="city" id="client_city" value="<%=h @client[:city] %>">
 	<label for="client_state">your state/province:</label>
-	<input name="state" id="client_state" value="<%=h @client.state %>">
+	<input name="state" id="client_state" value="<%=h @client[:state] %>">
 	<label for="client_country">your country:</label>
 	<select name="country" id="client_country">
-<%= Location.names.sort_by {|k,v| v}.inject('<option value="">… country …</option>') { |html, pair| html + '<option value="%s"%s>%s</option>' % [pair[0], (@client.country == pair[0]) ? ' selected' : '', pair[1][0,20]]} %>
+<%= #Location.names.sort_by {|k,v| v}.inject('<option value="">… country …</option>') { |html, pair| html + '<option value="%s"%s>%s</option>' % [pair[0], (@client[:country] == pair[0]) ? ' selected' : '', pair[1][0,20]]} %>
 	</select>
 	<label for="client_phone">your phone:</label>
-	<input name="phone" id="client_phone" value="<%=h @client.phone %>">
+	<input name="phone" id="client_phone" value="<%=h @client[:phone] %>">
 	<label for="client_currency">money currency:</label>
 	<select name="currency" id="client_currency">
-<%= Money.currencies.inject('<option value="">currency</option>') { |html, pair| html + '<option value="%s"%s>%s %s</option>' % [pair[0], (@client.currency == pair[0]) ? ' selected' : '', pair[0], pair[1]]} %>
+<%= #Money.currencies.inject('<option value="">currency</option>') { |html, pair| html + '<option value="%s"%s>%s %s</option>' % [pair[0], (@client[:currency] == pair[0]) ? ' selected' : '', pair[0], pair[1]]} %>
 	</select>
 	<input type="submit" value="update">
 </form>

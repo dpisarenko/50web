@@ -4,24 +4,18 @@
 
 <h2>Create a new project:</h2>
 <form action="/projects" method="post">
-	<input name="title" value="" placeholder="title">
-	<input type="submit" value="create">
+	<label for="project_title">project title:</label>
+	<input id="project_title" name="title" value="" placeholder="title">
+	<label for="project_description">project description:</label>
+	<textarea name="description" placeholder="description"></textarea>
+	<br><input type="submit" value="create">
 </form>
 
 <% if @projects.size > 0 %>
 	<h2>Created projects:</h2>
 	<ul>
 	<% @projects.each do |project| %>
-		<li><a href="/project/<%= project.id %>"><%=h project.title %></a> (<%= project.status %>)</li>
-	<% end %>
-	</ul>
-<% end %>
-
-<% if @payments.size > 0 %>
-	<h2>Payments:</h2>
-	<ul>
-	<% @payments.each do |payment| %>
-		<li><a href="/payment/<%= payment.id %>"><%= '%s: %s' % [payment.created_at[0,10], payment.money] %></a></li>
+		<li><a href="/project/<%= project[:id] %>"><%=h project[:title] %></a> (<%= project[:status] %>)</li>
 	<% end %>
 	</ul>
 <% end %>

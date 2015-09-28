@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title><%= @pagetitle %></title>
+<title><%=h @pagetitle %> | MuckWork</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="/css/muckwork-client.css">
+<link rel="stylesheet" href="/css/muck-client.css">
 </head>
 <body>
 <nav id="navigation">
 	<ul>
 		<li><a href="/">home</a></li>
 	<% if has_cookie? %>
-		<li><a href="/account"><%=h @client.name %> account</a></li>
+		<li><a href="/account"><%=h @client[:name] %> account</a></li>
 		<li><a href="/logout">log out</a></li>
 	<% end %>
 	</ul>

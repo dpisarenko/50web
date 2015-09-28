@@ -34,3 +34,4 @@ class MuckManagerWeb < ModAuth
 		erb :home
 	end
 
+end

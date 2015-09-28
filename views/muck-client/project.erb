@@ -1,54 +1,58 @@
 <section id="project">
-<h1><%= @project.status %>: <%=h @project.title %></h1>
+<h1><%= @project[:status] %>: <%=h @project[:title] %></h1>
 
-<% if @project.status == 'CREATED' %>
+<% if @project[:status] == 'created' %>
 	<h2>Describe your project in detail, so we can give you a quote on it.</h2>
-	<form action="/project/<%= @project.id %>" method="post">
+	<form action="/project/<%= @project[:id] %>" method="post">
 		<label for="p_title">title:</label>
-		<input id="p_title" name="title" value="<%=h @project.title %>">
+		<input id="p_title" name="title" value="<%=h @project[:title] %>">
 		<label for="p_description">description:</label>
-		<textarea id="p_description" name="description"><%=h @project.description %></textarea>
+		<textarea id="p_description" name="description"><%=h @project[:description] %></textarea>
 		<input type="submit" value="update">
 	</form>
 <% else %>
-	<% if @project.status == 'QUOTED' %>
+	<% if @project[:status] == 'quoted' %>
 		<h3>Do you approve of the quote?</h3>
-		<form action="/project/<%= @project.id %>/approve" method="post">
+		<form action="/project/<%= @project[:id] %>/approve" method="post">
 			<input type="submit" value="YES">
+		</form>
+		<form action="/project/<%= @project[:id] %>/refuse" method="post">
+			<input type="submit" value="NO">
 		</form>
 	<% end %>
 	<h2>Project facts:</h2>
 	<dl>
 		<dt>title</dt>
-		<dd><%=h @project.title %></dd>
+		<dd><%=h @project[:title] %></dd>
 		<dt>description</dt>
-		<dd><%=h @project.description %></dd>
+		<dd><%=h @project[:description] %></dd>
 		<dt>status</dt>
-		<dd><%=h @project.status %></dd>
+		<dd><%= @project[:status] %></dd>
 		<dt>created at</dt>
-		<dd><%=h @project.created_at %></dd>
+		<dd><%= @project[:created_at] %></dd>
 		<dt>quoted at</dt>
-		<dd><%=h @project.quoted_at %></dd>
+		<dd><%= @project[:quoted_at] %></dd>
 		<dt>quoted amount:</dt>
-		<dd><%=h @project.quoted_money %></dd>
+		<dd><%= '%d cents of %s' % [@project[:quoted_money][:cents], @project[:quoted_money][:currency]] %></dd>
 		<dt>approved at</dt>
-		<dd><%=h @project.approved_at %></dd>
+		<dd><%= @project[:approved_at] %></dd>
 		<dt>started at</dt>
-		<dd><%=h @project.started_at %></dd>
+		<dd><%= @project[:started_at] %></dd>
 		<dt>finished at</dt>
-		<dd><%=h @project.finished_at %></dd>
+		<dd><%= @project[:finished_at] %></dd>
 		<dt>final amount:</dt>
-		<dd><%=h @project.final_money %></dd>
+		<dd><%= '%d cents of %s' % [@project[:final_money][:cents], @project[:final_money][:currency]] %></dd>
 	</dl>
 	<h3>Tasks:</h3>
 	<ol>
-	<% @project.tasks.each do |task| %>
+	<% @project[:tasks].each do |task| %>
 		<li>
-			<strong><%=h task.title %></strong>: <%=h task.description %>
-			<br>created at: <%= task.created_at %>
-			<br>started at: <%= task.started_at %>
-			<br>finished at: <%= task.finished_at %>
-			<br>Worker: <%=h task.worker.name if task.worker %>
+			<a href="/project/<%= @project[:id] %>/task/<%= task[:id] %>">go</a> :
+			<strong><%=h task[:title] %></strong>: <%=h task[:description] %>
+			<br>created at: <%= task[:created_at] %>
+			<br>started at: <%= task[:started_at] %>
+			<br>finished at: <%= task[:finished_at] %>
+			<br>Worker: <%=h(task[:worker][:name]) if task[:worker] %>
 		</li>
 	<% end %>
 	</ol>
