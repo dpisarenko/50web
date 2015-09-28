@@ -37,11 +37,13 @@ class MuckClientWeb < ModAuth
 
 	get '/account' do
 		@pagetitle = @client[:name] + ' ACCOUNT'
+		@locations = @mc.locations
+		@currencies = @mc.currencies
 		erb :account
 	end
 
 	post '/account' do
-		@mc.update(params[:currency])
+		@mc.update(params)
 		redirect to('/account')
 	end
 
