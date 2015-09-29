@@ -1,0 +1,17 @@
+<section id="emails">
+<h2><%= @pagetitle %></h2>
+
+<% @grouped.each do |emailer| %>
+	<h3><a href="/person/<%= emailer[:id] %>"><%=h emailer[:name] %></a></h3>
+	<ul>
+	<% emailer[:sent].each do |email| %>
+		<li><a href="/email/<%= email[:id] %>"><%= email[:id] %></a> »
+			<%= email[:created_at][0,10] %> —
+			<%=h email[:subject] %> —
+			<strong><%=h email[:their_name] %></strong>
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+
+</section>
