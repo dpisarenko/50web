@@ -97,7 +97,8 @@ class Inbox < ModAuth
 		@person = @email[:person]
 		@clash = (@email[:their_email] != @person[:email])
 		@profiles = @p.profiles
-		@formletters = @p.formletters
+		# skip formletters that start with _, since those are automated
+		@formletters = @p.formletters.reject {|x| x[:title][0] == '_'}
 		@locations = @p.all_countries
 		@reply = (params[:formletter]) ?
 			@p.get_formletter_for_person(params[:formletter], @email[:person][:id])[:body] : ''
