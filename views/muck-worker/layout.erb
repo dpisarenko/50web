@@ -11,7 +11,7 @@
 	<ul>
 		<li><a href="/">home</a></li>
 	<% if has_cookie? %>
-		<li><a href="/account"><%=h @worker.name %> account</a></li>
+		<li><a href="/account"><%=h @worker[:name] %> account</a></li>
 		<li><a href="/logout">log out</a></li>
 	<% end %>
 	</ul>

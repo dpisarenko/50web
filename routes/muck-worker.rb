@@ -20,9 +20,11 @@ class MuckWorkerWeb < ModAuth
 	end
 
 	before do
+		@api = 'Muckworker'
+		@livetest = 'test'
 		env['rack.errors'] = log
-		if has_cookie?
-			@mr = B50D::MuckWorker.new(request.cookies['api_key'], request.cookies['api_pass'])
+		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
+			@mr = B50D::Muckworker.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
 			@worker = @mr.get_worker
 		end
 	end

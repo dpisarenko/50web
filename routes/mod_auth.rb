@@ -24,14 +24,14 @@ class ModAuth < Sinatra::Base
 	end
 
 	post '/login' do
-		redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
+		redirect to('/login?err=missing') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
 		if res = B50D::Peeps.auth(@livetest, params[:email], params[:password], @api)
 			response.set_cookie('person_id', value: res[:person_id], path: '/', secure: true, httponly: true)
 			response.set_cookie('api_key', value: res[:akey], path: '/', secure: true, httponly: true)
 			response.set_cookie('api_pass', value: res[:apass], path: '/', secure: true, httponly: true)
 			redirect to('/')
 		else
-			redirect to('/login')
+			redirect to('/login?err=wrong')
 		end
 	end
 
