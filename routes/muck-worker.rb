@@ -31,7 +31,30 @@ class MuckWorkerWeb < ModAuth
 
 	get '/' do
 		@pagetitle = 'Muckwork'
+		@grouped_tasks = @mr.grouped_tasks
+		# only show available tasks if they have no started/approved tasks
+		@avaliable = nil
+		if [] == (%w(started approved) & @grouped_tasks.keys)
+			@available = @mr.next_available_tasks
+		end
 		erb :home
+	end
+
+	get '/account' do
+		@pagetitle = @worker[:name] + ' ACCOUNT'
+		@locations = @mr.locations
+		@currencies = @mr.currencies
+		erb :account
+	end
+
+	post '/account' do
+		@mr.update(params)
+		redirect to('/account?msg=updated')
+	end
+
+	post '/password' do
+		@mr.set_password(params[:password])
+		redirect to('/account?msg=newpass')
 	end
 
 end

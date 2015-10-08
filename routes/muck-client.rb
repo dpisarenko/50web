@@ -47,6 +47,11 @@ class MuckClientWeb < ModAuth
 		redirect to('/account')
 	end
 
+	post '/password' do
+		@mc.set_password(params[:password])
+		redirect to('/account?msg=newpass')
+	end
+
 	post '/projects' do
 		p = @mc.create_project(params[:title], params[:description])
 		if p

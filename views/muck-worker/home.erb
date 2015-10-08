@@ -1,2 +1,26 @@
-<h1>Welcome <%=h @worker[:name] %></h1>
+<section id="home">
+
+<% if @available %>
+	<h2>help wanted! (available tasks)</h2>
+	<dl>
+	<% @available.each do |task| %>
+		<dt><a href="/task/<%= task[:id] %>"><%=h task[:title] %></a></dt>
+		<dd><strong><%=h task[:description] %></strong></dd>
+		<dd>Project: <%=h task[:project][:title] %></dd>
+		<dd><%=h task[:project][:description] %></dd>
+	<% end %>
+	</dl>
+<% end %>
+
+<% @grouped_tasks.each do |status, tasks| %>
+	<h2><%= status %></h2>
+	<dl>
+	<% tasks.each do |task| %>
+		<dt><a href="/task/<%= task[:id] %>"><%=h task[:title] %></a></dt>
+		<dd><%=h task[:description] %></dd>
+		<dd>Project: <%=h task[:project][:title] %></dd>
+	<% end %>
+	</dl>
+<% end %>
+</section>
 

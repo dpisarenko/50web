@@ -1,7 +1,6 @@
 <section id="account">
 
-<h1>TODO:</h1>
-
+<h2>Update your info?</h2>
 <form action="/account" method="post">
 	<label for="client_name">your name:</label>
 	<input name="name" id="client_name" value="<%=h @client[:name] %>">
@@ -36,6 +35,15 @@ end
 %>
 	</select>
 	<input type="submit" value="update">
+</form>
+
+<hr>
+
+<h2>Change your password?</h2>
+<form action="/password" method="post">
+	<label for="client_password">new password:</label>
+	<input type="password" name="password" id="client_password">
+	<input type="submit" value="change password">
 </form>
 
 </section>

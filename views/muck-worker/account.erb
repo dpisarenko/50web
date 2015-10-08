@@ -1,0 +1,51 @@
+<section id="account">
+
+<h2>Update your info?</h2>
+<form action="/account" method="post">
+	<label for="worker_name">your name:</label>
+	<input name="name" id="worker_name" value="<%=h @worker[:name] %>">
+	<label for="worker_address">how should we address you?:</label>
+	<input name="address" id="worker_address" value="<%=h @worker[:address] %>">
+	<label for="worker_email">your email:</label>
+	<input type="email" name="email" id="worker_email" value="<%=h @worker[:email] %>">
+	<label for="worker_company">company name:</label>
+	<input name="company" id="worker_company" value="<%=h @worker[:company] %>">
+	<label for="worker_city">your city:</label>
+	<input name="city" id="worker_city" value="<%=h @worker[:city] %>">
+	<label for="worker_state">your state/province:</label>
+	<input name="state" id="worker_state" value="<%=h @worker[:state] %>">
+	<label for="worker_country">your country:</label>
+	<select name="country" id="worker_country">
+<%=
+@locations.inject('<option value="">… country …</option>') do |html, c|
+	html + '<option value="%s"%s>%s</option>' %
+		[c[:code], (@worker[:country] == c[:code]) ? ' selected' : '', c[:name][0,20]]
+end
+%>
+	</select>
+	<label for="worker_phone">your phone:</label>
+	<input name="phone" id="worker_phone" value="<%=h @worker[:phone] %>">
+	<label for="worker_currency">money currency:</label>
+	<select name="currency" id="worker_currency">
+<%=
+@currencies.inject('<option value="">currency</option>') do |html, c|
+	html + '<option value="%s"%s>%s: %s</option>' %
+		[c[:code], (@worker[:currency] == c[:code]) ? ' selected' : '', c[:code], c[:name]]
+end
+%>
+	</select>
+	<input type="submit" value="update">
+</form>
+
+<hr>
+
+<h2>Change your password?</h2>
+<form action="/password" method="post">
+	<label for="worker_password">new password:</label>
+	<input type="password" name="password" id="worker_password">
+	<input type="submit" value="change password">
+</form>
+
+<h1>TODO: update rate? get approval first?</h1>
+
+</section>
