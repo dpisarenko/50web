@@ -1,15 +1,22 @@
 <section id="home">
 
 <% if @available %>
-	<h2>help wanted! (available tasks)</h2>
-	<dl>
-	<% @available.each do |task| %>
-		<dt><a href="/task/<%= task[:id] %>"><%=h task[:title] %></a></dt>
-		<dd><strong><%=h task[:description] %></strong></dd>
-		<dd>Project: <%=h task[:project][:title] %></dd>
-		<dd><%=h task[:project][:description] %></dd>
+	<% if @available.size == 0 %>
+		<h2>Sorry! No more available tasks. Check later.</h2>
+	<% else %>
+		<h2>help wanted! (available tasks)</h2>
+		<dl>
+		<% @available.each do |task| %>
+			<dt><strong><%=h task[:title] %></strong></dt>
+			<dd><strong><%=h task[:description] %></strong></dd>
+			<dd>Project: <%=h task[:project][:title] %></dd>
+			<dd><%=h task[:project][:description] %></dd>
+			<dd><form action="/claim/<%= task[:id] %>" method="post">
+				<input type="submit" value="claim it!"></form>
+			</dd>
+		<% end %>
+		</dl>
 	<% end %>
-	</dl>
 <% end %>
 
 <% @grouped_tasks.each do |status, tasks| %>

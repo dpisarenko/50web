@@ -1,0 +1,37 @@
+<section id="task">
+
+<h1>Task from project: <%=h @task[:project][:title] %></h1>
+<p><%=h @task[:project][:description] %></p>
+
+<h2>Task facts:</h2>
+<dl>
+	<dt>order</dt>
+	<dd><%= @task[:sortid] %></dd>
+	<dt>title</dt>
+	<dd><%=h @task[:title] %></dd>
+	<dt>description</dt>
+	<dd><%=h @task[:description] %></dd>
+	<dt>status</dt>
+	<dd><%= @task[:status] %></dd>
+	<dt>created at</dt>
+	<dd><%= @task[:created_at] %></dd>
+	<dt>claimed at</dt>
+	<dd><%= @task[:claimed_at] %></dd>
+	<dt>started at</dt>
+	<dd><%= @task[:started_at] %></dd>
+	<dt>finished at</dt>
+	<dd><%= @task[:finished_at] %></dd>
+</dl>
+
+<h2>Task actions: (TODO: conditional)</h2>
+<form method="post" action="/unclaim/<%= @task[:id] %>">
+	<input type="submit" value="unclaim">
+</form>
+<form method="post" action="/start/<%= @task[:id] %>">
+	<input type="submit" value="start">
+</form>
+<form method="post" action="/finish/<%= @task[:id] %>">
+	<input type="submit" value="finish">
+</form>
+
+</section>

@@ -57,5 +57,42 @@ class MuckWorkerWeb < ModAuth
 		redirect to('/account?msg=newpass')
 	end
 
+	post %r{\A/claim/([0-9]+)\Z} do |task_id|
+		if @mr.claim_task(task_id)
+			redirect to("/task/#{task_id}")
+		else
+			redirect to('/?msg=claimfail')
+		end
+	end
+
+	get %r{\A/task/([0-9]+)\Z} do |task_id|
+		@task = @mr.get_task(task_id) || halt(404)
+		@pagetitle = "TASK %d : %s" % [task_id, @task[:title]]
+		erb :task
+	end
+
+	post %r{\A/unclaim/([0-9]+)\Z} do |task_id|
+		if @mr.unclaim_task(task_id)
+			redirect to('/')
+		else
+			redirect to("/task/#{task_id}?msg=unclaimfail")
+		end
+	end
+
+	post %r{\A/start/([0-9]+)\Z} do |task_id|
+		if @mr.start_task(task_id)
+			redirect to("/task/#{task_id}")
+		else
+			redirect to("/task/#{task_id}?msg=startfail")
+		end
+	end
+
+	post %r{\A/finish/([0-9]+)\Z} do |task_id|
+		if @mr.finish_task(task_id)
+			redirect to('/')
+		else
+			redirect to("/task/#{task_id}?msg=finishfail")
+		end
+	end
 end
 
