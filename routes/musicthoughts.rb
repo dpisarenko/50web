@@ -114,7 +114,7 @@ class MusicThoughts < Sinatra::Base
 
 	get '/new' do
 		#@thoughts = @db.js('new_thoughts($1, $2)', [@lang, 20])
-		@thoughts = @mt.thoughts_new(@lang, 20)
+		@thoughts = @mt.thoughts_new(@lang)
 		@pagetitle = t.new + ' ' + t.musicthoughts
 		@bodyid = 'new'
 		erb :new
