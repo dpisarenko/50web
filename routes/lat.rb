@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require 'b50d/lat'
+require '../lib/db2js.rb'
 
 class Lat < Sinatra::Base
 
@@ -20,27 +20,28 @@ class Lat < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
-		@l = B50D::Lat.new(livetest)
+		#livetest = (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
+		@db = getdb('lat')
 	end
 
 	get '/' do
-		@tags = @l.tags
+		ok, @tags = @db.call('tags')
 		erb :home
 	end
 
 	get '/concepts' do
-		@concepts = @l.get_concepts
+		ok, @concepts = @db.call('get_concepts')
 		erb :concepts
 	end
 
 	get '/pairings' do
-		@pairings = @l.get_pairings
+		ok, @pairings = @db.call('get_pairings')
 		erb :pairings
 	end
 
 	post '/pairing' do
-		if x = @l.create_pairing
+		ok, x = @db.call('create_pairing')
+		if ok
 			redirect to('/pairing/%d' % x[:id])
 		else
 			redirect to('/')
@@ -48,12 +49,13 @@ class Lat < Sinatra::Base
 	end
 
 	get %r{\A/tagged/([a-z_-]+)\Z} do |tag|
-		@concepts = @l.concepts_tagged(tag)
+		ok, @concepts = @db.call('concepts_tagged', tag)
 		erb :concepts
 	end
 
 	post '/concept' do
-		if x = @l.create_concept(params[:title], params[:concept])
+		ok, x = @db.call('create_concept', params[:title], params[:concept])
+		if ok
 			redirect to('/concept/%d' % x[:id])
 		else
 			redirect to('/')
@@ -61,62 +63,62 @@ class Lat < Sinatra::Base
 	end
 
 	get %r{\A/concept/([0-9]+)\Z} do |id|
-		@concept = @l.get_concept(id)
+		ok, @concept = @db.call('get_concept', id)
 		erb :concept
 	end
 
 	post %r{\A/concept/([0-9]+)\Z} do |id|
-		@l.update_concept(id, params[:title], params[:concept])
+		@db.call('update_concept', id, params[:title], params[:concept])
 		redirect to('/concept/%d' % id)
 	end
 
 	post %r{\A/concept/([0-9]+)/delete\Z} do |id|
-		@l.delete_concept(id)
+		@db.call('delete_concept', id)
 		redirect to('/')
 	end
 
 	post %r{\A/concept/([0-9]+)/url\Z} do |id|
-		@l.add_url(id, params[:url], params[:notes])
+		@db.call('add_url', id, params[:url], params[:notes])
 		redirect to('/concept/%d' % id)
 	end
 
 	post %r{\A/concept/([0-9]+)/url/([0-9]+)\Z} do |id, url_id|
-		@l.update_url(url_id, params[:url], params[:notes])
+		@db.call('update_url', url_id, params[:url], params[:notes])
 		redirect to('/concept/%d' % id)
 	end
 
 	post %r{\A/concept/([0-9]+)/url/([0-9]+)/delete\Z} do |id, url_id|
-		@l.delete_url(url_id)
+		@db.call('delete_url', url_id)
 		redirect to('/concept/%d' % id)
 	end
 
 	post %r{\A/concept/([0-9]+)/tag\Z} do |id|
-		@l.tag_concept(id, params[:tag])
+		@db.call('tag_concept', id, params[:tag])
 		redirect to('/concept/%d' % id)
 	end
 
 	post %r{\A/concept/([0-9]+)/tag/([0-9]+)/delete\Z} do |id, tag_id|
-		@l.untag_concept(id, tag_id)
+		@db.call('untag_concept', id, tag_id)
 		redirect to('/concept/%d' % id)
 	end
 
 	get %r{\A/pairing/([0-9]+)\Z} do |id|
-		@pairing = @l.get_pairing(id)
+		ok, @pairing = @db.call('get_pairing', id)
 		erb :pairing
 	end
 
 	post %r{\A/pairing/([0-9]+)\Z} do |id|
-		@l.update_pairing(id, params[:thoughts])
+		@db.call('update_pairing', id, params[:thoughts])
 		redirect to('/pairing/%d' % id)
 	end
 
 	post %r{\A/pairing/([0-9]+)/delete\Z} do |id|
-		@l.delete_pairing(id)
+		@db.call('delete_pairing', id)
 		redirect to('/')
 	end
 
 	post %r{\A/pairing/([0-9]+)/tag\Z} do |id|
-		@l.tag_pairing(id, params[:tag])
+		@db.call('tag_pairing', id, params[:tag])
 		redirect to('/pairing/%d' % id)
 	end
 
