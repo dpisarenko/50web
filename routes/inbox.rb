@@ -25,8 +25,8 @@ class Inbox < ModAuth
 			end
 		end
 
-		def redirect_to_email_or_home(email)
-			if email
+		def redirect_to_email_or_home(ok, email)
+			if ok
 				redirect to('/email/%d' % email[:id])
 			else
 				redirect to('/')
@@ -93,7 +93,7 @@ class Inbox < ModAuth
 
 	post '/next_unopened' do
 		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
-		redirect_to_email_or_home(email)
+		redirect_to_email_or_home(ok, email)
 	end
 
 	get %r{^/email/([0-9]+)$} do |id|
@@ -128,13 +128,13 @@ class Inbox < ModAuth
 	post %r{^/email/([0-9]+)/close$} do |id|
 		@db.call('close_email', @eid, id)
 		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
-		redirect_to_email_or_home(email)
+		redirect_to_email_or_home(ok, email)
 	end
 
 	post %r{^/email/([0-9]+)/reply$} do |id|
 		@db.call('reply_to_email', @eid, id, params[:reply])
 		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
-		redirect_to_email_or_home(email)
+		redirect_to_email_or_home(ok, email)
 	end
 
 	post %r{^/email/([0-9]+)/not_my$} do |id|
