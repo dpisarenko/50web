@@ -40,166 +40,171 @@ class Inbox < ModAuth
 		@api = 'Peep'
 		@livetest = 'live' # (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
 		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
-			@p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
+			@db = getdb('peeps', @livetest)
+			ok, res = @db.call('auth_emailer', request.cookies['api_key'], request.cookies['api_pass'])
+			raise 'bad API auth' unless ok
+			@eid = res[:id]
+			# TODO: erase this next line once no more @p calls, below
+			# @p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
 		end
 	end
 
 	get '/' do
-		@unopened_email_count = @p.unopened_email_count
-		@open_emails = @p.open_emails
-		@unknowns_count = @p.unknowns_count[:count]
+		@unopened_email_count = @db.call('unopened_email_count', @eid)[1]
+		@open_emails = @db.call('opened_emails', @eid)[1]
+		@unknowns_count = @db.call('count_unknowns', @eid)[1][:count]
 		@pagetitle = 'inbox'
 		erb :home
 	end
 
 	get '/unknown' do
-		@unknown = @p.next_unknown
-		redirect to('/') unless @unknown
-		@search = (params[:search]) ? params[:search] : nil
-		@results = @p.person_search(@search) if @search
+		ok, @unknown = @db.call('get_next_unknown', @eid)
+		redirect to('/') unless ok
+		@search = (params[:search]) ? params[:search].strip : nil
+		if @search
+			ok, @results = @db.call('people_search', @search)
+		end
 		@pagetitle = 'unknown'
 		erb :unknown
 	end
  
 	post %r{^/unknown/([0-9]+)$} do |email_id|
-		if params[:person_id]
-			@p.unknown_is_person(email_id, params[:person_id])
-		else
-			@p.unknown_is_new_person(email_id)
-		end
+		person_id = (params[:person_id]) ? params[:person_id].to_i : 0
+		@db.call('set_unknown_person', @eid, email_id, person_id)
 		redirect to('/unknown')
 	end
 
 	post %r{^/unknown/([0-9]+)/delete$} do |email_id|
-		@p.delete_unknown(email_id)
+		@db.call('delete_unknown', @eid, email_id)
 		redirect to('/unknown')
 	end
 
 	get '/unopened' do
-		@emails = @p.emails_unopened(params[:profile], params[:category])
+		ok, @emails = @db.call('unopened_emails', @eid, params[:profile], params[:category])
 		@pagetitle = 'unopened for %s: %s' % [params[:profile], params[:category]]
 		erb :emails
 	end
 
 	get '/unemailed' do
-		@people = @p.unemailed_people
+		ok, @people = @db.call('people_unemailed')
 		@pagetitle = 'unemailed'
 		erb :people
 	end
 
 	post '/next_unopened' do
-		email = @p.next_unopened_email(params[:profile], params[:category])
+		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
 		redirect_to_email_or_home(email)
 	end
 
 	get %r{^/email/([0-9]+)$} do |id|
-		@email = @p.open_email(id) || halt(404)
+		ok, @email = @db.call('get_email', @eid, id)
+		halt 404 unless ok
 		@person = @email[:person]
 		@clash = (@email[:their_email] != @person[:email])
-		@profiles = @p.profiles
+		@profiles = ['derek@sivers', 'we@woodegg']
 		# skip formletters that start with _, since those are automated
-		@formletters = @p.formletters.reject {|x| x[:title][0] == '_'}
-		@locations = @p.all_countries
-		@reply = (params[:formletter]) ?
-			@p.get_formletter_for_person(params[:formletter], @email[:person][:id])[:body] : ''
+		ok, res = @db.call('get_formletters')
+		@formletters = res.reject {|x| x[:title][0] == '_'}
+		ok, @locations = @db.call('all_countries')
 		@pagetitle = 'email %d from %s' % [id, @person[:name]]
 		erb :email
 	end
 
 	post %r{^/email/([0-9]+)$} do |id|
-		@p.update_email(id, params)
+		@db.call('update_email', @eid, id, params.to_json)
 		redirect to('/email/%d' % id)
 	end
 
 	post %r{^/email/([0-9]+)/delete$} do |id|
-		@p.delete_email(id)
+		@db.call('delete_email', @eid, id)
 		redirect '/'
 	end
 
 	post %r{^/email/([0-9]+)/unread$} do |id|
-		@p.unread_email(id)
+		@db.call('unread_email', @eid, id)
 		redirect '/'
 	end
 
 	post %r{^/email/([0-9]+)/close$} do |id|
-		@p.close_email(id)
-		email = @p.next_unopened_email(params[:profile], params[:category])
+		@db.call('close_email', @eid, id)
+		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
 		redirect_to_email_or_home(email)
 	end
 
 	post %r{^/email/([0-9]+)/reply$} do |id|
-		@p.reply_to_email(id, params[:reply])
-		email = @p.next_unopened_email(params[:profile], params[:category])
+		@db.call('reply_to_email', @eid, id, params[:reply])
+		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
 		redirect_to_email_or_home(email)
 	end
 
 	post %r{^/email/([0-9]+)/not_my$} do |id|
-		@p.not_my_email(id)
+		@db.call('not_my_email', @eid, id)
 		redirect '/'
 	end
 
 	post '/person' do
-		person = @p.new_person(params[:name], params[:email])
+		ok, person = @db.call('new_person', params[:name], params[:email])
 		redirect to('/person/%d' % person[:id])
 	end
 
 	get %r{^/person/([0-9]+)$} do |id|
-		@person = @p.get_person(id) || halt(404)
-		@emails = @p.emails_for_person(id).reverse
-		@tables = @p.tables_with_person(id).sort
+		ok, @person = @db.call('get_person', id)
+		halt(404) unless ok
+		@emails = @db.call('get_person_emails', id)[1].reverse
+		@tables = @db.call('tables_with_person', id)[1].sort
 		@tables.map! do |t|
 			(t == 'sivers.comments') ?
 				('<a href="' + (SCP % id) + '">sivers.comments</a>') : t
 		end
-		@profiles = @p.profiles
-		@locations = @p.all_countries
+		@profiles = ['derek@sivers', 'we@woodegg']
+		ok, @locations = @db.call('all_countries')
 		@pagetitle = 'person %d = %s' % [id, @person[:name]]
 		erb :personfull
 	end
 
 	post %r{^/person/([0-9]+)$} do |id|
-		@p.update_person(id, params)
+		@db.call('update_person', id, params.to_json)
 		redirect_to_email_or_person(params[:email_id], id)
 	end
 
 	post %r{^/person/([0-9]+)/annihilate$} do |id|
-		@p.annihilate_person(id)
+		@db.call('annihilate_person', id)
 		redirect '/'
 	end
 
 	post %r{^/person/([0-9]+)/url.json$} do |id|
-		@p.add_url(id, params[:url]).to_json
+		ok, res = @db.call('add_url', id, params[:url])
+		res.to_json
 	end
 
 	post %r{^/person/([0-9]+)/stat.json$} do |id|
-		@p.add_stat(id, params[:key], params[:value]).to_json
+		ok, res = @db.call('add_stat', id, params[:key], params[:value])
+		res.to_json
 	end
 
 	post %r{^/person/([0-9]+)/email$} do |id|
-		@p.new_email_to(id, params[:body], params[:subject], params[:profile])
+		@db.call('new_email', id, params[:body], params[:subject], params[:profile])
 		redirect to('/person/%d' % id)
 	end
 
 	post %r{^/person/([0-9]+)/match/([0-9]+)$} do |person_id, email_id|
-		e = @p.open_email(email_id)
-		@p.update_person(person_id, {email: e[:their_email]})
+		ok, res = @db.call('get_email', @eid, email_id)
+		@db.call('update_person', person_id, {email: e[:their_email]}.to_json)
 		redirect to('/email/%d' % email_id)
 	end
 
 	post %r{^/url/([0-9]+)/delete.json$} do |id|
-		@p.delete_url(id).to_json
+		ok, res = @db.call('delete_url', id)
+		res.to_json
 	end
 
 	post %r{^/stat/([0-9]+)/delete.json$} do |id|
-		@p.delete_stat(id).to_json
+		ok, res = @db.call('delete_stat', id)
+		res.to_json
 	end
 
 	post %r{^/url/([0-9]+).json$} do |id|
-		if params[:star] == 't'
-			@p.star_url(id).to_json
-		elsif params[:star] == 'f'
-			@p.unstar_url(id).to_json
-		end
+		@db.call('update_url', id, {main: params[:star]}.to_json)
 	end
 
 	# to avoid external sites seeing my internal links:
@@ -210,26 +215,28 @@ class Inbox < ModAuth
 
 	get '/search' do
 		@q = (params[:q]) ? params[:q] : false
-		@results = @p.person_search(@q) if @q
+		if @q
+			ok, @results = @db.call('person_search', @q)
+		end
 		@pagetitle = 'search'
 		erb :search
 	end
 
 	get '/sent' do
-		@grouped = @p.sent_emails_grouped
+		ok, @grouped = @db.call('sent_emails_grouped')
 		@pagetitle = 'sent emails'
 		erb :sent
 	end
 
 	get '/formletters' do
-		@formletters = @p.formletters
+		ok, @formletters = @db.call('get_formletters')
 		@pagetitle = 'form letters'
 		erb :formletters
 	end
 
 	post '/formletters' do
-		res = @p.add_formletter(params[:title])
-		if res
+		ok, res = @db.call('create_formletter', params[:title])
+		if ok
 			redirect to('/formletter/%d' % res[:id])
 		else
 			redirect to('/formletters')
@@ -237,42 +244,44 @@ class Inbox < ModAuth
 	end
 
 	get %r{^/person/([0-9]+)/formletter/([0-9]+).json$} do |person_id, formletter_id|
-		@p.get_formletter_for_person(formletter_id, person_id).to_json
+		ok, res = @db.call('parsed_formletter', person_id, formletter_id)
+		res.to_json
 	end
 
 	get %r{^/formletter/([0-9]+)$} do |id|
-		@formletter = @p.get_formletter(id) || halt(404)
+		ok, @formletter = @db.call('get_formletter', id)
+		halt(404) unless ok
 		@pagetitle = 'formletter %d' % id
 		erb :formletter
 	end
 
 	post %r{^/formletter/([0-9]+)$} do |id|
-		@p.update_formletter(id, params)
+		@db.call('update_formletter', id, params.to_json)
 		redirect to('/formletter/%d' % id)
 	end
 
 	post %r{^/formletter/([0-9]+)/delete$} do |id|
-		@p.delete_formletter(id)
+		@db.call('delete_formletter', id)
 		redirect to('/formletters')
 	end
 
 	get '/countries' do
-		@countries = @p.country_count
+		ok, @countries = @db.call('country_count')
 		@pagetitle = 'countries'
-		@cc = @p.country_names
+		ok, @cc = @db.call('country_names')
 		erb :where_countries
 	end
 
 	get %r{^/states/([A-Z][A-Z])$} do |country_code|
 		@country = country_code
-		@states = @p.state_count(country_code)
+		ok, @states = @db.call('state_count', country_code)
 		@pagetitle = 'states for %s' % country_code
 		erb :where_states
 	end
 
 	get %r{^/cities/([A-Z][A-Z])$} do |country_code|
 		@country = country_code
-		@cities = @p.city_count(country_code)
+		ok, @cities = @db.call('city_count', country_code)
 		@state = nil
 		@pagetitle = 'cities for %s' % country_code
 		erb :where_cities
@@ -280,55 +289,64 @@ class Inbox < ModAuth
 
 	get %r{^/cities/([A-Z][A-Z])/(\S+)$} do |country_code, state_name|
 		@country = country_code
-		@cities = @p.city_count(country_code, state_name)
+		ok, @cities = @db.call('city_count', country_code, state_name)
 		@state = state_name
 		@pagetitle = 'cities for %s, %s' % [state_name, country_code]
 		erb :where_cities
 	end
 
-	get %r{^/where/([A-Z][A-Z])} do |country_code|
+	get %r{^/where/([A-Z][A-Z])} do |country|
 		city = params[:city]
 		state = params[:state]
-		@people = @p.where(country_code, city, state)
-		@pagetitle = 'People in %s' % [city, state, country_code].compact.join(', ')
+		if state && city
+			ok, @people = @db.call('people_from_state_city', country, state, city)
+		elsif state
+			ok, @people = @db.call('people_from_state', country, state)
+		elsif city
+			ok, @people = @db.call('people_from_city', country, city)
+		else
+			ok, @people = @db.call('people_from_country', country)
+		end
+		@pagetitle = 'People in %s' % [city, state, country].compact.join(', ')
 		erb :people
 	end
 
 	get %r{^/stats/(\S+)/(\S+)$} do |statkey, statvalue| 
-		@stats = @p.stats_with_key_value(statkey, statvalue)
+		ok, @stats = @db.call('get_stats', statkey, statvalue)
 		@statkey = statkey
-		@valuecount = @p.statvalues_count(statkey)
+		ok, @valuecount = @db.call('get_stat_value_count', statkey)
 		@pagetitle = '%s = %s' % [statkey, statvalue]
 		erb :stats_people
 	end
 
 	get %r{^/stats/(\S+)$} do |statkey| 
-		@stats = @p.stats_with_key(statkey)
+		ok, @stats = @db.call('get_stats', statkey)
 		@statkey = statkey
-		@valuecount = @p.statvalues_count(statkey)
+		ok, @valuecount = @db.call('get_stat_value_count', statkey)
 		@pagetitle = statkey
 		erb :stats_people
 	end
 
 	get '/stats' do
-		@stats = @p.statkeys_count
+		ok, @stats = @db.call('get_stat_name_count')
 		@pagetitle = 'stats'
 		erb :stats_count
 	end
 
 	get '/merge' do
 		@id1 = params[:id1].to_i
-		@person1 = (@id1 == 0) ? nil : @p.get_person(@id1) 
+		@person1 = (@id1 == 0) ? nil : @db.call('get_person', @id1)[1]
 		@id2 = params[:id2].to_i
-		@person2 = (@id2 == 0) ? nil : @p.get_person(@id2) 
+		@person2 = (@id2 == 0) ? nil : @db.call('get_person', @id2)[1]
 		@q = params[:q]
-		@results = (@q) ? @p.person_search(@q) : false
+		@results = (@q) ? @db.call('people_search', @q.strip)[1] : false
 		@pagetitle = 'merge'
 		erb :merge
 	end
 
 	post %r{^/merge/([0-9]+)$} do |id|
-		if @p.merge_into_person(id, params[:id2])
+		ok, res = @db.call('merge_person', id, params[:id2])
+		if ok
 			redirect to('/person/%d' % id)
 		else
 			# TODO: flash error that not allowed?

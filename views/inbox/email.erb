@@ -70,7 +70,7 @@
 	<form id="replyform" action="/email/<%= @email[:id] %>/reply" method="post">
 		<input type="hidden" name="profile" value="<%= @email[:profile] %>">
 		<input type="hidden" name="category" value="<%= @email[:category] %>">
-		<textarea name="reply" id="reply"><%=h @reply %></textarea>
+		<textarea name="reply" id="reply"></textarea>
 		<input type="submit" value="reply">
 	</form>
 
