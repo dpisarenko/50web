@@ -1,5 +1,5 @@
 # USAGE
-# db = getdb('live', 'peeps')
+# db = getdb('peeps')
 # ok, res = db.call('tables_with_person', 1)
 # ok, res = db.call('get_stats', 'programmer', 'elm')
 # ok, res = db.call('country_count')
@@ -13,7 +13,7 @@ require 'pg'
 require 'json'
 
 # ONLY USE THIS: Curry calldb with a DB connection & schema
-def getdb(server, schema)
+def getdb(schema, server='live')
 	Proc.new do |func, *params|
 		okres(calldb(PGPool.get(server), schema, func, params))
 	end
