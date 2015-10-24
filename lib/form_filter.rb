@@ -2,6 +2,39 @@
 require 'resolv'
 require 'net/http'
 
+# TODO: un-magic. break into separate functions, not specific to sivers.org or Rack or B50D
+# boolean tests:
+#		akismet_ok?(hash)
+#   honeypot_ip?(ip)
+#
+# controller:
+# 	post '/comment' do
+# 		good_reference = %r{\Ahttps?://sivers\.(dev|org)/([a-z0-9_-]{1,32})\Z}
+# 		halt unless m = good_reference.match env['HTTP_REFERER']
+#			uri = m[2]
+#			halt unless params[:name] && params[:name].size > 0
+#			halt unless params[:email] && /\S+@\S\.\S/ === params[:email]
+#			halt unless params[:comment] || params[:comment].size > 2
+#			ak = { blog: 'http://sivers.org/',
+#				user_ip: env['REMOTE_ADDR'],
+#				user_agent: env['HTTP_USER_AGENT'],
+#				referrer: env['HTTP_REFERER'],
+#				permalink: env['HTTP_REFERER'],
+#				comment_type: 'comment',
+#				comment_author: env['rack.request.form_hash']['name'],
+#				comment_author_email: env['rack.request.form_hash']['email'],
+#				comment_content: env['rack.request.form_hash']['comment'],
+#				blog_charset: 'UTF-8'}
+#			halt unless akismet_ok?(ak)
+#			halt unless honeypot_ok?(env['REMOTE_ADDR'])
+#			ok, res = @db.call('add_comment', params[:name], params[:email], params[:comment])
+# 	end
+#
+# 	post '/list' do
+# 		good_ref = %r{\Ahttps?://sivers\.(dev|org)/}
+# 		halt unless good_ref.match env['HTTP_REFERER']
+# 	end
+
 # Treat all methods here as private, except the "PUBLIC" ones up top.
 module FormFilter
 	class << self
