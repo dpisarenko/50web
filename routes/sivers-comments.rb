@@ -1,6 +1,6 @@
 require_relative 'mod_auth'
 require 'b50d-config.rb'  # INP
-require 'b50d/sivers-comments'
+require '../lib/db2js.rb'
 
 class SiversComments < ModAuth
 
@@ -17,43 +17,43 @@ class SiversComments < ModAuth
 		env['rack.errors'] = log
 		@api = 'SiversComments'
 		@livetest = 'live' # (/dev$/ === request.env['SERVER_NAME']) ? 'test' : 'live'
-		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
-			@sc = B50D::SiversComments.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
-		end
+		@db = getdb('sivers', @livetest)
 	end
 
 	get '/' do
-		@comments = @sc.get_comments
+		ok, @comments = @db.call('new_comments')
 		erb :home
 	end
 
 	get %r{\A/comment/([0-9]+)\Z} do |id|
-		@comment = @sc.get_comment(id) || halt(404)
+		ok, @comment = @db.call('get_comment', id)
+		halt(404) unless ok
 		erb :edit
 	end
 
 	get %r{\A/person/([0-9]+)/comments\Z} do |id|
-		@comments = @sc.comments_by_person(id)
+		ok, @comments = @db.call('comments_by_person', id)
+		halt(404) unless ok
 		erb :home
 	end
 
 	post %r{\A/comment/([0-9]+)\Z} do |id|
-		@sc.update_comment(id, params)
+		@db.call('update_comment', id, params.to_json)
 		redirect '/'
 	end
 
 	post %r{\A/comment/([0-9]+)/reply\Z} do |id|
-		@sc.reply_to_comment(id, params[:reply])
+		@db.call('reply_to_comment', id, params[:reply])
 		redirect '/'
 	end
 
 	post %r{\A/comment/([0-9]+)/delete\Z} do |id|
-		@sc.delete_comment(id)
+		@db.call('delete_comment', id)
 		redirect '/'
 	end
 
 	post %r{\A/comment/([0-9]+)/spam\Z} do |id|
-		@sc.spam_comment(id)
+		@db.call('spam_comment', id)
 		redirect '/'
 	end
 end
