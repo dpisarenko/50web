@@ -215,7 +215,7 @@ class Inbox < ModAuth
 	get '/search' do
 		@q = (params[:q]) ? params[:q] : false
 		if @q
-			ok, @results = @db.call('person_search', @q)
+			ok, @results = @db.call('people_search', @q)
 		end
 		@pagetitle = 'search'
 		erb :search
