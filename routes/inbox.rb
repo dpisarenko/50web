@@ -202,7 +202,8 @@ class Inbox < ModAuth
 	end
 
 	post %r{^/url/([0-9]+).json$} do |id|
-		@db.call('update_url', id, {main: params[:star]}.to_json)
+		ok, res = @db.call('update_url', id, {main: params[:star]}.to_json)
+		res.to_json
 	end
 
 	# to avoid external sites seeing my internal links:
