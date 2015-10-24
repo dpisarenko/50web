@@ -44,8 +44,6 @@ class Inbox < ModAuth
 			ok, res = @db.call('auth_emailer', request.cookies['api_key'], request.cookies['api_pass'])
 			raise 'bad API auth' unless ok
 			@eid = res[:id]
-			# TODO: erase this next line once no more @p calls, below
-			# @p = B50D::Peeps.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
 		end
 	end
 

@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'b50d/peeps' 
 require '../lib/db2js.rb'
 
 class ModAuth < Sinatra::Base
@@ -27,7 +26,6 @@ class ModAuth < Sinatra::Base
 	post '/login' do
 		redirect to('/login?err=missing') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
 		db = getdb('peeps', @livetest)
-		#if res = B50D::Peeps.auth(@livetest, params[:email], params[:password], @api)
 		ok, res = db.call('auth_api', params[:email], params[:password], @api)
 		if ok
 			response.set_cookie('person_id', value: res[:person_id], path: '/', secure: true, httponly: true)
