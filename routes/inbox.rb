@@ -181,7 +181,7 @@ class Inbox < ModAuth
 	end
 
 	post %r{^/person/([0-9]+)/email$} do |id|
-		@db.call('new_email', @eid, id, params[:body], params[:subject], params[:profile])
+		@db.call('new_email', @eid, id, params[:profile], params[:subject], params[:body])
 		redirect to('/person/%d' % id)
 	end
 
