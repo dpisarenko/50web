@@ -49,7 +49,7 @@ class MuckClientWeb < ModAuth
 	post '/account' do
 		filtered = params.reject {|k,v| k == :person_id}
 		@db.call('update_client', @client_id, filtered)
-		redirect to('/account')
+		redirect to('/account?msg=updated')
 	end
 
 	post '/password' do

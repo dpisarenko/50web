@@ -1,6 +1,5 @@
 require_relative 'mod_auth'
-
-require 'b50d/muckwork'
+require_relative '../lib/db2js.rb'
 
 class MuckManagerWeb < ModAuth
 
@@ -22,8 +21,8 @@ class MuckManagerWeb < ModAuth
 	before do
 		env['rack.errors'] = log
 		if has_cookie?
-			@mm = B50D::MuckworkManager.new(request.cookies['api_key'], request.cookies['api_pass'])
-			@manager = @mm.get_manager
+			@db = getdm('muckwork', @livetest)
+			@manager = @db.call('get_manager', @manager_id)
 		end
 	end
 
