@@ -141,7 +141,7 @@ class Inbox < ModAuth
 	end
 
 	post '/person' do
-		ok, person = @db.call('new_person', params[:name], params[:email])
+		ok, person = @db.call('create_person', params[:name], params[:email])
 		redirect to('/person/%d' % person[:id])
 	end
 
