@@ -1,6 +1,6 @@
 require 'sinatra/base'
-require 'b50d/woodegg'
 require 'kramdown'
+require_relative '../lib/db2js.rb'
 
 class WoodEgg < Sinatra::Base
 
@@ -21,11 +21,13 @@ class WoodEgg < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		@we = B50D::WoodEgg.new
+		@db = getdb('woodegg')
 		unless ['/login', '/register'].include? request.path_info
-			unless @customer = @we.customer_from_cookie(request.cookies['ok'])
-				redirect to('/login')
+			ok = false
+			if /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
+				ok, @customer = @db.call('get_customer', request.cookies['ok'])
 			end
+			redirect to('/login') unless ok
 		end
 		@pagetitle = 'Wood Egg'
 		@country_name= {'KH'=>'Cambodia','CN'=>'China','HK'=>'Hong Kong','IN'=>'India','ID'=>'Indonesia','JP'=>'Japan','KR'=>'Korea','MY'=>'Malaysia','MN'=>'Mongolia','MM'=>'Myanmar','PH'=>'Philippines','SG'=>'Singapore','LK'=>'Sri Lanka','TW'=>'Taiwan','TH'=>'Thailand','VN'=>'Vietnam'}
@@ -37,20 +39,22 @@ class WoodEgg < Sinatra::Base
 	end
 
 	post '/register' do
-		unless params[:password] && (/\S+@\S+\.\S+/ === params[:email]) && String(params[:name]).size > 1 && String(params[:proof]).size > 10
+		unless params[:password] && (/\A\S+@\S+\.\S+\Z/ === params[:email]) && \
+			String(params[:name]).size > 1 && String(params[:proof]).size > 8
 			redirect to('/login')
 		end
-		unless @person = @we.register(params)
-			redirect to('/login')
-		end
+		ok, @person = @db.call('register',
+			params[:name], params[:email], params[:password], params[:proof])
+		redirect to('/login') unless ok
 		@pagetitle = 'thank you'
 		erb :register
 	end
 
 	post '/login' do
 		redirect to('/login') unless params[:password] && (/\S+@\S+\.\S+/ === params[:email])
-		if x = @we.login(params[:email], params[:password])
-			response.set_cookie('ok', value:x[:cookie], path:'/', secure:true, httponly:true)
+		ok, res = @db.call('login', params[:email], params[:password])
+		if ok
+			response.set_cookie('ok', value: res[:cookie], path:'/', secure:true, httponly:true)
 			redirect to('/home')
 		else
 			redirect to('/login')
@@ -73,26 +77,29 @@ class WoodEgg < Sinatra::Base
 	end
 
 	get %r{^/country/(CN|HK|ID|IN|JP|KH|KR|LK|MM|MN|MY|PH|SG|TH|TW|VN)$} do |cc|
-		@country = @we.country(cc)
-		@uploads = @we.uploads(cc)
+		ok, @country = @db.call('get_country', cc)
+		ok, @uploads = @db.call('get_uploads', cc)
 		@pagetitle = @country_name[cc]
 		erb :country
 	end
 
 	get %r{\A/template/([0-9]+)\Z} do |id|
-		@template = @we.template(id) || halt(404)
+		ok, @template = @db.call('get_template', id)
+		halt(404) unless ok
 		@pagetitle = @template[:question]
 		erb :template
 	end
 
 	get %r{\A/question/([0-9]+)\Z} do |id|
-		@question = @we.question(id) || halt(404)
+		ok, @question = @db.call('get_question', id)
+		halt(404) unless ok
 		@pagetitle = @question[:question]
 		erb :question
 	end
 
 	get %r{\A/upload/([0-9]+)\Z} do |id|
-		@upload = @we.upload(id) || halt(404)
+		ok, @upload = @db.call('get_upload', id)
+		halt(404) unless ok
 		@upload[:filename].gsub!(/^r[0-9]{3}/, 'WoodEgg')
 		@pagetitle = @upload[:filename]
 		erb :upload
@@ -105,7 +112,8 @@ class WoodEgg < Sinatra::Base
 	end
 
 	get %r{\A/download/([0-9]+)/WoodEgg.*\Z} do |id|
-		up = @we.upload(id) || halt(404)
+		ok, up = @db.call('get_upload', id)
+		halt(404) unless ok
 		send_file "/var/www/htdocs/uploads/#{up[:filename]}",
 			filename: up[:filename].gsub(/^r[0-9]{3}/, 'WoodEgg')
 	end
