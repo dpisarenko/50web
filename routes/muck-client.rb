@@ -1,6 +1,5 @@
 require_relative 'mod_auth'
-
-require 'b50d/muckwork'
+require_relative '../lib/db2js.rb'
 
 class MuckClientWeb < ModAuth
 
@@ -24,37 +23,44 @@ class MuckClientWeb < ModAuth
 		@livetest = 'test'
 		env['rack.errors'] = log
 		if String(request.cookies['api_key']).size == 8 && String(request.cookies['api_pass']).size == 8
-			@mc = B50D::MuckworkClient.new(request.cookies['api_key'], request.cookies['api_pass'], @livetest)
-			@client = @mc.get_client
+			@db = getdb('muckwork', @livetest)
+			ok, res = @db.call('auth_client', request.cookies['api_key'], request.cookies['api_pass'])
+			raise 'bad API auth' unless ok
+			@client_id = res[:client_id]
+			@person_id = res[:person_id]
+			ok, @client = @db.call('get_client', @client_id)
 		end
 	end
 
 	get '/' do
-		@projects = @mc.get_projects
+		ok, @projects = @db.call('client_get_projects', @client_id)
 		@pagetitle = @client[:name] + ' HOME'
 		erb :home
 	end
 
 	get '/account' do
+		db2 = getdb_noschema(@livetest)
 		@pagetitle = @client[:name] + ' ACCOUNT'
-		@locations = @mc.locations
-		@currencies = @mc.currencies
+		ok, @locations = db2.call('peeps.all_countries')
+		ok, @currencies = db2.call('core.all_currencies')
 		erb :account
 	end
 
 	post '/account' do
-		@mc.update(params)
+		filtered = params.reject {|k,v| k == :person_id}
+		@db.call('update_client', @client_id, filtered)
 		redirect to('/account')
 	end
 
 	post '/password' do
-		@mc.set_password(params[:password])
+		db2 = getdb_noschema(@livetest)
+		db2.call('peeps.set_password', @person_id, params[:password])
 		redirect to('/account?msg=newpass')
 	end
 
 	post '/projects' do
-		p = @mc.create_project(params[:title], params[:description])
-		if p
+		ok, p = @db.('create_project', @client_id, params[:title], params[:description])
+		if ok
 			redirect to('/project/%d' % p[:id])
 		else
 			redirect to('/')
@@ -62,29 +68,41 @@ class MuckClientWeb < ModAuth
 	end
 
 	get %r{\A/project/([0-9]+)\Z} do |id|
-		@project = @mc.get_project(id) || halt(404)
+		ok, res = @db.call('client_owns_project', @client_id, id)
+		halt(400) unless res == {ok: true}
+		ok, @project = @db.call('get_project', id)
+		halt(404) unless ok
 		@pagetitle = @project[:title]
 		erb :project
 	end
 
 	get %r{\A/project/([0-9]+)/task/([0-9]+)\Z} do |project_id, task_id|
-		@task = @mc.get_project_task(project_id, task_id) || halt(404)
+		ok, res = @db.call('client_owns_project', @client_id, project_id)
+		halt(400) unless res == {ok: true}
+		ok, @task = @db.call('get_project_task', project_id, task_id)
+		halt(404) unless ok
 		@pagetitle = @task[:title]
 		erb :task
 	end
 
 	post %r{\A/project/([0-9]+)\Z} do |id|
-		@mc.update_project(id, params[:title], params[:description])
+		ok, res = @db.call('client_owns_project', @client_id, id)
+		halt(400) unless res == {ok: true}
+		ok, res = @db.call('update_project', id, params[:title], params[:description])
 		redirect to('/project/%d' % id)
 	end
 
 	post %r{\A/project/([0-9]+)/approve\Z} do |id|
-		@mc.approve_quote(id)
+		ok, res = @db.call('client_owns_project', @client_id, id)
+		halt(400) unless res == {ok: true}
+		@db.call('approve_quote', id)
 		redirect to('/project/%d' % id)
 	end
 
 	post %r{\A/project/([0-9]+)/refuse\Z} do |id|
-		@mc.refuse_quote(id, params[:reason])
+		ok, res = @db.call('client_owns_project', @client_id, id)
+		halt(400) unless res == {ok: true}
+		@db.call('refuse_quote', id, params[:reason])
 		redirect to('/project/%d' % id)
 	end
 
