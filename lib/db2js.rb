@@ -3,7 +3,7 @@
 # ok, res = db.call('tables_with_person', 1)
 # ok, res = db.call('get_stats', 'programmer', 'elm')
 # ok, res = db.call('country_count')
-# ok, res = db.call('update_person', 1, JSON.generate({email: 'boo'}))
+# ok, res = db.call('update_person', 1, {email: 'boo'}.to_json)
 # if ok
 # 	puts "worked! #{res.inspect}"
 # else
@@ -16,6 +16,13 @@ require 'json'
 def getdb(schema, server='live')
 	Proc.new do |func, *params|
 		okres(calldb(PGPool.get(server), schema, func, params))
+	end
+end
+
+# ALTERNATE: when I don't want to auto-prefix a schema
+def getdb_noschema(server='live')
+	Proc.new do |fullfunc, *params|
+		okres(calldb_noschema(PGPool.get(server), fullfunc, params))
 	end
 end
 
@@ -42,6 +49,11 @@ end
 def calldb(pg, schema, func, params)
 	pg.exec_params('SELECT mime, js FROM %s.%s%s' %
 		[schema, func, paramstring(params)], params)
+end
+
+def calldb_noschema(pg, fullfunc, params)
+	pg.exec_params('SELECT mime, js FROM %s%s' %
+		[fullfunc, paramstring(params)], params)
 end
 
 # PG Pool of connections. Simple as can be. Bypassed if test database.
