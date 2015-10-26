@@ -1,5 +1,5 @@
 require_relative 'mod_auth'
-require_relative '../lib/db2js.rb'
+require 'b50d/getdb'
 
 class MuckManagerWeb < ModAuth
 

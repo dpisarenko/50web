@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require '../lib/db2js.rb'
+require 'b50d/getdb'
 require 'r18n-core'
 include R18n::Helpers
 

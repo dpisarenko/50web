@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require '../lib/db2js.rb'
+require 'b50d/getdb'
 
 class Lat < Sinatra::Base
 

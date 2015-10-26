@@ -1,6 +1,6 @@
 require_relative 'mod_auth'
+require 'b50d/getdb'
 require 'b50d-config.rb'  # INP
-require '../lib/db2js.rb'
 
 class SiversComments < ModAuth
 

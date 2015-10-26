@@ -1,6 +1,6 @@
 require 'sinatra/base'
 require 'kramdown'
-require_relative '../lib/db2js.rb'
+require 'b50d/getdb'
 
 class WoodEgg < Sinatra::Base
 
