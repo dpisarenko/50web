@@ -1,0 +1,11 @@
+<section id="stats">
+
+<h1>nownownow.com URLs with unknown person:</h1>
+
+<ul>
+<% @nows.each do |n| %>
+	<li><a href="/now/<%= n[:id] %>"><%= n[:short] %></a></li>
+<% end %>
+</ul>
+
+</section>

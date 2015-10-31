@@ -1,0 +1,25 @@
+<section id="people">
+<h1><a href="<%= @now[:long] %>"><%= @now[:short] %></a></h1>
+
+<% if @people.count == 0 %>
+	<p>(no people)</p>
+<% else %>
+<table>
+	<tr><th>go</th><th>name</th><th>email</th><th>use</th></tr>
+<% @people.each do |person| %>
+	<tr>
+		<td><a href="/person/<%= person[:id] %>"><%= person[:id] %></a></td>
+		<td><%=h person[:name] %></td>
+		<td><%=h person[:email] %></td>
+		<td>
+			<form action="/now/<%= @now[:id] %>" method="post">
+			<input type="hidden" name="person_id" value="<%= person[:id] %>">
+			<input type="submit" value="use">
+			</form>
+		</td>
+	</tr>
+<% end %>
+</table>
+<% end %>
+
+</section>
