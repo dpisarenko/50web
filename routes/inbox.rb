@@ -187,7 +187,7 @@ class Inbox < ModAuth
 
 	post %r{^/person/([0-9]+)/match/([0-9]+)$} do |person_id, email_id|
 		ok, res = @db.call('get_email', @eid, email_id)
-		@db.call('update_person', person_id, {email: e[:their_email]}.to_json)
+		@db.call('update_person', person_id, {email: res[:their_email]}.to_json)
 		redirect to('/email/%d' % email_id)
 	end
 
