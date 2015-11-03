@@ -125,7 +125,7 @@ function formUrl(u) {
 	'<form data-post="/url/' + u.id + '.json" data-after="updateUrl">' +
 	'<input type="hidden" name="star" value="' + (u.main ? 'f' : 't') + '">' +
 	'<input type="submit" name="submit" value="' + (u.main ? '★' : '☆') + '">' +
-	'<a href="/link?url=' + encodeURI(u.url) + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>');
+	'<a href="/link?url=' + encodeURIComponent(u.url) + '">' + u.url.replace(/^https?:\/\//, '') + '</a></form>');
 }
 function listUrl(u) {
 	var li = document.createElement('li');
