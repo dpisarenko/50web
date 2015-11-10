@@ -110,7 +110,7 @@ function killStat(s) {
 </div>
 
 <div id="urls">
-<h4>urls:</h4>
+<h4>urls: (<a href="/now/<%= @person[:id] %>">now</a>)</h4>
 <form id="urladd" data-post="/person/<%= @person[:id] %>/url.json" data-after="addUrl">
 	<input name="url" placeholder="url">
 	<input id="urladdbutton" type="submit" name="submit" value="add url">

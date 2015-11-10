@@ -1,0 +1,57 @@
+<section id="people">
+
+<h2>Add a /now URL?</h2>
+<form action="/now" method="post">
+	<label for="addshort">short:</label>
+	<input id="addshort" type="text" name="short" value="">
+	<input type="hidden" name="person_id" value="<%= @person_id %>">
+	<input type="submit" value="add">
+</form>
+
+<% @urls.each do |u| %>
+	<form action="/now/<%= u[:id] %>" method="post">
+		<label for="<%= u[:id] %>_person_id">person_id:</label>
+		<input id="<%= u[:id] %>_person_id" type="text" name="person_id" value="<%= u[:person_id] %>">
+		<label for="<%= u[:id] %>_tiny">tiny:</label>
+		<input id="<%= u[:id] %>_tiny" type="text" name="tiny" value="<%= u[:tiny] %>">
+		<label for="<%= u[:id] %>_short">short:</label>
+		<input id="<%= u[:id] %>_short" type="text" name="short" value="<%= u[:short] %>">
+		<label for="<%= u[:id] %>_long">long:</label>
+		<input id="<%= u[:id] %>_long" type="text" name="long" value="<%= u[:long] %>">
+		<input type="submit" value="update">
+	</form>
+<% end %>
+
+<% if @urls.size > 0 %>
+	<h2>Profile questions:</h2>
+	<p>(#1 / location is updated on the person page.)</p>
+
+<%
+%w(title liner why thought red).each do |xx|
+	stat = @stats.find {|s| s[:name] == "now-#{xx}"}
+	if stat
+%>
+	<h3><%= xx %></h3>
+	<form action="/stats/<%= stat[:id] %>" method="post">
+		<input type="hidden" name="person_id" value="<%= @person_id %>">
+		<textarea name="value"><%=h stat[:value] %></textarea>
+		<input type="submit" value="update">
+	</form>
+<%
+	else
+%>
+	<h3><%= xx %></h3>
+	<form action="/stats" method="post">
+		<input type="hidden" name="person_id" value="<%= @person_id %>">
+		<input type="hidden" name="name" value="now-<%= xx %>">
+		<textarea name="value"></textarea>
+		<input type="submit" value="add">
+	</form>
+<%
+	end # if stat
+	end # xx loop
+end # if urls.size
+%>
+
+</section>
+

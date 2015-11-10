@@ -361,6 +361,12 @@ class Inbox < ModAuth
 		erb :now
 	end
 
+	post '/now' do
+		now = getdb('now', @livetest)
+		now.call('add_url', params[:person_id], params[:short])
+		redirect to('/now/%d' % params[:person_id])
+	end
+
 	get %r{^/now/find/([0-9]+)$} do |id|
 		now = getdb('now', @livetest)
 		ok, @now = now.call('url', id)
@@ -373,6 +379,31 @@ class Inbox < ModAuth
 		now = getdb('now', @livetest)
 		now.call('unknown_assign', id, params[:person_id])
 		redirect to('/now')
+	end
+
+	get %r{^/now/([0-9]+)$} do |person_id|
+		now = getdb('now', @livetest)
+		ok, @urls = now.call('urls_for_person', person_id)
+		ok, @stats = now.call('stats_for_person', person_id)
+		@person_id = person_id
+		@pagetitle = "/now for #{person_id}"
+		erb :now_person
+	end
+
+	post %r{^/now/([0-9]+)$} do |id|
+		now = getdb('now', @livetest)
+		now.call('update_url', id, params.to_json)
+		redirect to('/now/%d' % params[:person_id])
+	end
+
+	post '/stats' do
+		@db.call('add_stat', params[:person_id], params[:name], params[:value])
+		redirect to('/now/%d' % params[:person_id])
+	end
+
+	post %r{^/stats/([0-9]+)$} do |id|
+		@db.call('update_stat', id, {statvalue: params[:value]}.to_json)
+		redirect to('/now/%d' % params[:person_id])
 	end
 end
 
