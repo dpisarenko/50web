@@ -366,7 +366,7 @@ class Inbox < ModAuth
 		ok, @now = now.call('url', id)
 		ok, @people = now.call('unknown_find', id)
 		@pagetitle = "now #{id}"
-		erb :now1
+		erb :nowfind
 	end
 
 	post %r{^/now/find/([0-9]+)$} do |id|
