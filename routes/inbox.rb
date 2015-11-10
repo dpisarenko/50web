@@ -354,18 +354,21 @@ class Inbox < ModAuth
 	end
 
 	get '/now' do
-		ok, @nows = @db.call('now_unknowns')
+		now = getdb('now', @livetest)
+		ok, @nows = now.call('unknowns')
 		erb :now
 	end
 
 	get %r{^/now/([0-9]+)$} do |id|
-		ok, @now = @db.call('now_url', id)
-		ok, @people = @db.call('now_unknown_find', id)
+		now = getdb('now', @livetest)
+		ok, @now = now.call('url', id)
+		ok, @people = now.call('unknown_find', id)
 		erb :now1
 	end
 
 	post %r{^/now/([0-9]+)$} do |id|
-		@db.call('now_unknown_assign', id, params[:person_id])
+		now = getdb('now', @livetest)
+		now.call('unknown_assign', id, params[:person_id])
 		redirect to('/now')
 	end
 end
