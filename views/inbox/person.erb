@@ -69,46 +69,6 @@ end
 	<p>✿ <%= @tables.join(', ') %></p>
 <% end %>
 
-<div id="stats">
-<h4>stats:</h4>
-<form id="statadd" data-post="/person/<%= @person[:id] %>/stat.json" data-after="addStat">
-	<input name="key" placeholder="key">
-	<input name="value" placeholder="value">
-	<input id="stataddbutton" type="submit" name="submit" value="add stat">
-</form>
-<ul id="statlist"></ul>
-<script>
-activate(document.getElementById('statadd'));
-
-function listStat(s) {
-	var li = document.createElement('li');
-	li.id = 'stat-' + s.id;
-	li.innerHTML = '<form data-post="/stat/' + s.id + '/delete.json" data-after="killStat">' +
-		'<input type="submit" name="submit" value="x"></form>' +
-		s.created_at.substring(0,10) + ' ' +
-		s.name + ': ' +
-		s.value;  // TODO: html escape
-	var list = document.getElementById('statlist');
-	list.appendChild(li);
-	return li;
-}
-function addStat(s) {
-	var li = listStat(s);
-	activateForms(li);
-}
-function killStat(s) {
-	var li = document.getElementById('stat-' + s.id);
-	document.getElementById('statlist').removeChild(li);
-}
-
-<% if @person[:stats] %>
-	<% @person[:stats].each do |stat| %>
-		addStat(<%= stat.to_json %>);
-	<% end %>
-<% end %>
-</script>
-</div>
-
 <div id="urls">
 <h4>urls: (<a href="/now/<%= @person[:id] %>">now</a>)</h4>
 <form id="urladd" data-post="/person/<%= @person[:id] %>/url.json" data-after="addUrl">
@@ -152,6 +112,46 @@ function killUrl(u) {
 <% if @person[:urls] %>
 	<% @person[:urls].each do |url| %>
 		addUrl(<%= url.to_json %>);
+	<% end %>
+<% end %>
+</script>
+</div>
+
+<div id="stats">
+<h4>stats:</h4>
+<form id="statadd" data-post="/person/<%= @person[:id] %>/stat.json" data-after="addStat">
+	<input name="key" placeholder="key">
+	<input name="value" placeholder="value">
+	<input id="stataddbutton" type="submit" name="submit" value="add stat">
+</form>
+<ul id="statlist"></ul>
+<script>
+activate(document.getElementById('statadd'));
+
+function listStat(s) {
+	var li = document.createElement('li');
+	li.id = 'stat-' + s.id;
+	li.innerHTML = '<form data-post="/stat/' + s.id + '/delete.json" data-after="killStat">' +
+		'<input type="submit" name="submit" value="x"></form>' +
+		s.created_at.substring(0,10) + ' ' +
+		s.name + ': ' +
+		s.value;  // TODO: html escape
+	var list = document.getElementById('statlist');
+	list.appendChild(li);
+	return li;
+}
+function addStat(s) {
+	var li = listStat(s);
+	activateForms(li);
+}
+function killStat(s) {
+	var li = document.getElementById('stat-' + s.id);
+	document.getElementById('statlist').removeChild(li);
+}
+
+<% if @person[:stats] %>
+	<% @person[:stats].each do |stat| %>
+		addStat(<%= stat.to_json %>);
 	<% end %>
 <% end %>
 </script>
