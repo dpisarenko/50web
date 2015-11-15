@@ -1,5 +1,4 @@
 require_relative 'mod_auth'
-require 'b50d/getdb'
 require 'b50d-config.rb'  # INP
 
 class SiversComments < ModAuth

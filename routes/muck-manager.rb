@@ -1,5 +1,4 @@
 require_relative 'mod_auth'
-require 'b50d/getdb'
 
 class MuckManagerWeb < ModAuth
 
