@@ -147,11 +147,7 @@ class SiversOrg < Sinatra::Base
 		ok, p = @db.call('create_person', params[:name], params[:email])
 		redirect '/pdf' unless ok
 		@db.call('add_stat', p[:id], 'ebook', 'requested')
-		#  PARAMS: people.id, formletters.id
-		ok, b = @db.call('parsed_formletter', p[:id], 5)
-		# PARAMS: emailer_id, person_id, profile, subject, body
-		@db.call('new_email', 2, p[:id], 'derek@sivers',
-			"#{p[:address]} - How to Call Attention to Your Music", b[:body])
+		ok, b = @db.call('send_person_formletter', p[:id], 5, 'derek@sivers')
 		redirect '/thanks?for=pdf'
 	end
 
