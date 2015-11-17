@@ -147,13 +147,14 @@ class SiversOrg < Sinatra::Base
 		ok, p = @db.call('create_person', params[:name], params[:email])
 		redirect '/pdf' unless ok
 		@db.call('add_stat', p[:id], 'ebook', 'requested')
-		ok, b = @db.call('send_person_formletter', p[:id], 5, 'derek@sivers')
+		@db.call('send_person_formletter', p[:id], 5, 'derek@sivers')
 		redirect '/thanks?for=pdf'
 	end
 
 	# PASSWORD: semi-authorized. show form to make/change real password
 	get %r{\A/u/([0-9]+)/([a-zA-Z0-9]{8})\Z} do |person_id, newpass|
-		redirect '/sorry?for=badurlid' unless @db.call('get_person_newpass', person_id, newpass)[0]
+		ok, _ = @db.call('get_person_newpass', person_id, newpass)
+		redirect '/sorry?for=badurlid' unless ok
 		@person_id = person_id
 		@newpass = newpass
 		@bodyid = 'newpass'
@@ -188,53 +189,6 @@ class SiversOrg < Sinatra::Base
 		@db.call('new_email', p[:id], b[:body],
 			"#{p[:address]} - your password reset link", 'derek@sivers')
 		redirect '/thanks?for=reset'
-	end
-
-	# AYW post code word + name & email. if right, emails login link
-	# (if you are reading this, yes the codeword is here. it's intentionally not very secret.)
-	post '/ayw/proof' do
-		redirect '/sorry?for=aywcode' unless /utopia/i === params[:code]
-		ok, p = @db.call('create_person', params[:name], params[:email])
-		redirect '/a' unless ok
-		@db.call('add_stat', p[:id], 'ayw', 'a')
-		ok, b = @db.call('parsed_formletter', 4, p[:id])
-		@db.call('new_email', p[:id], b[:body],
-			"#{p[:address]} - your MP3 download link", 'derek@sivers')
-		redirect '/thanks?for=ayw'
-	end
-
-	# log in form to get to AYW MP3 download area
-	get '/ayw/login' do
-		redirect '/ayw/list' if @db.call('get_person_cookie', request.cookies['ok'])[0]
-		@bodyid = 'ayw'
-		@pagetitle = 'log in for MP3 downloads'
-		erb :ayw_login
-	end
-
-	# post login form to get into list of MP3s
-	post '/ayw/login' do
-		ok, res = @db.call('cookie_from_login', params[:email], params[:password], request.env['SERVER_NAME'])
-		if ok
-			response.set_cookie('ok', value: res[:cookie], path: '/', httponly: true)
-			redirect '/ayw/list'
-		else
-			redirect '/sorry?for=badlogin'
-		end
-	end
-
-	# AYW list of MP3 downloads - only for the authorized
-	get '/ayw/list' do
-		redirect '/ayw/login' unless @db.call('get_person_cookie', request.cookies['ok'])[0]
-		@bodyid = 'ayw'
-		@pagetitle = 'MP3 downloads for Anything You Want book'
-		erb :ayw_list
-	end
-
-	# AYW MP3 downloads 
-	get %r{\A/ayw/download/([A-Za-z-]+.zip)\Z} do |zipfile|
-		redirect '/sorry?for=login' unless @db.call('get_person_cookie', request.cookies['ok'])[0]
-		redirect '/ayw/list' unless %w(AnythingYouWant.zip CLASSICAL-AnythingYouWant.zip COUNTRY-AnythingYouWant.zip FOLK-AnythingYouWant.zip JAZZ-AnythingYouWant.zip OTHER-AnythingYouWant.zip POP-AnythingYouWant.zip ROCK-AnythingYouWant.zip SAMPLER-AnythingYouWant.zip SINGSONG-AnythingYouWant.zip URBAN-AnythingYouWant.zip WORLD-AnythingYouWant.zip).include? zipfile
-		redirect "/file/#{zipfile}"
 	end
 
 end
