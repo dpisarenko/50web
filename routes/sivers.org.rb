@@ -138,7 +138,8 @@ class SiversOrg < Sinatra::Base
 	get %r{\A/download/([0-9]+)/([a-zA-Z0-9]{4})/([a-zA-Z0-9\._-]+)\Z} do |person_id, lopass, filename|
 		whitelist = %w(DerekSivers.pdf)
 		redirect '/sorry?for=notfound' unless whitelist.include?(filename)
-		redirect '/sorry?for=login' unless @db.call('get_person_lopass', person_id, lopass)[0]
+		ok, _ = @db.call('get_person_lopass', person_id, lopass)
+		redirect '/sorry?for=login' unless ok
 		send_file "/var/www/htdocs/downloads/#{filename}"
 	end
 
