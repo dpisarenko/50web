@@ -1,6 +1,21 @@
 require 'sinatra/base'
 require 'b50d/getdb'
 
+# https://data.sivers.org/ FEATURES:
+#	form to post your email to have password reset link emailed to you
+# route to receive post of that ^ form, verify, send formletter, or sorry
+# /thanks?for= and /sorry?for= pages
+#	receive password reset link & show form to make new password
+# route to receive post of new password. logs in with cookie. sends home.
+# login form: email + password
+# route to receive login form: sorry or logs in with cookie. sends home.
+# home: forms for email, city/state/country, listype, urls. link to /now
+# routes to receive post of each of these ^ forms
+# now: if no now.urls yet, form to enter one
+# route to trim new now.url, check unique, visit it, get long, make tiny, insert
+# now profile questions. edit link to turn answer into form. [save] button.
+# routes to receive post of each of these ^ forms, redirect to /now
+
 class SiversData < Sinatra::Base
 
 	log = File.new('/tmp/SiversData.log', 'a+')
