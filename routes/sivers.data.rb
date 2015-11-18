@@ -1,6 +1,7 @@
-require_relative 'mod_auth'
+require 'sinatra/base'
+require 'b50d/getdb'
 
-class SiversData < ModAuth
+class SiversData < Sinatra::Base
 
 	log = File.new('/tmp/SiversData.log', 'a+')
 	log.sync = true
@@ -14,13 +15,15 @@ class SiversData < ModAuth
 	before do
 		env['rack.errors'] = log
 		@db = getdb('peeps')
-		@api = 'Data'
-		@livetest = 'live'
 	end
 
 	helpers do
 		def h(text)
 			Rack::Utils.escape_html(text)
+		end
+
+		def sorry(msg)
+			redirect to('/sorry?for=' + msg)
 		end
 	end
 
@@ -59,9 +62,44 @@ class SiversData < ModAuth
 		redirect to('/')
 	end
 
-	post '/email' do
-		params[:email]
-		# exists in db?
+	# PASSWORD: semi-authorized. show form to make/change real password
+	get %r{\A/u/([0-9]+)/([a-zA-Z0-9]{8})\Z} do |person_id, newpass|
+		ok, _ = @db.call('get_person_newpass', person_id, newpass)
+		sorry 'badurlid' unless ok
+		@person_id = person_id
+		@newpass = newpass
+		@bodyid = 'newpass'
+		@pagetitle = 'new password'
+		erb :newpass
+	end
+
+	# PASSWORD: posted here to make/change it. then log in with cookie
+	post '/password' do
+		ok, p = @db.call('get_person_newpass', params[:person_id], params[:newpass])
+		sorry 'badurlid' unless ok
+		sorry 'shortpass' unless params[:password].to_s.size >= 4
+		ok, p = @db.call('set_password', p[:id], params[:password])
+		ok, res = @db.call('cookie_from_id', p[:id], request.env['SERVER_NAME'])
+		response.set_cookie('ok', value: res[:cookie], path: '/', httponly: true)
+		redirect '/ayw/list'
+	end
+
+	# PASSWORD: forgot? form to enter email
+	get '/forgot' do
+		@bodyid = 'forgot'
+		@pagetitle = 'forgot password'
+		erb :forgot
+	end
+
+	# PASSWORD: email posted here. send password reset link
+	post '/forgot' do
+		ok, p = @db.call('get_person_email', params[:email])
+		sorry 'emailnf' unless ok
+		@db.call('make_newpass', p[:id])
+		ok, b = @db.call('parsed_formletter', 1, p[:id])
+		@db.call('new_email', p[:id], b[:body],
+			"#{p[:address]} - your password reset link", 'derek@sivers')
+		redirect '/thanks?for=reset'
 	end
 
 end

@@ -126,7 +126,7 @@ class SiversOrg < Sinatra::Base
 		sorry 'noemail' unless params[:email] && /\A\S+@\S+\.\S+\Z/ === params[:email]
 		sorry 'nocomment' unless %w(some all none).include? params[:listype]
 		sorry 'honeypot' unless honeypot_ok?(HONEYPOT, env['REMOTE_ADDR'])
-		ok, res = @db.call('list_update', params[:name], params[:email], params[:listype])
+		ok, _ = @db.call('list_update', params[:name], params[:email], params[:listype])
 		if ok
 			redirect('/thanks?for=list')
 		else
@@ -137,9 +137,9 @@ class SiversOrg < Sinatra::Base
 	# DOWNLOAD: id+lopass auth to get a file
 	get %r{\A/download/([0-9]+)/([a-zA-Z0-9]{4})/([a-zA-Z0-9\._-]+)\Z} do |person_id, lopass, filename|
 		whitelist = %w(DerekSivers.pdf)
-		redirect '/sorry?for=notfound' unless whitelist.include?(filename)
+		sorry 'notfound' unless whitelist.include?(filename)
 		ok, _ = @db.call('get_person_lopass', person_id, lopass)
-		redirect '/sorry?for=login' unless ok
+		sorry 'login' unless ok
 		send_file "/var/www/htdocs/downloads/#{filename}"
 	end
 
@@ -150,46 +150,6 @@ class SiversOrg < Sinatra::Base
 		@db.call('add_stat', p[:id], 'ebook', 'requested')
 		@db.call('send_person_formletter', p[:id], 5, 'derek@sivers')
 		redirect '/thanks?for=pdf'
-	end
-
-	# PASSWORD: semi-authorized. show form to make/change real password
-	get %r{\A/u/([0-9]+)/([a-zA-Z0-9]{8})\Z} do |person_id, newpass|
-		ok, _ = @db.call('get_person_newpass', person_id, newpass)
-		redirect '/sorry?for=badurlid' unless ok
-		@person_id = person_id
-		@newpass = newpass
-		@bodyid = 'newpass'
-		@pagetitle = 'new password'
-		erb :newpass
-	end
-
-	# PASSWORD: posted here to make/change it. then log in with cookie
-	post '/u/password' do
-		ok, p = @db.call('get_person_newpass', params[:person_id], params[:newpass])
-		redirect '/sorry?for=badurlid' unless ok
-		redirect '/sorry?for=shortpass' unless params[:password].to_s.size >= 4
-		ok, p = @db.call('set_password', p[:id], params[:password])
-		ok, res = @db.call('cookie_from_id', p[:id], request.env['SERVER_NAME'])
-		response.set_cookie('ok', value: res[:cookie], path: '/', httponly: true)
-		redirect '/ayw/list'
-	end
-
-	# PASSWORD: forgot? form to enter email
-	get '/u/forgot' do
-		@bodyid = 'forgot'
-		@pagetitle = 'forgot password'
-		erb :forgot
-	end
-
-	# PASSWORD: email posted here. send password reset link
-	post '/u/forgot' do
-		ok, p = @db.call('get_person_email', params[:email])
-		redirect '/sorry?for=emailnf' unless ok
-		@db.call('make_newpass', p[:id])
-		ok, b = @db.call('parsed_formletter', 1, p[:id])
-		@db.call('new_email', p[:id], b[:body],
-			"#{p[:address]} - your password reset link", 'derek@sivers')
-		redirect '/thanks?for=reset'
 	end
 
 end
