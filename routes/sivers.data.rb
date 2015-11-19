@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'b50d/getdb'
 
-# https://data.sivers.org/ FEATURES:
+# https://data.sivers.org/ CONTENTS:
 #	form to post your email to have password reset link emailed to you
 # route to receive post of that ^ form, verify, send formletter, or sorry
 # /thanks?for= and /sorry?for= pages
@@ -36,30 +36,43 @@ class SiversData < Sinatra::Base
 		def h(text)
 			Rack::Utils.escape_html(text)
 		end
-
-		def sorry(msg)
-			redirect to('/sorry?for=' + msg)
-		end
-
-		# Also checked by routes that don't require authorization because sometimes
-		# people hit those by accident (browser back too far) even though they're
-		# already logged in. So if they do, just send to authorized home.
-		def authorized?
-		end
-
-		def authorize!
-			# TODO: redirect to('/login') unless authorized
-			# TODO: assign @person_id once found
-		end
-
-		def login(person_id)
-		end
-
-		def logout
-		end
 	end
 
-## ROUTES THAT DON'T NEED AUTH COOKIE
+	def sorry(msg)
+		redirect to('/sorry?for=' + msg)
+	end
+
+	def thanks(msg)
+		redirect to('/thanks?for=' + msg)
+	end
+
+	# Also checked by routes that don't require authorization because sometimes
+	# people hit those by accident (browser back too far) even though they're
+	# already logged in. So if they do, just send to authorized home.
+	def authorized?
+		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
+		ok, res = @db.call('get_person_cookie', request.cookies['ok'])
+		return false unless ok
+		@person_id = res[:id]
+	end
+
+	def authorize!
+		redirect to('/login') unless authorized?
+	end
+
+	def login(person_id)
+		ok, res = @db.call('cookie_from_id', person_id, 'data.sivers.org')
+		logout unless ok
+		response.set_cookie('ok', value: res[:cookie], path: '/',
+			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: true)
+	end
+
+	def logout
+		response.set_cookie('ok', value: '', path: '/',
+			expires: Time.at(0), secure: true, httponly: true)
+	end
+
+##### ROUTES THAT DON'T NEED AUTH COOKIE
 
 	#	form to post your email to have password reset link emailed to you
 	get '/getpass' do
@@ -71,17 +84,23 @@ class SiversData < Sinatra::Base
 	# route to receive post of that ^ form, verify, send formletter, or sorry
 	post '/getpass' do
 		redirect to('/') if authorized?
-		# sorry 'bade' unless params[:email] matches regex
-		# get person by email
-		# sorry 'unknown' unless ok
-		# send reset formletter
-		# thanks 'getpass'
+		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params[:email])
+		ok, res = @db.call('reset_email', 1, params[:email])
+		sorry 'unknown' unless ok
+		thanks 'getpass'
 	end
 
 	# /thanks?for= and /sorry?for= pages
 	get '/thanks' do
-		@header = @pagetitle = 'Thanks!'
+		@header = @pagetitle = 'Thank you!'
 		@msg = case params[:for] 
+		when 'getpass'
+			'Please go check for an email from derek@sivers.org</p>
+			<p>Subject is “your password reset link”'
+		when 'that'
+			'another message here'
+		else
+			'You’re so cool.'
 		end
 		erb :generic
 	end
@@ -90,6 +109,19 @@ class SiversData < Sinatra::Base
 	get '/sorry' do
 		@header = @pagetitle = 'Sorry!'
 		@msg = case params[:for] 
+		when 'bademail'
+			'There was a typo in your email address.</p><p>Please try again.'
+		when 'unknown'
+			'That email address is not in my system.</p><p>Do you have another?'
+		when 'badid'
+			'That link is expired. Maybe try to <a href="/login">log in</a>?'
+		when 'badpass'
+			'Not sure why, but my system didn’t accept that password. Try another?'
+		when 'badlogin'
+			'That email address or password wasn’t right.</p>
+			<p>Please <a href="/login">try again</a>.'
+		else
+			'I’m sure it’s my fault.'
 		end
 		erb :generic
 	end
@@ -98,15 +130,10 @@ class SiversData < Sinatra::Base
 	get %r{\A/newpass/([0-9]+)/([0-9a-zA-Z]{8})\Z} do |id, newpass|
 		redirect to('/') if authorized?
 		ok, @person = @db.call('get_person_newpass', id, newpass)
-		if ok
-			@post2 = '/newpass/%d/%s' % [id, newpass]
-			@pagetitle = 'make a password'
-			erb :newpass
-		else
-			@header = @pagetitle = 'expired link'
-			@msg = 'Sorry! That link is expired. Try to login instead.'
-			erb :generic
-		end
+		sorry 'badid' unless ok
+		@post2 = '/newpass/%d/%s' % [id, newpass]
+		@pagetitle = 'make a password'
+		erb :newpass
 	end
 
 	# route to receive post of new password. logs in with cookie. sends home.
@@ -135,13 +162,13 @@ class SiversData < Sinatra::Base
 		redirect to('/') if authorized?
 		redirect to('/login') unless %r{} === params[:email]
 		redirect to('/login') unless String(params[:password]).size > 3
-		ok, p = @db.call('get_person_password', id, newpass)
+		ok, p = @db.call('get_person_password', params[:email], params[:password])
 		sorry 'badlogin' unless ok
-		login(p[:id])
+		login p[:id]
 		redirect to('/')
 	end
 
-## ROUTES THAT NEED AUTH COOKIE:
+##### ROUTES THAT NEED AUTH COOKIE:
 
 	# home: forms for email, city/state/country, listype, urls. link to /now
 	get '/' do
@@ -209,7 +236,7 @@ class SiversData < Sinatra::Base
 	end
 
 	# log out
-	post '/logout' do
+	get '/logout' do
 		logout
 		redirect to('/')
 	end

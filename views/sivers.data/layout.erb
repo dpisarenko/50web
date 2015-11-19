@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title><%=h @pagetitle %> | sivers.org</title>
+<title><%=h @pagetitle %> | data.sivers.org</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
 <nav id="navigation">
 	<ul>
 		<li><a href="/">data.sivers.org</a></li>
-	<% if has_cookie? %>
+	<% if authorized? %>
 		<li><a href="/logout">log out</a></li>
 	<% end %>
 	</ul>
