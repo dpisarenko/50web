@@ -40,81 +40,177 @@ class SiversData < Sinatra::Base
 		def sorry(msg)
 			redirect to('/sorry?for=' + msg)
 		end
+
+		# Also checked by routes that don't require authorization because sometimes
+		# people hit those by accident (browser back too far) even though they're
+		# already logged in. So if they do, just send to authorized home.
+		def authorized?
+		end
+
+		def authorize!
+			# TODO: redirect to('/login') unless authorized
+			# TODO: assign @person_id once found
+		end
+
+		def login(person_id)
+		end
+
+		def logout
+		end
 	end
 
+## ROUTES THAT DON'T NEED AUTH COOKIE
+
+	#	form to post your email to have password reset link emailed to you
+	get '/getpass' do
+		redirect to('/') if authorized?
+		@pagetitle = 'get a new password'
+		erb :getpass
+	end
+
+	# route to receive post of that ^ form, verify, send formletter, or sorry
+	post '/getpass' do
+		redirect to('/') if authorized?
+		# sorry 'bade' unless params[:email] matches regex
+		# get person by email
+		# sorry 'unknown' unless ok
+		# send reset formletter
+		# thanks 'getpass'
+	end
+
+	# /thanks?for= and /sorry?for= pages
+	get '/thanks' do
+		@header = @pagetitle = 'Thanks!'
+		@msg = case params[:for] 
+		end
+		erb :generic
+	end
+
+	# /thanks?for= and /sorry?for= pages
+	get '/sorry' do
+		@header = @pagetitle = 'Sorry!'
+		@msg = case params[:for] 
+		end
+		erb :generic
+	end
+
+	#	receive password reset link & show form to make new password
+	get %r{\A/newpass/([0-9]+)/([0-9a-zA-Z]{8})\Z} do |id, newpass|
+		redirect to('/') if authorized?
+		ok, @person = @db.call('get_person_newpass', id, newpass)
+		if ok
+			@post2 = '/newpass/%d/%s' % [id, newpass]
+			@pagetitle = 'make a password'
+			erb :newpass
+		else
+			@header = @pagetitle = 'expired link'
+			@msg = 'Sorry! That link is expired. Try to login instead.'
+			erb :generic
+		end
+	end
+
+	# route to receive post of new password. logs in with cookie. sends home.
+	post %r{\A/newpass/([0-9]+)/([0-9a-zA-Z]{8})\Z} do |id, newpass|
+		redirect to('/') if authorized?
+		unless String(params[:setpass]).length > 3
+			redirect to('/newpass/%d/%s' % [id, newpass])
+		end
+		ok, _ = @db.call('get_person_newpass', id, newpass)
+		sorry 'badid' unless ok
+		ok, _ = @db.call('set_password', id, params[:setpass])
+		sorry 'badpass' unless ok
+		login(id)
+		redirect to('/')
+	end
+
+	# login form: email + password
+	get '/login' do
+		redirect to('/') if authorized?
+		@pagetitle = 'login'
+		erb :login
+	end
+
+	# route to receive login form: sorry or logs in with cookie. sends home.
+	post '/login' do
+		redirect to('/') if authorized?
+		redirect to('/login') unless %r{} === params[:email]
+		redirect to('/login') unless String(params[:password]).size > 3
+		ok, p = @db.call('get_person_password', id, newpass)
+		sorry 'badlogin' unless ok
+		login(p[:id])
+		redirect to('/')
+	end
+
+## ROUTES THAT NEED AUTH COOKIE:
+
+	# home: forms for email, city/state/country, listype, urls. link to /now
 	get '/' do
+		authorize!
+		# get their data
 		@pagetitle = 'your data'
 		erb :home
 	end
 
-	get %r{\A/newpass/([0-9]+)/([0-9a-zA-Z]{8})\Z} do |id, newpass|
-		ok, @person = @db.call('get_person_newpass', id, newpass)
-		if ok
-			@pagetitle = 'make a password'
-			erb :newpass_good
-		else
-			@pagetitle = 'expired link'
-			erb :newpass_bad
-		end
+	# routes to receive post of each of these ^ forms...
+	# update email, city, state, country, listype
+	post '/update' do
+		authorize!
+		# TODO: whitelist update-able params
+		ok, _ = @db.call('update_person', @person_id, params)
+		# TODO: log change in core.changes
+		sorry 'badupdate' unless ok
+		redirect to('/?update=ok')
 	end
 
-	post '/newpass' do
-		redirect to('/login?err=missing') unless (params[:id] && params[:newpass])
-		id = params[:id]
-		newpass = params[:newpass]
-		ok, _ = @db.call('get_person_newpass', id, newpass)
-		redirect to('/login?err=badid') unless ok
-		unless params[:setpass].length > 3
-			redirect to('/newpass/%d/%s' % [id, newpass])
-		end
-		ok, _ = @db.call('set_password', id, params[:setpass])
-		redirect to('/login?err=bad_set_pass') unless ok
-		ok, res = @db.call('add_api', id, 'Sivers')
-		redirect to('/login?err=wrong') unless ok
-		response.set_cookie('person_id', value: id, path: '/', secure: true, httponly: true)
-		response.set_cookie('api_key', value: res[:akey], path: '/', secure: true, httponly: true)
-		response.set_cookie('api_pass', value: res[:apass], path: '/', secure: true, httponly: true)
+	# delete a url
+	post %r{\A/urls/delete/([0-9]+)\Z} do |id|
+		authorize!
+		# delete url
 		redirect to('/')
 	end
 
-	# PASSWORD: semi-authorized. show form to make/change real password
-	get %r{\A/u/([0-9]+)/([a-zA-Z0-9]{8})\Z} do |person_id, newpass|
-		ok, _ = @db.call('get_person_newpass', person_id, newpass)
-		sorry 'badurlid' unless ok
-		@person_id = person_id
-		@newpass = newpass
-		@bodyid = 'newpass'
-		@pagetitle = 'new password'
-		erb :newpass
+	# add a url
+	post '/urls' do
+		authorize!
+		# add url
+		# log in core.changes
+		redirect to('/')
 	end
 
-	# PASSWORD: posted here to make/change it. then log in with cookie
-	post '/password' do
-		ok, p = @db.call('get_person_newpass', params[:person_id], params[:newpass])
-		sorry 'badurlid' unless ok
-		sorry 'shortpass' unless params[:password].to_s.size >= 4
-		ok, p = @db.call('set_password', p[:id], params[:password])
-		ok, res = @db.call('cookie_from_id', p[:id], request.env['SERVER_NAME'])
-		response.set_cookie('ok', value: res[:cookie], path: '/', httponly: true)
-		redirect '/ayw/list'
+	# now: if no now.urls yet, form to enter one
+	get '/now' do
+		authorize!
+		@pagetitle = ''
+		erb :now
 	end
 
-	# PASSWORD: forgot? form to enter email
-	get '/forgot' do
-		@bodyid = 'forgot'
-		@pagetitle = 'forgot password'
-		erb :forgot
+	# route to trim new now.url, check unique, visit it, get long, make tiny, insert
+	post '/now' do
+		authorize!
+		# add now.url
+		# log in core.changes
+		redirect to('/now')
 	end
 
-	# PASSWORD: email posted here. send password reset link
-	post '/forgot' do
-		ok, p = @db.call('get_person_email', params[:email])
-		sorry 'emailnf' unless ok
-		@db.call('make_newpass', p[:id])
-		ok, b = @db.call('parsed_formletter', 1, p[:id])
-		@db.call('new_email', p[:id], b[:body],
-			"#{p[:address]} - your password reset link", 'derek@sivers')
-		redirect '/thanks?for=reset'
+	# now profile questions. edit link to turn answer into form. [save] button.
+	get '/now_profile' do
+		authorize!
+		@pagetitle = ''
+		erb :now_profile
 	end
 
+	# routes to receive post of each of these ^ forms, redirect to /now
+	post '/now_profile' do
+		authorize!
+		# whitelist of stats to update
+		# update or add stat
+		# log in core.changes
+		redirect to('/now')
+	end
+
+	# log out
+	post '/logout' do
+		logout
+		redirect to('/')
+	end
 end
