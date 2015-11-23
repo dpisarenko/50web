@@ -363,7 +363,20 @@ class Inbox < ModAuth
 
 	post '/now' do
 		now = getdb('now', @livetest)
-		now.call('add_url', params[:person_id], params[:short])
+		# get short from long
+		long = params[:long].strip
+		short = long.gsub(/^https?:\/\//, '').gsub(/^www\./, '').gsub(/\/$/, '')
+		ok, u = now.call('add_url', params[:person_id], short)
+		if ok
+			# if short worked, update with long
+			nu = {long: long}.to_json
+			ok, _ = now.call('update_url', u[:id], nu)
+			if ok
+				# if long worked, update with tiny
+				nu = {tiny: short[0...short.index('.')]}.to_json
+				ok, _ = now.call('update_url', u[:id], nu)
+			end
+		end
 		redirect to('/now/%d' % params[:person_id])
 	end
 
