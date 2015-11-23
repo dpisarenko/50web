@@ -5,6 +5,19 @@ include R18n::Helpers
 
 R18n.default_places = File.expand_path('../../i18n/musicthoughts/', __FILE__)
 
+# TODO: make this a static site:
+# 10 language directories (en fr etc) looped at top level doing each of these:
+# 188 as_rand quotes in JSON, template footer loads shows 1 random in js
+#	no more /t. random nav link also uses as_rand js to select one
+#	/home and /add and /thanks = static
+#	/t/[0-9]+ write all active thoughts
+# /new write all new
+# /cat* is unused anyway. skip
+# /author and /contributor are static pages
+# nginx load_path /author/[0-9]+ & /contributor/[0-9]+ to plural directory
+# /search https://www.google.com/search?q=__&sitesearch=__.musicthoughts.com
+# /add posts to only dynamic route, below, nginx only proxying that one
+
 class MusicThoughts < Sinatra::Base
 
 	log = File.new('/tmp/MusicThoughts.log', 'a+')
@@ -43,8 +56,7 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	before do
-		env['rack.errors'] = log
-		@languages = {'en' => 'English',
+		env['rack.errors'] = log @languages = {'en' => 'English',
 			'es' => 'Español',
 			'fr' => 'Français',
 			'de' => 'Deutsch',
