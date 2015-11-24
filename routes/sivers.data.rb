@@ -12,7 +12,7 @@ require 'b50d/getdb'
 # home: forms for email, city/state/country, listype, urls. link to /now
 # routes to receive post of each of these ^ forms
 # now: if no now.urls yet, form to enter one
-# route to trim new now.url, check unique, visit it, get long, make tiny, insert
+# route to trim new now.url, check unique, visit it, get long, insert
 # now profile questions. edit link to turn answer into form. [save] button.
 # routes to receive post of each of these ^ forms, redirect to /now
 
@@ -211,7 +211,7 @@ class SiversData < Sinatra::Base
 		erb :now
 	end
 
-	# route to trim new now.url, check unique, visit it, get long, make tiny, insert
+	# route to trim new now.url, check unique, visit it, get long, insert
 	post '/now' do
 		authorize!
 		# add now.url

@@ -370,12 +370,7 @@ class Inbox < ModAuth
 		if ok
 			# if short worked, update with long
 			nu = {long: long}.to_json
-			ok, _ = now.call('update_url', u[:id], nu)
-			if ok
-				# if long worked, update with tiny
-				nu = {tiny: short[0...short.index('.')]}.to_json
-				ok, _ = now.call('update_url', u[:id], nu)
-			end
+			now.call('update_url', u[:id], nu)
 		end
 		redirect to('/now/%d' % params[:person_id])
 	end
