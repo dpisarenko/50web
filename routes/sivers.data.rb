@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'tilt/erb'
 require 'b50d/getdb'
 
 # https://data.sivers.org/ CONTENTS:
@@ -29,8 +30,8 @@ class SiversData < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		livetest = (request.env['SERVER_NAME'].end_with? 'dev') ? 'test' : 'live'
-		@db = getdb('peeps', livetest)
+		z = (request.env['SERVER_NAME'] == 'data.sivers.org') ? 'live' : 'test'
+		@db = getdb('peeps', z)
 	end
 
 	helpers do
