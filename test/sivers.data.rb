@@ -28,6 +28,33 @@ class TestSiversData < Minitest::Test
 		@browser.get(@host)
 		assert_equal @host + '/login', @browser.current_url
 
+		# attempt log in with bad email
+		@browser.get(@host + '/login')
+		el = @browser.find_element(:id, 'email')
+		el.send_keys 'veruca'
+		el = @browser.find_element(:id, 'password')
+		el.send_keys 'booop'
+		el.submit
+		assert_equal(@host + '/sorry?for=bademail', @browser.current_url)
+
+		# attempt log in with unknown email
+		@browser.get(@host + '/login')
+		el = @browser.find_element(:id, 'email')
+		el.send_keys 'veruca@gmail.com'
+		el = @browser.find_element(:id, 'password')
+		el.send_keys 'booop'
+		el.submit
+		assert_equal(@host + '/sorry?for=badlogin', @browser.current_url)
+
+		# attempt log in with bad password
+		@browser.get(@host + '/login')
+		el = @browser.find_element(:id, 'email')
+		el.send_keys 'veruca@salt.com'
+		el = @browser.find_element(:id, 'password')
+		el.send_keys 'wrong-password'
+		el.submit
+		assert_equal(@host + '/sorry?for=badlogin', @browser.current_url)
+
 		# /getpass submit bademail
 		@browser.get(@host + '/getpass')
 		el = @browser.find_element(:id, 'email')

@@ -162,8 +162,8 @@ class SiversData < Sinatra::Base
 	# route to receive login form: sorry or logs in with cookie. sends home.
 	post '/login' do
 		redirect to('/') if authorized?
-		redirect to('/login') unless %r{} === params[:email]
-		redirect to('/login') unless String(params[:password]).size > 3
+		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params[:email])
+		sorry 'badlogin' unless String(params[:password]).size > 3
 		ok, p = @db.call('get_person_password', params[:email], params[:password])
 		sorry 'badlogin' unless ok
 		login p[:id]
