@@ -120,8 +120,11 @@ class SiversData < Sinatra::Base
 		when 'badpass'
 			'Not sure why, but my system didn’t accept that password. Try another?'
 		when 'badlogin'
-			'That email address or password wasn’t right.</p>
-			<p>Please <a href="/login">try again</a>.'
+			'That email address or password wasn’t right.
+			</p><p>Please <a href="/login">try again</a>.'
+		when 'badupdate'
+			'That updated info seems wrong, because the database wouldn’t accept it.
+			</p><p>Please go back, look closely, and try again.'
 		else
 			'I’m sure it’s my fault.'
 		end
@@ -175,7 +178,7 @@ class SiversData < Sinatra::Base
 	# home: forms for email, city/state/country, listype, urls. link to /now
 	get '/' do
 		authorize!
-		# get their data
+		ok, @person = @db.call('get_person', @person_id)
 		@pagetitle = 'your data'
 		erb :home
 	end
@@ -184,9 +187,9 @@ class SiversData < Sinatra::Base
 	# update email, city, state, country, listype
 	post '/update' do
 		authorize!
-		# TODO: whitelist update-able params
-		ok, _ = @db.call('update_person', @person_id, params)
-		# TODO: log change in core.changes
+		whitelist = %w(city state country email listype)
+		update = params.select {|k,v| whitelist.include? k}
+		ok, _ = @db.call('update_person', @person_id, update.to_json)
 		sorry 'badupdate' unless ok
 		redirect to('/?update=ok')
 	end
