@@ -29,7 +29,8 @@ class SiversData < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		@db = getdb('peeps')
+		livetest = (request.env['SERVER_NAME'].end_with? 'dev') ? 'test' : 'live'
+		@db = getdb('peeps', livetest)
 	end
 
 	helpers do
