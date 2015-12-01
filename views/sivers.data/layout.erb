@@ -25,11 +25,11 @@ nav ul li a { color: #fff; text-decoration: none; }
 <body>
 <nav id="navigation">
 	<ul>
-		<li><a href="/">your info +</a></li>
+		<li><a href="/">your info</a></li>
+	<% if authorized? %>
 		<li><a href="/urls">URLs</a></li>
 		<li><a href="/now">/now page</a></li>
 		<li><a href="/profile">/now profile</a></li>
-	<% if authorized? %>
 		<li><a href="/logout">log out</a></li>
 	<% end %>
 	</ul>
