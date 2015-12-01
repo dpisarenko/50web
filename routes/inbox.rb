@@ -103,7 +103,6 @@ class Inbox < ModAuth
 		# skip formletters that start with _, since those are automated
 		ok, res = @db.call('get_formletters')
 		@formletters = res.reject {|x| x[:title][0] == '_'}
-		ok, @locations = @db.call('all_countries')
 		@pagetitle = 'email %d from %s' % [id, @person[:name]]
 		erb :email
 	end
@@ -155,7 +154,6 @@ class Inbox < ModAuth
 				('<a href="' + (SCP % id) + '">sivers.comments</a>') : t
 		end
 		@profiles = ['derek@sivers', 'we@woodegg']
-		ok, @locations = @db.call('all_countries')
 		@pagetitle = 'person %d = %s' % [id, @person[:name]]
 		erb :personfull
 	end
