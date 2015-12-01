@@ -20,7 +20,7 @@ end
 cleanstate = String(@person[:state]).strip.gsub(/[^A-Z a-z]/, '')
 %>
 <section id="home">
-<h1>Hi <%=h @person[:address] %>. Your info:</h1>
+<h1>Hi <%=h @person[:address] %>.</h1>
 
 <h2>Where are you?</h2>
 <p>This helps for opportunities in your area.</p>
@@ -83,7 +83,7 @@ document.getElementById('country').onchange = countryChanged;
 </script>
 
 <h2>Your best email:</h2>
-<p>Just one, please. Maybe someday I’ll have a system for multiple.</p>
+<p>Just one, please. Never shared. For me only.</p>
 <form id="update-email" action="/update" method="post">
 	<label for="email">email:</label>
 	<input type="email" id="email" name="email" value="<%=h @person[:email] %>">
@@ -110,5 +110,8 @@ document.getElementById('country').onchange = countryChanged;
 	</label>
 	<input type="submit" value="update">
 </form>
+
+<h2>What are your links?</h2>
+<p>Please <a href="/urls">go here</a> to tell me.</p>
 
 </section>

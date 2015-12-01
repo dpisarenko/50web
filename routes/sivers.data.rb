@@ -30,8 +30,8 @@ class SiversData < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		z = (request.env['SERVER_NAME'] == 'data.sivers.org') ? 'live' : 'test'
-		@db = getdb('peeps', z)
+		@livetest = (request.env['SERVER_NAME'] == 'data.sivers.org') ? 'live' : 'test'
+		@db = getdb('peeps', @livetest)
 	end
 
 	helpers do
@@ -197,42 +197,90 @@ class SiversData < Sinatra::Base
 	# delete a url
 	post %r{\A/urls/delete/([0-9]+)\Z} do |id|
 		authorize!
-		# delete url
-		redirect to('/')
+		ok, u = @db.call('get_url', id)
+		if ok && u[:person_id] == @person_id
+			@db.call('delete_url', id)
+		end
+		redirect to('/urls')
+	end
+
+	# star a url
+	post %r{\A/urls/star/([0-9]+)\Z} do |id|
+		authorize!
+		ok, u = @db.call('get_url', id)
+		if ok && u[:person_id] == @person_id
+			@db.call('update_url', id, '{"main":true}')
+		end
+		redirect to('/urls')
+	end
+
+	# page for url forms
+	get '/urls' do
+		authorize!
+		ok, @person = @db.call('get_person', @person_id)
+		@urls = @person[:urls] || []
+		@pagetitle = 'your URLs'
+		erb :urls
 	end
 
 	# add a url
 	post '/urls' do
 		authorize!
-		# add url
-		# log in core.changes
-		redirect to('/')
+		@db.call('add_url', @person_id, params[:url])
+		redirect to('/urls')
 	end
 
-	# now: if no now.urls yet, form to enter one
+	# update now page
+	post %r{\A/now/([0-9]+)\Z} do |id|
+		authorize!
+		n = getdb('now', @livetest)
+		ok, u = n.call('url', id)
+		if ok && u[:person_id] == @person_id
+			n.call('update_url', id, params.to_json)
+		end
+		redirect to('/now')
+	end
+
+	# delete now page
+	post %r{\A/now/delete/([0-9]+)\Z} do |id|
+		authorize!
+		n = getdb('now', @livetest)
+		ok, u = n.call('url', id)
+		if ok && u[:person_id] == @person_id
+			n.call('delete_url', id)
+		end
+		redirect to('/now')
+	end
+
+	# page for /now forms
 	get '/now' do
 		authorize!
-		@pagetitle = ''
+		n = getdb('now', @livetest)
+		ok, @nows = n.call('urls_for_person', @person_id)
+		@pagetitle = 'your /now page'
 		erb :now
 	end
 
 	# route to trim new now.url, check unique, visit it, get long, insert
 	post '/now' do
 		authorize!
-		# add now.url
-		# log in core.changes
+		n = getdb('now', @livetest)
+		ok, u = n.call('add_url', @person_id, params[:url])
+		if ok
+			n.call('update_url', u[:id], {long: params[:url]}.to_json)
+		end
 		redirect to('/now')
 	end
 
 	# now profile questions. edit link to turn answer into form. [save] button.
-	get '/now_profile' do
+	get '/profile' do
 		authorize!
 		@pagetitle = ''
-		erb :now_profile
+		erb :profile
 	end
 
 	# routes to receive post of each of these ^ forms, redirect to /now
-	post '/now_profile' do
+	post '/profile' do
 		authorize!
 		# whitelist of stats to update
 		# update or add stat

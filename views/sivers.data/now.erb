@@ -1,0 +1,31 @@
+<section id="now">
+<h1>Your “now” page</h1>
+
+<% if @nows.size > 0 %>
+	<h2>Here’s your now page link:</h2>
+<% @nows.each do |n| %>
+	<h3><a href="<%= n[:long] %>"><%=h n[:short] %></a></h3>
+	<p>Please click it to make sure it works. If not, update or delete:</p>
+	<form action="/now/<%= n[:id] %>" method="post">
+		<label for="short">short version for display:</label>
+		<input id="short" type="text" name="short" value="<%= n[:short] %>">
+		<label for="long">the full working URL:</label>
+		<input id="long" type="text" name="long" value="<%= n[:long] %>">
+		<input type="submit" value="update">
+	</form>
+	<form action="/now/delete/<%= n[:id] %>" method="post">
+		or <input type="submit" value="delete">
+	</form>
+<% end %>
+<% else %>
+	<h2>Got a /now page?</h2>
+	<p>First please <a href="http://nownownow.com/about">read “what is a now page?”</a>, and <a href="http://nownownow.com/">visit some people’s pages</a>, to make sure we’re talking about the same thing.</p>
+	<form action="/now" method="post">
+		<input type="text" name="url" value="" placeholder="http://">
+		<input type="submit" value="add">
+	</form>
+<% end %>
+
+
+
+</section>

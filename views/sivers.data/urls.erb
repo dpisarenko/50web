@@ -1,0 +1,36 @@
+<section id="urls">
+<h1>Hi <%=h @person[:address] %>.</h1>
+
+<h2>What are your links?</h2>
+<p>Most important is your own site, if you have one. But also your Twitter, Facebook, LinkedIn, YouTube, Instagram, GitHub, about.me, etc. Just the main ones you use.</p>
+
+<form action="/urls" method="post">
+	<input type="text" name="url" value="" placeholder="http://">
+	<input type="submit" value="add">
+</form>
+
+<% if @urls.size > 0 %>
+<h3>Please click the links to make sure they work:</h3>
+<p>Click [X] to delete, or [↑] to say it’s your main site: the one that should come first in a list.</p>
+<ul>
+<% @urls.each do |u| %>
+	<li>
+		<form action="/urls/delete/<%= u[:id] %>" method="post"><input type="submit" value="X"></form>
+<% if u[:main] %>
+		<strong>
+<% else %>
+		<form action="/urls/star/<%= u[:id] %>" method="post"><input type="submit" value="↑"></form>
+<% end %>
+		<a href="<%= u[:url] %>"><%=h u[:url] %></a>
+<% if u[:main] %>
+		</strong>
+<% end %>
+	</li>
+<% end %>
+</ul>
+<% end %>
+
+<h2>Do you have <a href="http://nownownow.com/about">a /now page</a>?</h2>
+<p>Don’t add it here. Instead <a href="/now">go to the next page</a> to tell me.</p>
+
+</section>
