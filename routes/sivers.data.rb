@@ -316,7 +316,7 @@ class SiversData < Sinatra::Base
 	post %r{\A/profile/([0-9]+)\Z} do |id|
 		authorize!
 		ok, stat = @db.call('get_stat', id)
-		if stat[:person_id] == @person_id
+		if stat[:person][:id] == @person_id
 			@db.call('update_stat', id, {statvalue: params[:statvalue]}.to_json)
 		end
 		redirect to('/profile')

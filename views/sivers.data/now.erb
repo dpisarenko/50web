@@ -10,7 +10,7 @@
 		<label for="short">short version for display:</label>
 		<input id="short" type="text" name="short" value="<%= n[:short] %>">
 		<label for="long">the full working URL:</label>
-		<input id="long" type="text" name="long" value="<%= n[:long] %>">
+		<input id="long" type="text" name="long" value="<%= n[:long] %>" style="width: 100%">
 		<input type="submit" value="update">
 	</form>
 	<form action="/now/delete/<%= n[:id] %>" method="post">
