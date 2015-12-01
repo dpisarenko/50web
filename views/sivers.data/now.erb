@@ -26,6 +26,29 @@
 	</form>
 <% end %>
 
+<h2>Your photo:</h2>
+<% if @gravatar %>
+	<p><img src="<%= @gravatar %>"></p>
+	<p>To change it, please <a href="https://www.gravatar.com/">sign in to gravatar.com</a>.</p>
+<% else %>
+<p>
+To get a photo on <a href="http://nownownow.com/">nownownow.com</a>, use <a href="http://gravatar.com/">Gravatar</a>. They’re a great free non-profit service that works with many different websites, where you can keep your photo updated yourself.
+</p>
+<h2>Instructions:</h2>
+<ol>
+<li>Go to <a href="https://www.gravatar.com/">gravatar.com</a></li>
+<li>Click the big blue button in the middle of the page that says “[ Create Your Own Gravatar ]”</li>
+<li>Create a WordPress account with <%= @person[:email] %> as your email.  Your username might have to be long and stupid, since WordPress has been around forever and all the good ones are taken, but it doesn’t matter.  You’ll never use it.</li>
+<li>Go check your <%= @person[:email] %> email for their “activate” email, and click the link inside it to confirm.</li>
+<li>Click the blue “[ Sign in to Gravatar]” button, and you’re in.  A notice should say, “Whoops, looks like you don’t have any images yet! Add one by clicking here!”.  Click that.</li>
+<li>Click the big “[ Upload new ]” button, and upload a simple headshot.</li>
+<li>Adjust it if needed, then click “[ Crop and Finish ]”.</li>
+<li>When you finish, click on [G] because c’mon....</li>
+</ol>
+<p>If you already have an old WordPress account, under a different email address, please log in to that, then go back to <a href="https://en.gravatar.com/emails/">gravatar.com/emails/</a> and click “Add email address” to add <%= @person[:email] %>.  That will make it automatically come up on nownownow.com since that’s the email address I have for you.</p>
+<% end %>
 
+<h2>Want a profile?</h2>
+<p>Just <a href="/profile">answer these questions</a>.</p>
 
 </section>

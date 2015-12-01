@@ -1,6 +1,8 @@
 require 'sinatra/base'
 require 'tilt/erb'
 require 'b50d/getdb'
+require 'digest/md5'
+require 'net/http'
 
 # https://data.sivers.org/ CONTENTS:
 #	form to post your email to have password reset link emailed to you
@@ -46,6 +48,29 @@ class SiversData < Sinatra::Base
 
 	def thanks(msg)
 		redirect to('/thanks?for=' + msg)
+	end
+
+	def gravatar_url(hash)
+		'https://secure.gravatar.com/avatar/%s?s=300' % hash
+	end
+
+	def gravatar(person)
+		stat = person[:stats].find {|s| s[:name] == 'gravatar'}
+		return false if stat.nil?
+		gravatar_url(stat[:value])
+	end
+
+	def get_gravatar(person, db)
+		return gravatar(person) if gravatar(person)
+		hash = Digest::MD5.hexdigest(person[:email])
+		url = 'http://www.gravatar.com/avatar/%s?d=404' % hash
+		res = Net::HTTP.get_response(URI(url))
+		if res.code == '200'
+			db.call('add_stat', person[:id], 'gravatar', hash)
+			gravatar_url(hash)
+		else
+			false
+		end
 	end
 
 	# Also checked by routes that don't require authorization because sometimes
@@ -255,6 +280,8 @@ class SiversData < Sinatra::Base
 	# page for /now forms
 	get '/now' do
 		authorize!
+		ok, @person = @db.call('get_person', @person_id)
+		@gravatar = (@person[:stats]) ? get_gravatar(@person, @db) : false
 		n = getdb('now', @livetest)
 		ok, @nows = n.call('urls_for_person', @person_id)
 		@pagetitle = 'your /now page'
@@ -275,17 +302,34 @@ class SiversData < Sinatra::Base
 	# now profile questions. edit link to turn answer into form. [save] button.
 	get '/profile' do
 		authorize!
-		@pagetitle = ''
+		n = getdb('now', @livetest)
+		ok, nows = n.call('urls_for_person', @person_id)
+		if nows.size == 0
+			redirect to('/now')
+		end
+		ok, @stats = n.call('stats_for_person', @person_id)
+		@pagetitle = 'your profile for nownownow.com'
 		erb :profile
 	end
 
-	# routes to receive post of each of these ^ forms, redirect to /now
+	# update profile answers
+	post %r{\A/profile/([0-9]+)\Z} do |id|
+		authorize!
+		ok, stat = @db.call('get_stat', id)
+		if stat[:person_id] == @person_id
+			@db.call('update_stat', id, {statvalue: params[:statvalue]}.to_json)
+		end
+		redirect to('/profile')
+	end
+
+	# add profile answers
 	post '/profile' do
 		authorize!
-		# whitelist of stats to update
-		# update or add stat
-		# log in core.changes
-		redirect to('/now')
+		whitelist = %w(now-title now-red now-why now-liner now-thought)
+		if whitelist.include?(params[:statkey]) && params[:statvalue].size > 2
+			@db.call('add_stat', @person_id, params[:statkey], params[:statvalue])
+		end
+		redirect to('/profile')
 	end
 
 	# log out

@@ -1,0 +1,48 @@
+<section id="profile">
+<h1>Your profile on <a href="http://nownownow.com/">nownownow.com</a></h1>
+<%
+questions = {
+	'now-title' => 'Professional titles?',
+	'now-liner' => 'One-liner about what you do, at a fundamental level',
+	'now-why' => 'Why do you do what you do? (just 1-3 sentences)',
+	'now-thought' => 'Recent thought, epiphany, or profound concept',
+	'now-red' => 'Recommended book or article? (title and author)'
+}
+examples = {
+	'now-title' => "“Freelance web developer”\n“Director of marketing at Pixar”\n“Singer/songwriter”",
+	'now-liner' => "“I tell stories, some of which are true, and I turn ideas into words.”\n“I help students study, work, and achieve their goals more effectively.”\n“I gather broken bottles from the train tracks of life and reflect them back on the unwitting passerby.”",
+	'now-why' => "“I write because I want to jump into the hearts of people and splash around. I write because I have a lot of questions and because I fall in love with strange things like How To Mourn.”\n“I love to create things out of nothing and care a lot about freedom. I think software development is the sweet spot to do this now.”",
+	'now-thought' => "“It’s possible to do what you really want in life and pay the bills. You don’t need to get into the rat race or give up on your dreams. Never settle until it feels right.”,“The traveler sees what he sees, the tourist sees what he has come to see.”",
+	'now-red' => "“You Are Not a Gadget by Jaron Lanier”\n“Harry Potter and the Methods of Rationality by Eliezer Yudkowsky”"
+}
+
+next_question = false
+questions.keys.each do |q|
+	unless @stats.find {|s| s[:name] == q}
+		next_question = q
+		break
+	end
+end
+
+if next_question
+%>
+	<h3><%= questions[next_question] %></h3>
+	<p><strong>Examples:</strong><br>
+	<%= examples[next_question].gsub("\n", '<br>') %></p>
+	<form action="/profile" method="post">
+		<input type="hidden" name="statkey" value="<%= next_question %>">
+		<textarea name="statvalue"></textarea>
+		<input type="submit" value="answer">
+	</form>
+<%
+else
+	questions.keys.each do |q|
+		stat = @stats.find {|s| s[:name] == q}
+%>
+		<h3><%= questions[q] %></h3>
+		<p><%=h stat[:value] %></p>
+<%
+	end
+end
+%>
+</section>
