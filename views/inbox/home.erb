@@ -29,4 +29,15 @@
 	</ul>
 <% end %>
 
+<h2>inspector</h2>
+<table>
+<% @inspect.each do |r| %>
+	<tr>
+	<td><%= r[:schema_name] %></td>
+	<td><%= r[:table_name] %></td>
+	<td><a href="/inspector/<%= r[:schema_name] %>/<%= r[:table_name] %>"><%= r[:count] %></a></td>
+	</tr>
+<% end %>
+</table>
+
 </section>

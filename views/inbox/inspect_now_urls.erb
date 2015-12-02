@@ -1,0 +1,19 @@
+<section id="inspector">
+<h1>now/urls inspector</h1>
+
+<p>Fix the ones that look wrong and then…</p>
+<form action="/inspector" method="post">
+<input type="hidden" name="ids" value="<%= @inspect.map{|r| r[:id]}.join(',') %>">
+<input type="submit" value="APPROVE EVERYTHING BELOW">
+</form>
+<table>
+<% @inspect.each do |r| %>
+	<tr>
+		<td><a href="/now/<%= r[:person_id] %>">go</a></td>
+		<td><%=h r[:short] %></td>
+		<td><%=h r[:long] %></td>
+		<td><a href="/link?url=<%=h r[:long] %>">link</a></td>
+	</tr>
+<% end %>
+</table>
+</section>

@@ -51,6 +51,7 @@ class Inbox < ModAuth
 		ok, @unopened_email_count = @db.call('unopened_email_count', @eid)
 		ok, @open_emails = @db.call('opened_emails', @eid)
 		ok, @unknowns_count = @db.call('count_unknowns', @eid)
+		ok, @inspect = @db.call('inspections_grouped')
 		@pagetitle = 'inbox'
 		erb :home
 	end
@@ -417,6 +418,36 @@ class Inbox < ModAuth
 	post %r{^/stats/([0-9]+)$} do |id|
 		@db.call('update_stat', id, {statvalue: params[:value]}.to_json)
 		redirect to('/now/%d' % params[:person_id])
+	end
+
+	get '/inspector/peeps/people' do
+		@pagetitle = 'inspector'
+		ok, @inspect = @db.call('inspect_peeps_people')
+		erb :inspector_peeps_people
+	end
+
+	get '/inspector/peeps/urls' do
+		@pagetitle = 'inspector'
+		ok, @inspect = @db.call('inspect_peeps_urls')
+		erb :inspector_peeps_urls
+	end
+
+	get '/inspector/peeps/stats' do
+		@pagetitle = 'inspector'
+		ok, @inspect = @db.call('inspect_peeps_stats')
+		erb :inspector_peeps_stats
+	end
+
+	get '/inspector/now/urls' do
+		@pagetitle = 'inspector'
+		ok, @inspect = @db.call('inspect_now_urls')
+		erb :inspector_now_urls
+	end
+
+	post '/inspector' do
+		ids = params[:ids].split(',').map(&:to_i)
+		@db.call('log_approve', ids.to_json)
+		redirect to('/')
 	end
 end
 
