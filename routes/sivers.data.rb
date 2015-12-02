@@ -215,6 +215,7 @@ class SiversData < Sinatra::Base
 		whitelist = %w(city state country email listype)
 		update = params.select {|k,v| whitelist.include? k}
 		ok, _ = @db.call('update_person', @person_id, update.to_json)
+		@db.call('log', @person_id, 'peeps', 'people', @person_id) if ok
 		sorry 'badupdate' unless ok
 		redirect to('/?update=ok')
 	end
@@ -251,7 +252,8 @@ class SiversData < Sinatra::Base
 	# add a url
 	post '/urls' do
 		authorize!
-		@db.call('add_url', @person_id, params[:url])
+		ok, u = @db.call('add_url', @person_id, params[:url])
+		@db.call('log', @person_id, 'peeps', 'urls', u[:id]) if ok
 		redirect to('/urls')
 	end
 
@@ -261,7 +263,8 @@ class SiversData < Sinatra::Base
 		n = getdb('now', @livetest)
 		ok, u = n.call('url', id)
 		if ok && u[:person_id] == @person_id
-			n.call('update_url', id, params.to_json)
+			ok, _ = n.call('update_url', id, params.to_json)
+			@db.call('log', @person_id, 'now', 'urls', u[:id]) if ok
 		end
 		redirect to('/now')
 	end
@@ -294,6 +297,7 @@ class SiversData < Sinatra::Base
 		n = getdb('now', @livetest)
 		ok, u = n.call('add_url', @person_id, params[:url])
 		if ok
+			@db.call('log', @person_id, 'now', 'urls', u[:id])
 			n.call('update_url', u[:id], {long: params[:url]}.to_json)
 		end
 		redirect to('/now')
@@ -317,7 +321,8 @@ class SiversData < Sinatra::Base
 		authorize!
 		ok, stat = @db.call('get_stat', id)
 		if stat[:person][:id] == @person_id
-			@db.call('update_stat', id, {statvalue: params[:statvalue]}.to_json)
+			ok, _ = @db.call('update_stat', id, {statvalue: params[:statvalue]}.to_json)
+			@db.call('log', @person_id, 'peeps', 'stats', id) if ok
 		end
 		redirect to('/profile')
 	end
@@ -327,7 +332,8 @@ class SiversData < Sinatra::Base
 		authorize!
 		whitelist = %w(now-title now-red now-why now-liner now-thought)
 		if whitelist.include?(params[:statkey]) && params[:statvalue].size > 2
-			@db.call('add_stat', @person_id, params[:statkey], params[:statvalue])
+			ok, s = @db.call('add_stat', @person_id, params[:statkey], params[:statvalue])
+			@db.call('log', @person_id, 'peeps', 'stats', s[:id]) if ok
 		end
 		redirect to('/profile')
 	end
