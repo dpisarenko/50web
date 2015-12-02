@@ -48,9 +48,9 @@ class Inbox < ModAuth
 	end
 
 	get '/' do
-		@unopened_email_count = @db.call('unopened_email_count', @eid)[1]
-		@open_emails = @db.call('opened_emails', @eid)[1]
-		@unknowns_count = @db.call('count_unknowns', @eid)[1][:count]
+		ok, @unopened_email_count = @db.call('unopened_email_count', @eid)
+		ok, @open_emails = @db.call('opened_emails', @eid)
+		ok, @unknowns_count = @db.call('count_unknowns', @eid)
 		@pagetitle = 'inbox'
 		erb :home
 	end
@@ -147,9 +147,10 @@ class Inbox < ModAuth
 	get %r{^/person/([0-9]+)$} do |id|
 		ok, @person = @db.call('get_person', id)
 		halt(404) unless ok
-		@emails = @db.call('get_person_emails', id)[1].reverse
-		@tables = @db.call('tables_with_person', id)[1].sort
-		@tables.map! do |t|
+		ok, @emails = @db.call('get_person_emails', id)
+		@emails.reverse!
+		ok, @tables = @db.call('tables_with_person', id)
+		@tables.sort.map! do |t|
 			(t == 'sivers.comments') ?
 				('<a href="' + (SCP % id) + '">sivers.comments</a>') : t
 		end
@@ -331,12 +332,19 @@ class Inbox < ModAuth
 	end
 
 	get '/merge' do
+		@person1 = @person2 = nil
 		@id1 = params[:id1].to_i
-		@person1 = (@id1 == 0) ? nil : @db.call('get_person', @id1)[1]
+		if @id1 > 0
+			ok, @person1 = @db.call('get_person', @id1)
+		end
 		@id2 = params[:id2].to_i
-		@person2 = (@id2 == 0) ? nil : @db.call('get_person', @id2)[1]
-		@q = params[:q]
-		@results = (@q) ? @db.call('people_search', @q.strip)[1] : false
+		if @id2 > 0
+			ok, @person2 = @db.call('get_person', @id2)
+		end
+		@q = params[:q] || false
+		if @q
+			ok, @results = @db.call('people_search', @q.strip)
+		end
 		@pagetitle = 'merge'
 		erb :merge
 	end
@@ -346,7 +354,6 @@ class Inbox < ModAuth
 		if ok
 			redirect to('/person/%d' % id)
 		else
-			# TODO: flash error that not allowed?
 			redirect to('/merge?id1=%d&id2=%d' % [id, params[:id2]])
 		end
 	end
