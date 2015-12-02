@@ -423,25 +423,25 @@ class Inbox < ModAuth
 	get '/inspector/peeps/people' do
 		@pagetitle = 'inspector'
 		ok, @inspect = @db.call('inspect_peeps_people')
-		erb :inspector_peeps_people
+		erb :inspect_peeps_people
 	end
 
 	get '/inspector/peeps/urls' do
 		@pagetitle = 'inspector'
 		ok, @inspect = @db.call('inspect_peeps_urls')
-		erb :inspector_peeps_urls
+		erb :inspect_peeps_urls
 	end
 
 	get '/inspector/peeps/stats' do
 		@pagetitle = 'inspector'
 		ok, @inspect = @db.call('inspect_peeps_stats')
-		erb :inspector_peeps_stats
+		erb :inspect_peeps_stats
 	end
 
 	get '/inspector/now/urls' do
 		@pagetitle = 'inspector'
 		ok, @inspect = @db.call('inspect_now_urls')
-		erb :inspector_now_urls
+		erb :inspect_now_urls
 	end
 
 	post '/inspector' do
