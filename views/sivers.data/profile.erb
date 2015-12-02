@@ -51,6 +51,25 @@ else
 <%
 	end
 %>
+<script>
+function edit1(id) {
+	document.getElementById('show-' + id).setAttribute('class', 'hide');
+	document.getElementById('edit-' + id).removeAttribute('class');
+	var editlinks = document.querySelectorAll('span.editlink');
+	for(var i=0; i < editlinks.length; i++) {
+		editlinks[i].setAttribute('class', 'hide');
+	}
+}
+function clickEdit(e) {
+	e.preventDefault();
+	edit1(e.target.getAttribute('data-id'));
+}
+var editlinks = document.querySelectorAll('span.editlink');
+for(var i=0; i < editlinks.length; i++) {
+	editlinks[i].addEventListener('click', clickEdit, false);
+}
+</script>
+
 	<h2>That’s it!</h2>
 	<p>I upload all changes to <a href="http://nownownow.com/">nownownow.com</a> once every day or so. Check it tomorrow to see your profile.</p>
 	<p>Also <a href="https://twitter.com/nownownow">follow @NowNowNow on Twitter</a> because your profile will be tweeted there, too.</p>
@@ -58,20 +77,3 @@ else
 end
 %>
 </section>
-<script>
-function edit1(id) {
-	document.getElementById('show-' + id).setAttribute('class', 'hide');
-	document.getElementById('edit-' + id).removeAttribute('class');
-	Array.forEach(document.querySelectorAll('span.editlink'), function(el) {
-		el.setAttribute('class', 'hide');
-	});
-}
-function clickEdit(e) {
-	e.preventDefault();
-	edit1(e.target.getAttribute('data-id'));
-}
-Array.forEach(document.querySelectorAll('span.editlink'), function(el) {
-	el.addEventListener('click', clickEdit, false);
-});
-</script>
-
