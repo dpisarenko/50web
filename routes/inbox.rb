@@ -377,6 +377,10 @@ class Inbox < ModAuth
 			# if short worked, update with long
 			nu = {long: long}.to_json
 			now.call('update_url', u[:id], nu)
+			# give them a newpass
+			@db.call('make_newpass', params[:person_id])
+			# send them the formletter
+			@db.call('send_person_formletter', params[:person_id], 6, 'derek@sivers')
 		end
 		redirect to('/now/%d' % params[:person_id])
 	end
