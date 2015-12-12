@@ -56,7 +56,8 @@ class MusicThoughts < Sinatra::Base
 	end
 
 	before do
-		env['rack.errors'] = log @languages = {'en' => 'English',
+		env['rack.errors'] = log
+		@languages = {'en' => 'English',
 			'es' => 'Español',
 			'fr' => 'Français',
 			'de' => 'Deutsch',
