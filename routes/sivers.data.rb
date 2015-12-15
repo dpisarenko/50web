@@ -1,6 +1,6 @@
 require 'sinatra/base'
 require 'tilt/erb'
-require 'b50d/getdb'
+require 'getdb'
 require 'digest/md5'
 require 'net/http'
 

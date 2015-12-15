@@ -1,6 +1,6 @@
 require 'sinatra/base'
-require 'b50d/getdb'
-require 'b50d-config.rb'
+require 'getdb'
+require 'peeps-config.rb'
 require 'net/http'
 require 'resolv'
 

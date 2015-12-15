@@ -1,6 +1,6 @@
 require 'sinatra/base'
 require 'kramdown'
-require 'b50d/getdb'
+require 'getdb'
 
 class WoodEgg < Sinatra::Base
 

@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require 'b50d/getdb'
+require 'getdb'
 require 'r18n-core'
 include R18n::Helpers
 

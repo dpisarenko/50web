@@ -1,5 +1,5 @@
 require_relative 'mod_auth'
-require 'b50d-config.rb'  # SCP
+require 'peeps-config.rb'  # SCP
 
 class Inbox < ModAuth
 

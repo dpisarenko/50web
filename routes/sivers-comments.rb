@@ -1,5 +1,5 @@
 require_relative 'mod_auth'
-require 'b50d-config.rb'  # INP
+require 'peeps-config.rb'  # INP
 
 class SiversComments < ModAuth
 
