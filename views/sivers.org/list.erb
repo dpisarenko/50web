@@ -1,14 +1,14 @@
 <!-- email list -->
 
 <h1>email list</h1>
-<p>If you be on (or off) my private email list, please say so here:</p>
+<p>If you want on (or off) my private email list, please say so here:</p>
 
 <form action="/list" method="post">
 
 <label for="name">Your Name</label>
 <input type="text" name="name" id="name" value="<%= @show_name %>"/>
 
-<label for="email">Your Email <span class="small">(kept private! never shared.)</span></label>
+<label for="email">Your Email <span class="small">(kept private! never shared)</span></label>
 <input type="email" name="email" id="email" value="<%= @show_email %>"/>
 
 <h2><label for="listype">how often?</label></h2>
