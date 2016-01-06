@@ -65,7 +65,7 @@ class MusicThoughts < Sinatra::Base
 			'pt' => 'Português',
 			'ru' => 'Русский',
 			'ar' => 'العربية',
-			'ja' => '日本',
+			'ja' => '日本語',
 			'zh' => '中文'}
 		# Nginx should only be routing these 2-letter language subdomains 
 		# If found at beginning of URL, use as lang.  Otherwise 'en'.
