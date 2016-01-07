@@ -1,0 +1,40 @@
+<table>
+	<tr><th>attribute</th><th>N</th><th>?</th><th>Y</th></tr>
+<% @attributes.each do |x|
+minus = (x[:plusminus] == false) ? ' checked="checked"' : ''
+unknown = (x[:plusminus] == nil) ? ' checked="checked"' : ''
+plus = (x[:plusminus] == true) ? ' checked="checked"' : ''
+%>
+	<tr>
+		<td><%= x[:atkey] %></td>
+		<td>
+				<input type="radio" name="<%= x[:atkey] %>" value="minus"<%= minus %>>
+		</td><td>
+				<input type="radio" name="<%= x[:atkey] %>" value="delete"<%= unknown %>>
+		</td><td>
+				<input type="radio" name="<%= x[:atkey] %>" value="plus"<%= plus %>>
+		</td>
+	</tr>
+<% end %>
+</table>
+
+<h4>interests:</h4>
+<form action="/interest/<%= @person[:id] %>/add.json" method="post">
+	<select name="interest">
+		<option value="">. . .</option>
+	<% @inkeys.each do |x| %>
+		<option value="<%= x %>"><%= x %></option>
+	<% end %>
+	</select>
+	<input type="submit" value="add">
+</form>
+<% @interests.each do |x| %>
+	<form data-urlbase="/interest/<%= @person[:id] %>/<%= x %>/">
+		<input type="submit" name="delete" value="x">
+		<%= x %>
+		<input type="submit" name="expert" value="-">
+		<input type="submit" name="expert" value="|">
+		<input type="submit" name="expert" value="+">
+	</form>
+<% end %>
+

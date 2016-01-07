@@ -7,10 +7,8 @@ pure-tables.scss
 @import 'pure/grids.scss';
 @import 'pure/grids-responsive.scss';
 @import 'pure/forms.scss';
-@import 'pure/menus.scss';
 
 nav#navigation {
-	@extend .pure-menu-horizontal;
 	background-color: #000;
 	a {
 		color: #fff;
@@ -18,6 +16,9 @@ nav#navigation {
 	}
 	ul {
 		margin: 0;
+	}
+	li {
+		display: inline;
 	}
 }
 #content {
@@ -30,19 +31,36 @@ nav#navigation {
 section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats, section#merge, section#login {
 	@extend .pure-u-1;
 }
+section#atkeys, section#inkeys {
+	@extend .pure-u-1-2;
+	form {
+		display: inline;
+	}
+	dt {
+		margin-top: 1em;
+		font-size: 1.4em;
+	}
+}
+
 section#showemail {
 	@extend .pure-u-1;
-	@extend .pure-u-md-2-3;
-	@extend .pure-u-lg-4-5;
+	@extend .pure-u-md-1-3;
+	@extend .pure-u-lg-2-3;
 	textarea {
 		width: 80%;
 	}
 	background-color: #eef;
 }
+section#showai {
+	@extend .pure-u-1;
+	@extend .pure-u-md-1-3;
+	@extend .pure-u-lg-1-6;
+	background-color: #dfd;
+}
 section#showperson {
 	@extend .pure-u-1;
 	@extend .pure-u-md-1-3;
-	@extend .pure-u-lg-1-5;
+	@extend .pure-u-lg-1-6;
 	background-color: #ffd;
 }
 form {
@@ -77,5 +95,10 @@ input.longtext {
 	li {
 		list-style-type: none;
 		margin-bottom: 0.5em;
+	}
+}
+#showai table {
+	td, th {
+		padding-right: 2em;
 	}
 }

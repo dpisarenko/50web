@@ -101,6 +101,7 @@ class Inbox < ModAuth
 		@person = @email[:person]
 		ok, @attributes = @db.call('person_attributes', @person[:id])
 		ok, @interests = @db.call('person_interests', @person[:id])
+		@inkeys = @db.call('interest_keys')[1].map {|x| x[:inkey]}
 		@clash = (@email[:their_email] != @person[:email])
 		@profiles = ['derek@sivers', 'we@woodegg']
 		# skip formletters that start with _, since those are automated
@@ -199,13 +200,18 @@ class Inbox < ModAuth
 		res.to_json
 	end
 
-	post %r{^/interest/([0-9]+)/([a-z-]+)/add.json$} do |id, interest|
-		ok, res = @db.call('person_add_interest', id, interest)
+	post %r{^/interest/([0-9]+)/add.json$} do |id|
+		ok, res = @db.call('person_add_interest', id, params[:interest])
 		res.to_json
 	end
 
 	post %r{^/interest/([0-9]+)/([a-z-]+)/update.json$} do |id, interest|
-		ok, res = @db.call('person_update_interest', id, interest, params[:expert])
+		expert = case params[:expert]
+			when '-' then false
+			when '+' then true
+			else nil
+		end
+		ok, res = @db.call('person_update_interest', id, interest, expert)
 		res.to_json
 	end
 

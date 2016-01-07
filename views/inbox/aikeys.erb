@@ -1,6 +1,4 @@
-<section id="stats">
-
-<div id="atkeys">
+<section id="atkeys">
 	<h2>attribute keys:</h2>
 	<form action="/attribute" method="post">
 		<input type="text" name="attribute">
@@ -9,37 +7,40 @@
 <dl>
 <% @atkeys.each do |x| %>
 	<dt>
+	<form action="/attribute/<%= x[:atkey] %>/delete" method="post"><input type="submit" value="x"></form>
 	<strong><%= x[:atkey] %></strong>
-	<form action="/attribute/<%= x[:atkey] %>/delete"><input type="submit" value="delete"></form>
 	</dt>
 	<dd>
-	<form action="/attribute/<%= x[:atkey] %>/update">
+	<form action="/attribute/<%= x[:atkey] %>/update" method="post">
 	<input type="text" name="description" value="<%=h x[:description] %>">
 	<input type="submit" value="update description"></form>
 	</dd>
 <% end %>
 </dl>
-</div>
+</section>
 
-<div id="inkeys">
+<section id="inkeys">
 	<h2>interest keys:</h2>
-	<form action="/interest" method="post">
+	<form action="/interest" method="post" name="interestform">
 		<input type="text" name="interest">
 		<input type="submit" value="add">
 	</form>
 <dl>
 <% @inkeys.each do |x| %>
 	<dt>
+	<form action="/interest/<%= x[:inkey] %>/delete" method="post"><input type="submit" value="x"></form>
 	<strong><%= x[:inkey] %></strong>
-	<form action="/interest/<%= x[:inkey] %>/delete"><input type="submit" value="delete"></form>
 	</dt>
 	<dd>
-	<form action="/interest/<%= x[:inkey] %>/update">
+	<form action="/interest/<%= x[:inkey] %>/update" method="post">
 	<input type="text" name="description" value="<%=h x[:description] %>">
 	<input type="submit" value="update description"></form>
 	</dd>
 <% end %>
 </dl>
-</div>
-
 </section>
+
+<script>
+document.interestform.interest.focus();
+</script>
+
