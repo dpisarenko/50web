@@ -1,0 +1,45 @@
+<section id="stats">
+
+<div id="atkeys">
+	<h2>attribute keys:</h2>
+	<form action="/attribute" method="post">
+		<input type="text" name="attribute">
+		<input type="submit" value="add">
+	</form>
+<dl>
+<% @atkeys.each do |x| %>
+	<dt>
+	<strong><%= x[:atkey] %></strong>
+	<form action="/attribute/<%= x[:atkey] %>/delete"><input type="submit" value="delete"></form>
+	</dt>
+	<dd>
+	<form action="/attribute/<%= x[:atkey] %>/update">
+	<input type="text" name="description" value="<%=h x[:description] %>">
+	<input type="submit" value="update description"></form>
+	</dd>
+<% end %>
+</dl>
+</div>
+
+<div id="inkeys">
+	<h2>interest keys:</h2>
+	<form action="/interest" method="post">
+		<input type="text" name="interest">
+		<input type="submit" value="add">
+	</form>
+<dl>
+<% @inkeys.each do |x| %>
+	<dt>
+	<strong><%= x[:inkey] %></strong>
+	<form action="/interest/<%= x[:inkey] %>/delete"><input type="submit" value="delete"></form>
+	</dt>
+	<dd>
+	<form action="/interest/<%= x[:inkey] %>/update">
+	<input type="text" name="description" value="<%=h x[:description] %>">
+	<input type="submit" value="update description"></form>
+	</dd>
+<% end %>
+</dl>
+</div>
+
+</section>

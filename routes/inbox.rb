@@ -99,6 +99,8 @@ class Inbox < ModAuth
 		ok, @email = @db.call('get_email', @eid, id)
 		halt 404 unless ok
 		@person = @email[:person]
+		ok, @attributes = @db.call('person_attributes', @person[:id])
+		ok, @interests = @db.call('person_interests', @person[:id])
 		@clash = (@email[:their_email] != @person[:email])
 		@profiles = ['derek@sivers', 'we@woodegg']
 		# skip formletters that start with _, since those are automated
@@ -150,6 +152,8 @@ class Inbox < ModAuth
 		halt(404) unless ok
 		ok, @emails = @db.call('get_person_emails', id)
 		@emails.reverse!
+		ok, @attributes = @db.call('person_attributes', id)
+		ok, @interests = @db.call('person_interests', id)
 		ok, @tables = @db.call('tables_with_person', id)
 		@tables.sort.map! do |t|
 			(t == 'sivers.comments') ?
@@ -180,6 +184,36 @@ class Inbox < ModAuth
 		res.to_json
 	end
 
+	post %r{^/attribute/([0-9]+)/([a-z-]+)/plus.json$} do |id, attribute|
+		ok, res = @db.call('person_set_attribute', id, attribute, true)
+		res.to_json
+	end
+
+	post %r{^/attribute/([0-9]+)/([a-z-]+)/minus.json$} do |id, attribute|
+		ok, res = @db.call('person_set_attribute', id, attribute, false)
+		res.to_json
+	end
+
+	post %r{^/attribute/([0-9]+)/([a-z-]+)/delete.json$} do |id, attribute|
+		ok, res = @db.call('person_delete_attribute', id, attribute)
+		res.to_json
+	end
+
+	post %r{^/interest/([0-9]+)/([a-z-]+)/add.json$} do |id, interest|
+		ok, res = @db.call('person_add_interest', id, interest)
+		res.to_json
+	end
+
+	post %r{^/interest/([0-9]+)/([a-z-]+)/update.json$} do |id, interest|
+		ok, res = @db.call('person_update_interest', id, interest, params[:expert])
+		res.to_json
+	end
+
+	post %r{^/interest/([0-9]+)/([a-z-]+)/delete.json$} do |id, interest|
+		ok, res = @db.call('person_delete_interest', id, interest)
+		res.to_json
+	end
+
 	post %r{^/person/([0-9]+)/email$} do |id|
 		@db.call('new_email', @eid, id, params[:profile], params[:subject], params[:body])
 		redirect to('/person/%d' % id)
@@ -204,6 +238,43 @@ class Inbox < ModAuth
 	post %r{^/url/([0-9]+).json$} do |id|
 		ok, res = @db.call('update_url', id, {main: params[:star]}.to_json)
 		res.to_json
+	end
+
+	get '/aikeys' do
+		ok, @atkeys = @db.call('attribute_keys')
+		ok, @inkeys = @db.call('interest_keys')
+		@pagetitle = 'attribute and interest keys'
+		erb :aikeys
+	end
+
+	post '/attribute' do
+		@db.call('add_attribute_key', params[:attribute])
+		redirect '/aikeys'
+	end
+
+	post %r{^/attribute/([a-z-]+)/delete$} do |attribute|
+		@db.call('delete_attribute_key', attribute)
+		redirect '/aikeys'
+	end
+
+	post %r{^/attribute/([a-z-]+)/update$} do |attribute|
+		@db.call('update_attribute_key', attribute, params[:description])
+		redirect '/aikeys'
+	end
+
+	post '/interest' do
+		@db.call('add_interest_key', params[:interest])
+		redirect '/aikeys'
+	end
+
+	post %r{^/interest/([a-z-]+)/delete$} do |interest|
+		@db.call('delete_interest_key', interest)
+		redirect '/aikeys'
+	end
+
+	post %r{^/interest/([a-z-]+)/update$} do |interest|
+		@db.call('update_interest_key', interest, params[:description])
+		redirect '/aikeys'
 	end
 
 	# to avoid external sites seeing my internal links:
