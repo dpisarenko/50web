@@ -46,9 +46,6 @@ section#showemail {
 	@extend .pure-u-1;
 	@extend .pure-u-md-1-3;
 	@extend .pure-u-lg-2-3;
-	textarea {
-		width: 80%;
-	}
 	background-color: #eef;
 }
 section#showai {
@@ -80,6 +77,9 @@ form#replyform textarea {
 }
 #emailactions form, #searchresults form {
 	display: inline;
+}
+textarea {
+	width: 98%;
 }
 input.longtext {
 	width: 70%;

@@ -1,25 +1,34 @@
-<table>
+<table id="attributes">
 	<tr><th>attribute</th><th>N</th><th>?</th><th>Y</th></tr>
 <% @attributes.each do |x|
 minus = (x[:plusminus] == false) ? ' checked="checked"' : ''
 unknown = (x[:plusminus] == nil) ? ' checked="checked"' : ''
 plus = (x[:plusminus] == true) ? ' checked="checked"' : ''
 %>
-	<tr>
-		<td><%= x[:atkey] %></td>
-		<td>
-				<input type="radio" name="<%= x[:atkey] %>" value="minus"<%= minus %>>
-		</td><td>
-				<input type="radio" name="<%= x[:atkey] %>" value="delete"<%= unknown %>>
-		</td><td>
-				<input type="radio" name="<%= x[:atkey] %>" value="plus"<%= plus %>>
-		</td>
-	</tr>
+	<tr><td><%= x[:atkey] %></td><td>
+		<input type="radio" name="<%= x[:atkey] %>" data-post="/attribute/<%= @person[:id] %>/<%= x[:atkey] %>/minus.json"<%= minus %>>
+	</td><td>
+		<input type="radio" name="<%= x[:atkey] %>" data-post="/attribute/<%= @person[:id] %>/<%= x[:atkey] %>/delete.json"<%= unknown %>>
+	</td><td>
+		<input type="radio" name="<%= x[:atkey] %>" data-post="/attribute/<%= @person[:id] %>/<%= x[:atkey] %>/plus.json"<%= plus %>>
+	</td></tr>
 <% end %>
 </table>
+<script>
+var attributeInputs = document.getElementById('attributes').getElementsByTagName('input');
+var l = attributeInputs.length;
+for(var i = 0; i < l; i++) {
+	attributeInputs[i].addEventListener('click', function(e) {
+		var url = e.currentTarget.getAttribute('data-post');
+		var xhr = new XMLHttpRequest();
+		xhr.open('post', url, true);
+		xhr.send();
+	}, false);
+}
+</script>
 
 <h4>interests:</h4>
-<form action="/interest/<%= @person[:id] %>/add.json" method="post">
+<form action="/interest/<%= @person[:id] %>/add.json" method="post" id="interestform">
 	<select name="interest">
 		<option value="">. . .</option>
 	<% @inkeys.each do |x| %>
@@ -28,6 +37,7 @@ plus = (x[:plusminus] == true) ? ' checked="checked"' : ''
 	</select>
 	<input type="submit" value="add">
 </form>
+<div id="interests">
 <% @interests.each do |x| %>
 	<form data-urlbase="/interest/<%= @person[:id] %>/<%= x %>/">
 		<input type="submit" name="delete" value="x">
@@ -37,4 +47,5 @@ plus = (x[:plusminus] == true) ? ' checked="checked"' : ''
 		<input type="submit" name="expert" value="+">
 	</form>
 <% end %>
+</div>
 

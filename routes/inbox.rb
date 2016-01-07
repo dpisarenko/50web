@@ -155,6 +155,7 @@ class Inbox < ModAuth
 		@emails.reverse!
 		ok, @attributes = @db.call('person_attributes', id)
 		ok, @interests = @db.call('person_interests', id)
+		@inkeys = @db.call('interest_keys')[1].map {|x| x[:inkey]}
 		ok, @tables = @db.call('tables_with_person', id)
 		@tables.sort.map! do |t|
 			(t == 'sivers.comments') ?
