@@ -49,6 +49,7 @@ document.getElementById('interestadd').addEventListener('click', function(e) {
 </script>
 
 <div id="interests">
+<!-- TODO: DRAW WITH JAVASCRIPT, AND USE THAT FUNCTION IN ADDING SCRIPT, ABOVE -->
 <% @interests.each do |x| %>
 	<form data-urlbase="/interest/<%= @person[:id] %>/<%= x[:interest] %>/">
 		<input type="submit" name="delete" value="x">
