@@ -201,8 +201,8 @@ class Inbox < ModAuth
 		res.to_json
 	end
 
-	post %r{^/interest/([0-9]+)/add.json$} do |id|
-		ok, res = @db.call('person_add_interest', id, params[:interest])
+	post %r{^/interest/([0-9]+)/([a-z-]+)/add.json$} do |id, interest|
+		ok, res = @db.call('person_add_interest', id, interest)
 		res.to_json
 	end
 

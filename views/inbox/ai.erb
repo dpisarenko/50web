@@ -28,20 +28,31 @@ for(var i = 0; i < l; i++) {
 </script>
 
 <h4>interests:</h4>
-<form action="/interest/<%= @person[:id] %>/add.json" method="post" id="interestform">
-	<select name="interest">
-		<option value="">. . .</option>
-	<% @inkeys.each do |x| %>
-		<option value="<%= x %>"><%= x %></option>
-	<% end %>
-	</select>
-	<input type="submit" value="add">
-</form>
+<select name="interest" id="inkeyselect">
+	<option value="">. . .</option>
+<% @inkeys.each do |x| %>
+	<option value="<%= x %>"><%= x %></option>
+<% end %>
+</select>
+<input type="submit" value="add" id="interestadd" data-personId="<%= @person[:id] %>" />
+<script>
+document.getElementById('interestadd').addEventListener('click', function(e) {
+	e.preventDefault();
+	var inkey = document.getElementById('inkeyselect').value;
+	if(inkey == '') { return; }
+	var personId = e.currentTarget.getAttribute('data-personId');
+	var url = '/interest/' + personId + '/' + inkey + '/add.json';
+	var xhr = new XMLHttpRequest();
+	xhr.open('post', url, true);
+	xhr.send();
+}, false);
+</script>
+
 <div id="interests">
 <% @interests.each do |x| %>
-	<form data-urlbase="/interest/<%= @person[:id] %>/<%= x %>/">
+	<form data-urlbase="/interest/<%= @person[:id] %>/<%= x[:interest] %>/">
 		<input type="submit" name="delete" value="x">
-		<%= x %>
+		<%= x[:interest] %>
 		<input type="submit" name="expert" value="-">
 		<input type="submit" name="expert" value="|">
 		<input type="submit" name="expert" value="+">
