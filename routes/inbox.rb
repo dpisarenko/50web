@@ -140,7 +140,8 @@ class Inbox < ModAuth
 
 	post %r{^/email/([0-9]+)/not_my$} do |id|
 		@db.call('not_my_email', @eid, id)
-		redirect '/'
+		ok, email = @db.call('open_next_email', @eid, params[:profile], params[:category])
+		redirect_to_email_or_home(ok, email)
 	end
 
 	post '/person' do

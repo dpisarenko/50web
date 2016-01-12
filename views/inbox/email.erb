@@ -58,13 +58,21 @@
 
 <% unless @email[:outgoing] != false %>
 <div id="emailactions">
-	<form action="/email/<%= @email[:id] %>/unread" method="post"><input type="submit" value="make new"></form>
+	<form action="/email/<%= @email[:id] %>/unread" method="post">
+		<input type="submit" value="make new">
+	</form>
+
 	<form action="/email/<%= @email[:id] %>/close" method="post">
 		<input type="hidden" name="profile" value="<%= @email[:profile] %>">
 		<input type="hidden" name="category" value="<%= @email[:category] %>">
 		<input type="submit" value="close">
 	</form>
-	<form action="/email/<%= @email[:id] %>/not_my" method="post"><input type="submit" value="not me"></form>
+
+	<form action="/email/<%= @email[:id] %>/not_my" method="post">
+		<input type="hidden" name="profile" value="<%= @email[:profile] %>">
+		<input type="hidden" name="category" value="<%= @email[:category] %>">
+		<input type="submit" value="not me">
+	</form>
 
 	<h3>Reply:</h3>
 	<form id="replyform" action="/email/<%= @email[:id] %>/reply" method="post">
