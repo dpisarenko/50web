@@ -6,6 +6,7 @@
 		<%=h @email[:their_name] %>
 	</span>
 	(<a id="email_details_link" href="#" accesskey="d">show details</a>)
+	(<a id="email_urls_link" href="#" accesskey="u">show urls</a>)
 	<% if @email[:closed_at] %>
 		closed_at: <%= @email[:closed_at] %> by <a href="/emailer/<%= @email[:closor][:id] %>"><%= @email[:closor][:name] %></a>
 	<% end %>
@@ -65,6 +66,14 @@ setInterval(getTimer(), 1000);
 		answer: <a href="/email/<%= @email[:answer_id] %>"><%=h @email[:answer_id] %></a>
 	<% end %>
 	</p>
+</div>
+
+<div id="emailurls" class="hidden">
+<ul>
+<% @email[:urls].each do |u| %>
+	<li><a href="http://<%= u %>" target="_blank"><%=h u %></a></li>
+<% end %>
+</ul>
 </div>
 
 <% unless @email[:outgoing] != false %>
@@ -131,21 +140,40 @@ document.getElementById('reply').focus();
 </section>
 
 <script>
-var link = document.getElementById('email_details_link');
+var link1 = document.getElementById('email_details_link');
 var details = document.getElementById('emaildetails');
 function showDetails(e) {
 	e.preventDefault();
 	details.removeAttribute('class');
-	link.removeEventListener('click', showDetails, false);
-	link.addEventListener('click', hideDetails, false);
-	link.innerHTML = 'hide details';
+	link1.removeEventListener('click', showDetails, false);
+	link1.addEventListener('click', hideDetails, false);
+	link1.innerHTML = 'hide details';
 }
 function hideDetails(e) {
 	e.preventDefault();
 	details.setAttribute('class', 'hidden');
-	link.removeEventListener('click', hideDetails, false);
-	link.addEventListener('click', showDetails, false);
-	link.innerHTML = 'show details';
+	link1.removeEventListener('click', hideDetails, false);
+	link1.addEventListener('click', showDetails, false);
+	link1.innerHTML = 'show details';
 }
-link.addEventListener('click', showDetails, false);
+link1.addEventListener('click', showDetails, false);
+
+var link2 = document.getElementById('email_urls_link');
+var urls = document.getElementById('emailurls');
+function showUrls(e) {
+	e.preventDefault();
+	urls.removeAttribute('class');
+	link2.removeEventListener('click', showUrls, false);
+	link2.addEventListener('click', hideUrls, false);
+	link2.innerHTML = 'hide urls';
+}
+function hideUrls(e) {
+	e.preventDefault();
+	urls.setAttribute('class', 'hidden');
+	link2.removeEventListener('click', hideUrls, false);
+	link2.addEventListener('click', showUrls, false);
+	link2.innerHTML = 'show urls';
+}
+link2.addEventListener('click', showUrls, false);
 </script>
+
