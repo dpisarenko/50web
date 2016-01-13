@@ -15,7 +15,18 @@
 		<textarea name="body"><%=h @email[:body] %></textarea>
 		<input name="subject" class="longtext" value="<%=h @email[:subject] %>">
 		<input type="submit" value="update">
+		<span id="timer"></span>
 </form>
+<script>
+function getTimer() {
+	var seconds = 0;
+	return function() {
+		seconds = seconds + 1;
+		document.getElementById('timer').innerHTML = 'seconds: ' + seconds;
+	};
+}
+setInterval(getTimer(), 1000);
+</script>
 
 <div id="emaildetails" class="hidden">
 	<form data-id="<%= @email[:id] %>" action="/email/<%= @email[:id] %>" method="post">
