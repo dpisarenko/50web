@@ -6,7 +6,7 @@
 		<%=h @email[:their_name] %>
 	</span>
 	(<a id="email_details_link" href="#" accesskey="d">show details</a>)
-	(<a id="email_urls_link" href="#" accesskey="u">show urls</a>)
+	(<a id="email_urls_link" href="#" accesskey="w">show urls</a>)
 	<% if @email[:closed_at] %>
 		closed_at: <%= @email[:closed_at] %> by <a href="/emailer/<%= @email[:closor][:id] %>"><%= @email[:closor][:name] %></a>
 	<% end %>
@@ -132,7 +132,7 @@ document.getElementById('reply').focus();
 </section>
 
 <section id="showai">
-	<!-- erb :ai -->
+<%= erb :ai %>
 </section>
 
 <section id="showperson">

@@ -4,19 +4,18 @@
 		<input type="text" name="attribute">
 		<input type="submit" value="add">
 	</form>
-<dl>
+<table>
 <% @atkeys.each do |x| %>
-	<dt>
+	<tr><td>
 	<form action="/attribute/<%= x[:atkey] %>/delete" method="post"><input type="submit" value="x"></form>
 	<strong><%= x[:atkey] %></strong>
-	</dt>
-	<dd>
+	</td><td>
 	<form action="/attribute/<%= x[:atkey] %>/update" method="post">
 	<input type="text" name="description" value="<%=h x[:description] %>">
 	<input type="submit" value="update description"></form>
-	</dd>
+	</td></tr>
 <% end %>
-</dl>
+</table>
 </section>
 
 <section id="inkeys">
@@ -25,19 +24,18 @@
 		<input type="text" name="interest">
 		<input type="submit" value="add">
 	</form>
-<dl>
+<table>
 <% @inkeys.each do |x| %>
-	<dt>
+	<tr><td>
 	<form action="/interest/<%= x[:inkey] %>/delete" method="post"><input type="submit" value="x"></form>
 	<strong><%= x[:inkey] %></strong>
-	</dt>
-	<dd>
+	</td><td>
 	<form action="/interest/<%= x[:inkey] %>/update" method="post">
 	<input type="text" name="description" value="<%=h x[:description] %>">
 	<input type="submit" value="update description"></form>
-	</dd>
+	</td></tr>
 <% end %>
-</dl>
+</table>
 </section>
 
 <script>

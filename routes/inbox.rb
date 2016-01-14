@@ -209,8 +209,8 @@ class Inbox < ModAuth
 
 	post %r{^/interest/([0-9]+)/([a-z-]+)/update.json$} do |id, interest|
 		expert = case params[:expert]
-			when '-' then false
-			when '+' then true
+			when 'f' then false
+			when 't' then true
 			else nil
 		end
 		ok, res = @db.call('person_update_interest', id, interest, expert)

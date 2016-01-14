@@ -35,29 +35,100 @@ for(var i = 0; i < l; i++) {
 <% end %>
 </select>
 <input type="submit" value="add" id="interestadd" data-personId="<%= @person[:id] %>" />
+<div id="interests"></div>
 <script>
-document.getElementById('interestadd').addEventListener('click', function(e) {
+function interestItem(personId, interest, expert) {
+	var div = document.createElement('div');
+	div.id = interest + personId;
+	var delBut = document.createElement('button');
+	delBut.appendChild(document.createTextNode('x'));
+	div.appendChild(delBut);
+	div.appendChild(document.createTextNode(interest));
+	delBut.addEventListener('click', delEvent(personId, interest), false);
+	if(expert === 'false') {
+		div.appendChild(document.createTextNode('---'));
+	} else {
+		var noBut = document.createElement('button');
+		noBut.appendChild(document.createTextNode('-'));
+		div.appendChild(noBut);
+		noBut.addEventListener('click', updEvent(personId, interest, false), false);
+	}
+	if(expert !== 'false' && expert !== 'true') {
+		div.appendChild(document.createTextNode('???'));
+	} else {
+		var nilBut = document.createElement('button');
+		nilBut.appendChild(document.createTextNode('?'));
+		div.appendChild(nilBut);
+		nilBut.addEventListener('click', updEvent(personId, interest, null), false);
+	}
+	if(expert === 'true') {
+		div.appendChild(document.createTextNode('+++'));
+	} else {
+		var yesBut = document.createElement('button');
+		yesBut.appendChild(document.createTextNode('+'));
+		div.appendChild(yesBut);
+		yesBut.addEventListener('click', updEvent(personId, interest, true), false);
+	}
+	return div;
+}
+
+function addInterestItem(personId, interest, expert) {
+	var div = interestItem(personId, interest, expert);
+	document.getElementById('interests').appendChild(div);
+}
+
+function killInterestItem(personId, interest) {
+	var div = document.getElementById(interest + personId);
+	document.getElementById('interests').removeChild(div);
+}
+
+function delEvent(personId, interest) {
+	return function(e) {
+		e.preventDefault();
+		var url = '/interest/' + personId + '/' + interest + '/delete.json';
+		var xhr = new XMLHttpRequest();
+		xhr.open('post', url, true);
+		xhr.send();
+		killInterestItem(personId, interest);
+	};
+}
+
+function updEvent(personId, interest, expert) {
+	return function(e) {
+		e.preventDefault();
+		var url = '/interest/' + personId + '/' + interest + '/update.json';
+		if(expert === true) {
+			var sendval = 'true';
+		} else if(expert === false) {
+			var sendval = 'false';
+		} else {
+			var sendval = '_';
+		}
+		var params = 'expert=' + sendval[0];
+		var xhr = new XMLHttpRequest();
+		xhr.open('post', url, true);
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.send(params);
+		killInterestItem(personId, interest);
+		addInterestItem(personId, interest, sendval);
+	};
+}
+
+function addInterest(e) {
 	e.preventDefault();
 	var inkey = document.getElementById('inkeyselect').value;
 	if(inkey == '') { return; }
 	var personId = e.currentTarget.getAttribute('data-personId');
+	addInterestItem(personId, inkey);
 	var url = '/interest/' + personId + '/' + inkey + '/add.json';
 	var xhr = new XMLHttpRequest();
 	xhr.open('post', url, true);
 	xhr.send();
-}, false);
-</script>
+}
 
-<div id="interests">
-<!-- TODO: DRAW WITH JAVASCRIPT, AND USE THAT FUNCTION IN ADDING SCRIPT, ABOVE -->
+document.getElementById('interestadd').addEventListener('click', addInterest, false);
+
 <% @interests.each do |x| %>
-	<form data-urlbase="/interest/<%= @person[:id] %>/<%= x[:interest] %>/">
-		<input type="submit" name="delete" value="x">
-		<%= x[:interest] %>
-		<input type="submit" name="expert" value="-">
-		<input type="submit" name="expert" value="|">
-		<input type="submit" name="expert" value="+">
-	</form>
+	addInterestItem(<%= @person[:id] %>, '<%= x[:interest] %>', '<%= x[:expert] %>');
 <% end %>
-</div>
-
+</script>
