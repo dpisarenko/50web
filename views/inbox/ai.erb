@@ -15,16 +15,13 @@ plus = (x[:plusminus] == true) ? ' checked="checked"' : ''
 <% end %>
 </table>
 <script>
-var attributeInputs = document.getElementById('attributes').getElementsByTagName('input');
-var l = attributeInputs.length;
-for(var i = 0; i < l; i++) {
-	attributeInputs[i].addEventListener('click', function(e) {
-		var url = e.currentTarget.getAttribute('data-post');
-		var xhr = new XMLHttpRequest();
-		xhr.open('post', url, true);
-		xhr.send();
-	}, false);
-}
+document.getElementById('attributes').addEventListener('click', function(e) {
+	var url = e.target.getAttribute('data-post');
+	if (url === null) { return; }
+	var xhr = new XMLHttpRequest();
+	xhr.open('post', url, true);
+	xhr.send();
+}, false);
 </script>
 
 <h4>interests:</h4>
@@ -37,81 +34,63 @@ for(var i = 0; i < l; i++) {
 <input type="submit" value="add" id="interestadd" data-personId="<%= @person[:id] %>" />
 <div id="interests"></div>
 <script>
-function interestItem(personId, interest, expert) {
+function interestButtonsHTML(interest, expert) {
+	var html = '<button class="deleteInterest">x</button>';
+	html += '<span class="showInterest">' + interest + '</span>';
+	switch(expert) {
+		case 'true':
+			html += '<button class="minusInterest">-</button>';
+			html += '<button class="nullInterest">?</button>';
+			html += '<span class="chosenInterest">+++</span>';
+			break;
+		case 'false':
+			html += '<span class="chosenInterest">---</span>';
+			html += '<button class="nullInterest">?</button>';
+			html += '<button class="plusInterest">+</button>';
+			break;
+		default:
+			html += '<button class="minusInterest">-</button>';
+			html += '<span class="chosenInterest">???</span>';
+			html += '<button class="plusInterest">+</button>';
+			break;
+	}
+	return html;
+}
+
+function newInterestItem(personId, interest, expert) {
 	var div = document.createElement('div');
-	div.id = interest + personId;
-	var delBut = document.createElement('button');
-	delBut.appendChild(document.createTextNode('x'));
-	div.appendChild(delBut);
-	div.appendChild(document.createTextNode(interest));
-	delBut.addEventListener('click', delEvent(personId, interest), false);
-	if(expert === 'false') {
-		div.appendChild(document.createTextNode('---'));
-	} else {
-		var noBut = document.createElement('button');
-		noBut.appendChild(document.createTextNode('-'));
-		div.appendChild(noBut);
-		noBut.addEventListener('click', updEvent(personId, interest, false), false);
-	}
-	if(expert !== 'false' && expert !== 'true') {
-		div.appendChild(document.createTextNode('???'));
-	} else {
-		var nilBut = document.createElement('button');
-		nilBut.appendChild(document.createTextNode('?'));
-		div.appendChild(nilBut);
-		nilBut.addEventListener('click', updEvent(personId, interest, null), false);
-	}
-	if(expert === 'true') {
-		div.appendChild(document.createTextNode('+++'));
-	} else {
-		var yesBut = document.createElement('button');
-		yesBut.appendChild(document.createTextNode('+'));
-		div.appendChild(yesBut);
-		yesBut.addEventListener('click', updEvent(personId, interest, true), false);
-	}
+	div.id = personId + '-' + interest;
+	div.innerHTML = interestButtonsHTML(interest, expert);
 	return div;
 }
 
 function addInterestItem(personId, interest, expert) {
-	var div = interestItem(personId, interest, expert);
+	var div = newInterestItem(personId, interest, expert);
 	document.getElementById('interests').appendChild(div);
 }
 
 function killInterestItem(personId, interest) {
-	var div = document.getElementById(interest + personId);
+	var div = document.getElementById(personId + '-' + interest);
 	document.getElementById('interests').removeChild(div);
 }
 
-function delEvent(personId, interest) {
-	return function(e) {
-		e.preventDefault();
-		var url = '/interest/' + personId + '/' + interest + '/delete.json';
-		var xhr = new XMLHttpRequest();
-		xhr.open('post', url, true);
-		xhr.send();
-		killInterestItem(personId, interest);
-	};
+function deleteInterest(personId, interest) {
+	var url = '/interest/' + personId + '/' + interest + '/delete.json';
+	var xhr = new XMLHttpRequest();
+	xhr.open('post', url, true);
+	xhr.send();
+	killInterestItem(personId, interest);
 }
 
-function updEvent(personId, interest, expert) {
-	return function(e) {
-		e.preventDefault();
-		var url = '/interest/' + personId + '/' + interest + '/update.json';
-		if(expert === true) {
-			var sendval = 'true';
-		} else if(expert === false) {
-			var sendval = 'false';
-		} else {
-			var sendval = '_';
-		}
-		var params = 'expert=' + sendval[0];
-		var xhr = new XMLHttpRequest();
-		xhr.open('post', url, true);
-		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.send(params);
-		killInterestItem(personId, interest);
-		addInterestItem(personId, interest, sendval);
-	};
+function updateInterest(personId, interest, expert) {
+	var url = '/interest/' + personId + '/' + interest + '/update.json';
+	var params = 'expert=' + expert[0];
+	var xhr = new XMLHttpRequest();
+	xhr.open('post', url, true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.send(params);
+	killInterestItem(personId, interest);
+	addInterestItem(personId, interest, expert);
 }
 
 function addInterest(e) {
@@ -126,7 +105,30 @@ function addInterest(e) {
 	xhr.send();
 }
 
+function editInterest(e) {
+	var reg = /^([0-9]+)-([a-z-]+)$/;  // the id of the containing div
+	var m = reg.exec(e.target.parentNode.id);
+	if (m == null) { return; }
+	var personId = m[1];
+	var interest = m[2];
+	switch(e.target.className) {
+		case 'deleteInterest':
+			deleteInterest(personId, interest);
+			break;
+		case 'minusInterest':
+			updateInterest(personId, interest, 'false');
+			break;
+		case 'nullInterest':
+			updateInterest(personId, interest, '_');
+			break;
+		case 'plusInterest':
+			updateInterest(personId, interest, 'true');
+			break;
+	}
+}
+
 document.getElementById('interestadd').addEventListener('click', addInterest, false);
+document.getElementById('interests').addEventListener('click', editInterest, false);
 
 <% @interests.each do |x| %>
 	addInterestItem(<%= @person[:id] %>, '<%= x[:interest] %>', '<%= x[:expert] %>');
