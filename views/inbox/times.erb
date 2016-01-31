@@ -1,0 +1,12 @@
+<section id="times">
+<% @emailers.each do |e| %>
+	<h2><%= e[:name] %></h2>
+	<table><tr><th>month</th><th>h:m:s</th></tr>
+	<% e[:times].each do |k,v| %>
+		<tr>
+			<td><%= k %></td><td><%= v %></td>
+		</tr>
+	<% end %>
+	</table>
+<% end %>
+</section>

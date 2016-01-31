@@ -532,5 +532,14 @@ class Inbox < ModAuth
 		@db.call('log_approve', ids.to_json)
 		redirect to('/')
 	end
+
+	get '/times' do
+		ok, @emailers = @db.call('active_emailers')
+		@emailers.each do |e|
+			ok, e[:times] = @db.call('emailer_times', e[:id])
+		end
+		@pagetitle = 'times'
+		erb :times
+	end
 end
 

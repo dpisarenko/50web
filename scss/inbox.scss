@@ -28,7 +28,7 @@ nav#navigation {
 	font-family: Arial;
 	font-size: 13px;
 }
-section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats, section#merge, section#login {
+section#home, section#unknown, section#emails, section#search, section#formletters, section#people, section#where, section#stats, section#merge, section#login, section#times {
 	@extend .pure-u-1;
 }
 section#atkeys, section#inkeys {
@@ -97,7 +97,7 @@ input.longtext {
 		margin-bottom: 0.5em;
 	}
 }
-#showai table {
+#showai table, #times table {
 	td, th {
 		padding-right: 2em;
 	}
