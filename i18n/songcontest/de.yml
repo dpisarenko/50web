@@ -1,3 +1,11 @@
 de:
   layout_title: "Freier, offener Song-Contest"
   home_title: "Freier, offener Song-Contest"
+  home_sign_up: "Registrieren"
+  home_email: "E-Mail-Adresse"
+  home_password: "Passwort"
+  home_repeat_password: "Passwort wiederholen"
+  home_account_type: "Wer sind Sie?"
+  home_fan: "Fan"
+  home_musician: "Musiker"
+  home_log_in: "Einloggen"

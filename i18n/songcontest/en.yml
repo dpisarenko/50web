@@ -1,3 +1,11 @@
 en:
   layout_title: "Free, open song contest"
   home_title: "Free, open song contest"
+  home_sign_up: "Sign up"
+  home_email: "E-Mail"
+  home_password: "Password"
+  home_repeat_password: "Repeat password"
+  home_account_type: "Who are you?"
+  home_fan: "Fan"
+  home_musician: "Musician"
+  home_log_in: "Log in"

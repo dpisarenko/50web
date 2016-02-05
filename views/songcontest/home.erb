@@ -1,14 +1,14 @@
-<h2><% I18n.t(:home_title) %></h2>
-<h3>Sign up</h3>
+<h2><%= I18n.t(:home_title) %></h2>
+<h3><%= I18n.t(:home_sign_up) %></h3>
 <form action="/signup" method="post">
-	E-mail: <input type="text" name="email" placeholder="Your e-mail"><br/>
-	Password: <input type="password" name="password"><br/>
-	Repeat password: <input type="password" name="password2"><br/>
-	Account type: <input type="radio" checked="true" name="type" value="fan">Fan
-	<input type="radio" name="type" value="musician">Musician
+	<%= I18n.t(:home_email) %>: <input type="text" name="email" placeholder="Your e-mail"><br/>
+	<%= I18n.t(:home_password) %>: <input type="password" name="password"><br/>
+	<%= I18n.t(:home_repeat_password) %>: <input type="password" name="password2"><br/>
+	<%= I18n.t(:home_account_type) %>: <input type="radio" checked="true" name="type" value="fan"><%= I18n.t(:home_account_fan) %>
+	<input type="radio" name="type" value="musician"><%= I18n.t(:home_musician) %>
 </form>
-<h3>Log in</h3>
+<h3><%= I18n.t(:home_log_in) %></h3>
 <form action="/login" method="post">
-	E-mail: <input type="text" name="email" placeholder="Your e-mail"><br/>
-	Password: <input type="password" name="password"><br/>
+	<%= I18n.t(:home_email) %>: <input type="text" name="email" placeholder="Your e-mail"><br/>
+	<%= I18n.t(:home_password) %>: <input type="password" name="password"><br/>
 </form>

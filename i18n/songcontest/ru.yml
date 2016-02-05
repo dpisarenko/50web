@@ -1,3 +1,11 @@
 ru:
   layout_title: "Свободный, открытый конкурс исполнителей"
   home_title: "Свободный, открытый конкурс исполнителей"
+  home_sign_up: "Регистрация"
+  home_email: "Адрес электронной почты"
+  home_password: "Пароль"
+  home_repeat_password: "Пароль (повтор)"
+  home_account_type: "Кто Вы?"
+  home_fan: "Поклонник"
+  home_musician: "Музыкант"
+  home_log_in: "Войти"
