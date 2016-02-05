@@ -13,7 +13,7 @@ class SongContest < Sinatra::Base
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new {File.join(root, 'views/songcontest')}
 		I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
-		I18n.load_path = Dir[File.join(settings.root, 'locales', '*.yml')]
+		I18n.load_path = Dir[File.join(settings.root, 'i18n/songcontest', '*.yml')]
 		I18n.backend.load_translations		
 	end
 
