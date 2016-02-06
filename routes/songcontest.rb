@@ -50,7 +50,7 @@ class SongContest < Sinatra::Base
 
 	post '/signup' do
 		# TODO: Do all sorts of verifications
-		pid = db.call('peeps.create_person', params['email'])
-		db.call('peeps.set_password', pid, params['password'])
+		ok, res = @db.call('peeps.create_person', params['email'])
+		@db.call('peeps.set_password', res, params['password'])
 	end
 end
