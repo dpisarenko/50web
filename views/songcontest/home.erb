@@ -6,7 +6,8 @@
 	<%= I18n.t(:home_password) %>: <input type="password" name="password"><br/>
 	<%= I18n.t(:home_repeat_password) %>: <input type="password" name="password2"><br/>
 	<%= I18n.t(:home_account_type) %>: <input type="radio" checked="true" name="type" value="fan"><%= I18n.t(:home_fan) %>
-	<input type="radio" name="type" value="musician"><%= I18n.t(:home_musician) %>
+	<input type="radio" name="type" value="musician"><%= I18n.t(:home_musician) %><br/>
+	<input type="submit" value="<%= I18n.t(:home_submit) %>">
 </form>
 <h3><%= I18n.t(:home_log_in) %></h3>
 <form action="/<%= I18n.locale %>/login" method="post">
