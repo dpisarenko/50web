@@ -68,7 +68,7 @@ class SongContest < Sinatra::Base
 	get '/signup-success' do
 		erb :signup_success
 	end
-	
+
 	# route to receive login form: sorry or logs in with cookie. sends home.
 	post '/login' do
 		redirect to('/') if authorized?
@@ -80,5 +80,9 @@ class SongContest < Sinatra::Base
 		redirect to('/')
 	end
 
+	get '/main' do
+		authorize!
+		erb :main
+	end
 
 end
