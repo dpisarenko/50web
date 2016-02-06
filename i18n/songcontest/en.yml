@@ -12,3 +12,4 @@ en:
   home_musician: "Musician"
   home_log_in: "Log in"
   home_submit: "Submit"
+  signup_success_msg: "You have successfully signed-up."
