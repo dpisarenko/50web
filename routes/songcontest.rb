@@ -45,6 +45,14 @@ class SongContest < Sinatra::Base
 	  end
 	end	
 
+	def login(person_id)
+		ok, res = @db.call('cookie_from_id', person_id, 'data.sivers.org')
+		logout unless ok
+		response.set_cookie('ok', value: res[:cookie], path: '/',
+			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: true)
+	end
+
+
 	get '/' do
 		erb :home
 	end
@@ -60,4 +68,17 @@ class SongContest < Sinatra::Base
 	get '/signup-success' do
 		erb :signup_success
 	end
+	
+	# route to receive login form: sorry or logs in with cookie. sends home.
+	post '/login' do
+		redirect to('/') if authorized?
+		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params[:email])
+		sorry 'badlogin' unless String(params[:password]).size > 3
+		ok, p = @db.call('get_person_password', params[:email], params[:password])
+		sorry 'badlogin' unless ok
+		login p[:id]
+		redirect to('/')
+	end
+
+
 end
