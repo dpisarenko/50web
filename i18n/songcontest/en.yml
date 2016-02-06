@@ -13,3 +13,4 @@ en:
   home_log_in: "Log in"
   home_submit: "Submit"
   signup_success_msg: "You have successfully signed-up."
+  main_login_successful: "You have successfully logged in. You shouldn't see this page, if you didn't log in."

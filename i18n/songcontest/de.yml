@@ -12,4 +12,5 @@ de:
   home_musician: "Musiker"
   home_log_in: "Einloggen"
   home_submit: "Abschicken"
-  signup_success_msg: "Sie haben sich erfolgreich angemeldet."
+  signup_success_msg: "Sie haben sich erfolgreich registriert."
+  main_login_successful: "Sie haben sich erfolgreich eingeloggt. Sie sollten diese Seite nicht sehen, wenn Sie sich nicht eingeloggt haben."
