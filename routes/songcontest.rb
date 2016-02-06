@@ -29,6 +29,7 @@ class SongContest < Sinatra::Base
 			)
 		)
 		@db = getdb('songcontest')
+		@peepsdb = getdb('peeps')
 	end
 
 	before '/:locale/*' do
@@ -50,7 +51,7 @@ class SongContest < Sinatra::Base
 
 	post '/signup' do
 		# TODO: Do all sorts of verifications
-		ok, res = @db.call('peeps.create_person', params['email'])
-		@db.call('peeps.set_password', res, params['password'])
+		ok, res = @peepsdb.call('create_person', params['email'])
+		@peepsdb.call('set_password', res, params['password'])
 	end
 end
