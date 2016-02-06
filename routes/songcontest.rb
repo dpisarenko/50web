@@ -34,7 +34,7 @@ class SongContest < Sinatra::Base
 
 	before '/:locale/*' do
 	  I18n.locale       =       params[:locale]
-	  request.path_info = '/' + params[:splat ][0]
+	  request.path_info = '/' + params[:splat ][0] + '?locale=' + params[:locale]
 	end
 
 	helpers do
@@ -51,7 +51,8 @@ class SongContest < Sinatra::Base
 
 	post '/signup' do
 		# TODO: Do all sorts of verifications
-		ok, res = @peepsdb.call('create_person', params['email'])
+		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		@peepsdb.call('set_password', res, params['password'])
+		redirect to('/' + params[:locale] + '/signup-success')
 	end
 end
