@@ -19,7 +19,16 @@ class SongContest < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		# @db = getdb('songcontest')
+		# TODO: Put the connection credentials to the right place
+		Object.const_set(:DB, PG::Connection.new(
+			dbname: 'd50b', 
+			user: 'd50b', 
+			password: 'postgres', 
+			host: 'localhost',
+			port: '5432'
+			)
+		)
+		@db = getdb('songcontest')
 	end
 
 	before '/:locale/*' do
@@ -39,5 +48,9 @@ class SongContest < Sinatra::Base
 		erb :home
 	end
 
-	
+	post '/signup' do
+		# TBD: Do all sorts of verifications
+		pid = db.call('peeps.create_person', params['email'])
+		db.call('peeps.set_password', pid, params['password'])
+	end
 end
