@@ -70,7 +70,9 @@ class SongContest < Sinatra::Base
 		@peepsdb.call('set_password', res, params['password'])
 		# redirect to('/' + request.path_info + '/signup-success')
 		locale = request.path.split('/').first
-
+		# logger.info 'request: ' + request
+		logger.info 'request.path: ' + request.path
+		logger.info 'request.path_info: ' + request.path_info
 		redirect to('/' + locale + '/signup-success')
 	end
 
