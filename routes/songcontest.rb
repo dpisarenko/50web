@@ -3,6 +3,7 @@ require 'getdb'
 require 'i18n'
 require 'i18n/backend/fallbacks'
 
+
 class SongContest < Sinatra::Base
 
 	log = File.new('/tmp/SongContest.log', 'a+')
@@ -10,6 +11,7 @@ class SongContest < Sinatra::Base
 
 	configure do
 		enable :logging
+		use Rack::Logger
 		set :root, File.dirname(File.dirname(File.realpath(__FILE__)))
 		set :views, Proc.new {File.join(root, 'views/songcontest')}
 		I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
@@ -43,6 +45,9 @@ class SongContest < Sinatra::Base
 	      super(views, "#{name}.#{locale}", engine, &block) }
 	    super(views, name, engine, &block)
 	  end
+		def logger
+		    request.logger
+		end	  
 	end	
 
 	def login(person_id)
@@ -54,15 +59,18 @@ class SongContest < Sinatra::Base
 
 
 	get '/' do
+		logger.info 'Logging test'
 		erb :home
 	end
 
 	post '/signup' do
+		
 		# TODO: Do all sorts of verifications
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		@peepsdb.call('set_password', res, params['password'])
 		# redirect to('/' + request.path_info + '/signup-success')
 		locale = request.path.split('/').first
+
 		redirect to('/' + locale + '/signup-success')
 	end
 
