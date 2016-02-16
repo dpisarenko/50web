@@ -63,6 +63,7 @@ class SongContest < Sinatra::Base
 	
 	def authorized?
 		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
+		logger.info 'Cookie: ' + request.cookies['ok']
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
