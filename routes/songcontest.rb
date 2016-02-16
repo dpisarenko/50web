@@ -114,7 +114,7 @@ class SongContest < Sinatra::Base
 		redirect to('/') if authorized?
 		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params[:email])
 		sorry 'badlogin' unless String(params[:password]).size > 3
-		ok, p = @db.call('get_person_password', params[:email], params[:password])
+		ok, p = @peepsdb.call('get_person_password', params[:email], params[:password])
 		sorry 'badlogin' unless ok
 		login p[:id]
 		redirect to('/')
