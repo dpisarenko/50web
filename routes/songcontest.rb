@@ -54,7 +54,7 @@ class SongContest < Sinatra::Base
 		ok, res = @peepsdb.call('cookie_from_id', person_id, 'localhost')
 		logout unless ok
 		response.set_cookie('ok', value: res[:cookie], path: '/',
-			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: true)
+			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: false)
 	end
 	
 	def sorry(msg)
