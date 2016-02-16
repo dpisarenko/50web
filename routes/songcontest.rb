@@ -132,6 +132,7 @@ class SongContest < Sinatra::Base
 	end
 
 	get '/main' do
+		logger.info 'Main, before authorize!'
 		authorize!
 		erb :main
 	end
