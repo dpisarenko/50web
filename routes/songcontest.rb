@@ -100,7 +100,7 @@ class SongContest < Sinatra::Base
 		# TODO: Do all sorts of verifications
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		logger.info 'Res: ' + res.to_s
-		logger.info 'Person ID: ' + res[:id]
+		logger.info 'Person ID: ' + res[:id].to_s
 		# logger.info 'Params, password: ' + params['password']
 		@peepsdb.call('set_hashpass', res, params['password'])
 		locale = request.path.split('/').first
