@@ -57,6 +57,12 @@ class SongContest < Sinatra::Base
 			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: true)
 	end
 
+	def authorized?
+		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
+		ok, res = @db.call('get_person_cookie', request.cookies['ok'])
+		return false unless ok
+		@person_id = res[:id]
+	end
 
 	get '/' do
 		logger.info 'Logging test'
