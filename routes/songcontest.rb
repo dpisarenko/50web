@@ -56,7 +56,11 @@ class SongContest < Sinatra::Base
 		response.set_cookie('ok', value: res[:cookie], path: '/',
 			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: true)
 	end
-
+	
+	def sorry(msg)
+		redirect to('/sorry?for=' + msg)
+	end
+	
 	def authorized?
 		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
 		ok, res = @db.call('get_person_cookie', request.cookies['ok'])
