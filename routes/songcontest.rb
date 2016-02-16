@@ -67,6 +67,10 @@ class SongContest < Sinatra::Base
 		return false unless ok
 		@person_id = res[:id]
 	end
+	
+	def authorize!
+		redirect to('/' + I18n.locale.to_s + '/') unless authorized?
+	end	
 
 	get '/' do
 		logger.info 'Logging test'
@@ -123,7 +127,8 @@ class SongContest < Sinatra::Base
 		ok, p = @peepsdb.call('get_person_password', params[:email], params[:password])
 		sorry 'badlogin' unless ok
 		login p[:id]
-		redirect to('/')
+		# redirect to('/')
+		redirect to('/' + I18n.locale.to_s + '/main')
 	end
 
 	get '/main' do
