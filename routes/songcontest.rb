@@ -56,6 +56,11 @@ class SongContest < Sinatra::Base
 		response.set_cookie('ok', value: res[:cookie], path: '/',
 			expires: Time.now + (60 * 60 * 24 * 30), secure: false, httponly: false)
 	end
+
+	def logout
+		response.set_cookie('ok', value: '', path: '/',
+			expires: Time.at(0), secure: true, httponly: true)
+	end
 	
 	def sorry(msg)
 		redirect to('/sorry?for=' + msg)
@@ -139,5 +144,9 @@ class SongContest < Sinatra::Base
 		authorize!
 		erb :main
 	end
-
+	
+	get '/logout' do
+		logout
+		redirect to('/' + I18n.locale.to_s + '/')
+	end
 end
