@@ -64,19 +64,12 @@ class SongContest < Sinatra::Base
 	end
 
 	post '/signup' do
-		logger.info 'Params, name: ' + params['name']
-		logger.info 'Params, email: ' + params['email']
 		# TODO: Do all sorts of verifications
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		logger.info 'Params, password: ' + params['password']
-		# logger.info 'res: ' + res
 		@peepsdb.call('set_password', res, params['password'])
-		# redirect to('/' + request.path_info + '/signup-success')
 		locale = request.path.split('/').first
-		# logger.info 'request: ' + request
-		logger.info 'request.path: ' + request.path
-		logger.info 'request.path_info: ' + request.path_info
-		redirect to('/' + locale + '/signup-success')
+		redirect to('/' + I18n.locale.to_s + '/signup-success')
 	end
 
 	get '/signup-success' do
