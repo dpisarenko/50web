@@ -14,3 +14,4 @@ de:
   home_submit: "Abschicken"
   signup_success_msg: "Sie haben sich erfolgreich registriert."
   main_login_successful: "Sie haben sich erfolgreich eingeloggt. Sie sollten diese Seite nicht sehen, wenn Sie sich nicht eingeloggt haben."
+  main_logout: "Ausloggen"
