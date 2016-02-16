@@ -101,8 +101,10 @@ class SongContest < Sinatra::Base
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		logger.info 'Res: ' + res.to_s
 		logger.info 'Person ID: ' + res[:id].to_s
+		#ok, _ = @db.call('get_person_newpass', res[:id], params['password'])
+		@db.call('set_password', res[:id], params['password'])
 		# logger.info 'Params, password: ' + params['password']
-		@peepsdb.call('set_hashpass', res[:id], params['password'])
+		# @peepsdb.call('set_hashpass', res[:id], params['password'])
 		locale = request.path.split('/').first
 		redirect to('/' + I18n.locale.to_s + '/signup-success')
 	end
