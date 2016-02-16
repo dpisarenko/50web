@@ -51,7 +51,7 @@ class SongContest < Sinatra::Base
 	end	
 
 	def login(person_id)
-		ok, res = @peepsdb.call('cookie_from_id', person_id, 'data.sivers.org')
+		ok, res = @peepsdb.call('cookie_from_id', person_id, 'localhost')
 		logout unless ok
 		response.set_cookie('ok', value: res[:cookie], path: '/',
 			expires: Time.now + (60 * 60 * 24 * 30), secure: true, httponly: true)
@@ -62,8 +62,8 @@ class SongContest < Sinatra::Base
 	end
 	
 	def authorized?
+		# logger.info 'Cookie: ' + request.cookies['ok']
 		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
-		logger.info 'Cookie: ' + request.cookies['ok']
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
