@@ -153,4 +153,11 @@ class SongContest < Sinatra::Base
 		authorize!
 		erb :upload
 	end
+
+	post "/upload" do 
+	  File.open('uploads/' + params['song'][:filename], "w") do |f|
+	    f.write(params['song'][:tempfile].read)
+	  end
+	  erb :main
+	end
 end
