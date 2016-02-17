@@ -140,7 +140,6 @@ class SongContest < Sinatra::Base
 	end
 
 	get '/main' do
-		logger.info 'Main, before authorize!'
 		authorize!
 		erb :main
 	end
@@ -148,5 +147,10 @@ class SongContest < Sinatra::Base
 	get '/logout' do
 		logout
 		redirect to('/' + I18n.locale.to_s + '/')
+	end
+
+	get '/upload' do
+		authorize!
+		erb :upload
 	end
 end
