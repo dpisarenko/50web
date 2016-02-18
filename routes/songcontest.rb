@@ -155,7 +155,7 @@ class SongContest < Sinatra::Base
 	end
 
 	post "/upload" do 
-	  File.open('uploads/' + params['song'][:filename], "w") do |f|
+	  File.open('../../public/songs/' + params['song'][:filename], "w") do |f|
 	    f.write(params['song'][:tempfile].read)
 	  end
 	  erb :main
@@ -164,9 +164,5 @@ class SongContest < Sinatra::Base
 	get '/playback' do
 		authorize!
 		erb :playback
-	end
-
-	get %r{.*/js/soundmanager2.js} do
-	    redirect('js/soundmanagerv297a-20150601/soundmanager2.js')
 	end
 end
