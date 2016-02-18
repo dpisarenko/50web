@@ -160,4 +160,9 @@ class SongContest < Sinatra::Base
 	  end
 	  erb :main
 	end
+
+	get '/playback' do
+		authorize!
+		erb :playback
+	end
 end
