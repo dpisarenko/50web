@@ -1,11 +1,16 @@
 <h2><%= I18n.t(:home_title) %></h2>
-<script src="/js/soundmanagerv297a-20150601/soundmanager2.js"></script>
+ <div id="sm2-container">
+  <!-- SM2 flash goes here -->
+ </div>
+<script src="/js/soundmanagerv297a-20150601/script/soundmanager2.js"></script>
 <script>
 soundManager.setup({
-  // where to find flash audio SWFs, as needed
-  url: '/path/to/swf-files/',
+  url: '/js/soundmanagerv297a-20150601/swf/',
   onready: function() {
-    // SM2 is ready to play audio!
+	var mySound = soundManager.createSound({
+	  url: 'http://localhost:3000/songs/Sleep%20Away.mp3'
+	});
+	mySound.play();
   }
 });
 </script>
