@@ -165,4 +165,8 @@ class SongContest < Sinatra::Base
 		authorize!
 		erb :playback
 	end
+
+	get %r{.*/js/soundmanager2.js} do
+	    redirect('js/soundmanagerv297a-20150601/soundmanager2.js')
+	end
 end
