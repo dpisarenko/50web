@@ -1,4 +1,15 @@
 <h2><%= I18n.t(:home_title) %></h2>
+<script src="/js/soundmanagerv297a-20150601/script/soundmanager2.js"></script>
+<script>
+soundManager.setup({
+  url: '/js/soundmanagerv297a-20150601/swf/',
+  onready: function() {
+
+  }
+});
+</script>
+<script src="/js/bar-ui/bar-ui.js"></script>
+
  <div id="sm2-container">
   <!-- SM2 flash goes here -->
  </div>
@@ -72,16 +83,4 @@
 </div>
 
 </div>
-<script src="/js/bar-ui/bar-ui.js"></script>
-<script src="/js/soundmanagerv297a-20150601/script/soundmanager2.js"></script>
-<script>
-soundManager.setup({
-  url: '/js/soundmanagerv297a-20150601/swf/',
-  onready: function() {
-	var mySound = soundManager.createSound({
-	  url: 'http://localhost:3000/songs/Sleep%20Away.mp3'
-	});
-	// mySound.play();
-  }
-});
-</script>
+
