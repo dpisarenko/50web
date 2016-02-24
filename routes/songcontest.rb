@@ -89,21 +89,19 @@ class SongContest < Sinatra::Base
 		@header = @pagetitle = 'Sorry!'
 		@msg = case params[:for] 
 		when 'bademail'
-			'There was a typo in your email address.</p><p>Please try again.'
+			I18n.t 'sorry_bademail'
 		when 'unknown'
-			'That email address is not in my system.</p><p>Do you have another?'
+			I18n.t 'sorry_unknownemail'
 		when 'badid'
-			'That link is expired. Maybe try to <a href="/login">log in</a>?'
+			I18n.t 'sorry_badid'
 		when 'badpass'
-			'Not sure why, but my system didn’t accept that password. Try another?'
+			I18n.t 'sorry_badpass'
 		when 'badlogin'
-			'That email address or password wasn’t right.
-			</p><p>Please <a href="/login">try again</a>.'
+			I18n.t 'sorry_badlogin'
 		when 'badupdate'
-			'That updated info seems wrong, because the database wouldn’t accept it.
-			</p><p>Please go back, look closely, and try again.'
+			I18n.t 'sorry_badupdate'
 		else
-			'I’m sure it’s my fault.'
+			I18n.t 'sorry_unknown'
 		end
 		erb :generic
 	end
