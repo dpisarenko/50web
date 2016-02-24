@@ -17,3 +17,11 @@ de:
   main_logout: "Ausloggen"
   upload_body_text: "Wählen Sie bitte die hochzuladende Datei aus."
   main_upload: "Einen Song hochladen"
+  sorry_bademail: "There was a typo in your email address.</p><p>Please try again."
+  sorry_unknownemail: "That email address is not in my system.</p><p>Do you have another?"
+  sorry_badid: "That link is expired. Maybe try to <a href=\"/login\">log in</a>?"
+  sorry_badpass: "Not sure why, but my system didn’t accept that password. Try another?"
+  sorry_badlogin: "That email address or password wasn’t right.</p><p>Please <a href=\"/login\">try again</a>."
+  sorry_badupdate: "That updated info seems wrong, because the database wouldn’t accept it.</p><p>Please go back, look closely, and try again."
+  sorry_unknown: "I’m sure it’s my fault."
+  
