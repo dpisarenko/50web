@@ -155,7 +155,7 @@ class SongContest < Sinatra::Base
 	end
 
 	post "/upload" do 
-	  File.open('../../public/songs/' + params['song'][:filename], "w") do |f|
+	  File.open('../../public/songs/' + params['song'][:filename], "wb") do |f|
 	    f.write(params['song'][:tempfile].read)
 	  end
 	  erb :main
