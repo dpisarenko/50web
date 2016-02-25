@@ -109,12 +109,11 @@ class SongContest < Sinatra::Base
 	post '/signup' do
 		# TODO: Do all sorts of verifications
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
-		logger.info 'Res: ' + res.to_s
-		logger.info 'Person ID: ' + res[:id].to_s
-		#ok, _ = @db.call('get_person_newpass', res[:id], params['password'])
 		@peepsdb.call('set_password', res[:id], params['password'])
-		# logger.info 'Params, password: ' + params['password']
-		# @peepsdb.call('set_hashpass', res[:id], params['password'])
+		logger.info 'User type: ' + params['type']
+		if ((params['type'] == 'fan') || (params['type'] == 'musician'))
+			@peepsdb.call('person_set_attribute', res[:id], params['type'], true)
+		end
 		locale = request.path.split('/').first
 		redirect to('/' + I18n.locale.to_s + '/signup-success')
 	end
