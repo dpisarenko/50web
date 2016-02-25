@@ -93,11 +93,11 @@ class SongContest < Sinatra::Base
 		when 'unknown'
 			I18n.t 'sorry_unknownemail'
 		when 'badid'
-			I18n.t 'sorry_badid'
+			(I18n.t 'sorry_badid') % "#{I18n.locale}"
 		when 'badpass'
 			I18n.t 'sorry_badpass'
 		when 'badlogin'
-			I18n.t 'sorry_badlogin'
+			(I18n.t 'sorry_badlogin') % "#{I18n.locale}"
 		when 'badupdate'
 			I18n.t 'sorry_badupdate'
 		else
