@@ -110,9 +110,7 @@ class SongContest < Sinatra::Base
 		# TODO: Do all sorts of verifications
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		@peepsdb.call('set_password', res[:id], params['password'])
-		logger.info 'User type: ' + params['type']
 		if ((params['type'] == 'fan') || (params['type'] == 'musician'))
-			logger.info 'Inside if, ' + res[:id].to_s + ', type: ' + params['type']
 			@peepsdb.call('person_set_attribute', res[:id], params['type'], true)
 		end
 		locale = request.path.split('/').first
