@@ -10,7 +10,7 @@ class SongContest < Sinatra::Base
 	log = File.new('/home/dp/dev/50web/servers/dev/SongContest.log', 'a+')
 	log.sync = true
 
-	config_file 'songcontest.yml'
+	config_file '/home/dp/dev/50web/servers/dev/songcontest.yml'
 
 	configure do
 		enable :logging
