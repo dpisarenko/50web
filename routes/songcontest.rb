@@ -2,12 +2,15 @@ require 'sinatra/base'
 require 'getdb'
 require 'i18n'
 require 'i18n/backend/fallbacks'
-
+require 'sinatra/config_file'
 
 class SongContest < Sinatra::Base
+	register Sinatra::ConfigFile
 
 	log = File.new('/tmp/SongContest.log', 'a+')
 	log.sync = true
+
+	config_file 'songcontest.yml'
 
 	configure do
 		enable :logging
@@ -16,18 +19,18 @@ class SongContest < Sinatra::Base
 		set :views, Proc.new {File.join(root, 'views/songcontest')}
 		I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
 		I18n.load_path = Dir[File.join(settings.root, 'i18n/songcontest', '*.yml')]
-		I18n.backend.load_translations		
+		I18n.backend.load_translations
 	end
 
 	before do
 		env['rack.errors'] = log
 		# TODO: Put the connection credentials to the right place
 		Object.const_set(:DB, PG::Connection.new(
-			dbname: 'songcontest', 
-			user: 'dp', 
-			password: 'TdsxI0r6yPFqWbow22w6ZwpAZ2J9Pk', 
-			host: 'localhost',
-			port: '5432'
+			dbname: settings.dbname, 
+			user: settings.user, 
+			password: settings.password, 
+			host: settings.host,
+			port: settings.port
 			)
 		)
 		@db = getdb('songcontest')
