@@ -25,6 +25,7 @@ class SongContest < Sinatra::Base
 	before do
 		env['rack.errors'] = log
 		# TODO: Put the connection credentials to the right place
+		logger.info 'settings.dbname: ' + settings.dbname
 		Object.const_set(:DB, PG::Connection.new(
 			dbname: settings.dbname, 
 			user: settings.user, 
