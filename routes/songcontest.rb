@@ -7,7 +7,7 @@ require 'sinatra/config_file'
 class SongContest < Sinatra::Base
 	register Sinatra::ConfigFile
 
-	log = File.new('/tmp/SongContest.log', 'a+')
+	log = File.new('/home/dp/dev/50web/servers/dev/SongContest.log', 'a+')
 	log.sync = true
 
 	config_file 'songcontest.yml'
