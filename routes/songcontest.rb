@@ -23,9 +23,9 @@ class SongContest < Sinatra::Base
 		env['rack.errors'] = log
 		# TODO: Put the connection credentials to the right place
 		Object.const_set(:DB, PG::Connection.new(
-			dbname: 'd50b', 
-			user: 'd50b', 
-			password: 'postgres', 
+			dbname: 'songcontest', 
+			user: 'dp', 
+			password: 'TdsxI0r6yPFqWbow22w6ZwpAZ2J9Pk', 
 			host: 'localhost',
 			port: '5432'
 			)
