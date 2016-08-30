@@ -24,7 +24,6 @@ class SongContest < Sinatra::Base
 
 	before do
 		env['rack.errors'] = log
-		# TODO: Put the connection credentials to the right place
 		logger.info 'settings.dbname: ' + settings.dbname
 		Object.const_set(:DB, PG::Connection.new(
 			dbname: settings.dbname, 
@@ -154,11 +153,13 @@ class SongContest < Sinatra::Base
 		erb :upload
 	end
 
-	post "/upload" do 
-	  File.open('../../public/songs/' + params['song'][:filename], "wb") do |f|
-	    f.write(params['song'][:tempfile].read)
-	  end
-	  erb :main
+	post "/upload" do
+		ok, songId = @db.call('song_create', @person_id)  
+		File.open('../../public/songs/song' + songId.to_s + '.mp3', "wb") do |f|
+			f.write(params['song'][:tempfile].read)
+		end
+	  
+		erb :main
 	end
 
 	get '/playback' do
