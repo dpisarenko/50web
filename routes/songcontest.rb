@@ -114,6 +114,10 @@ class SongContest < Sinatra::Base
 			I18n.t 'sorry_badupdate'
 		when 'badfiletype'
 			I18n.t 'sorry_badfiletype'
+		when 'badpassnomatch'
+			I18n.t 'sorry_badpassnomatch'
+		when 'badpasstooshort'
+			I18n.t 'sorry_badpasstooshort'
 		else
 			I18n.t 'sorry_unknown'
 		end
@@ -121,7 +125,9 @@ class SongContest < Sinatra::Base
 	end
 
 	post '/signup' do
-		# TODO: Do all sorts of verifications
+		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params['email'])
+		sorry 'badpassnomatch' unless (params['password'] === params['password2'])
+		sorry 'badpasstooshort' unles (params['password'].length > 3)		
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		@peepsdb.call('set_password', res[:id], params['password'])
 		if ((params['type'] == 'fan') || (params['type'] == 'musician'))
@@ -138,10 +144,8 @@ class SongContest < Sinatra::Base
 	# route to receive login form: sorry or logs in with cookie. sends home.
 	post '/login' do
 		redirect to('/') if authorized?
-		logger.info 'Params, password: ' + params[:password]
 		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params[:email])
 		sorry 'badlogin' unless String(params[:password]).size > 3
-		logger.info 'Params, email: ' + params[:email]
 		ok, p = @peepsdb.call('get_person_password', params[:email], params[:password])
 		sorry 'badlogin' unless ok
 		login p[:id]
