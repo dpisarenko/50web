@@ -143,6 +143,7 @@ class SongContest < Sinatra::Base
 	end
 
 	def musician?
+		return @isMusician
 	end
 	
 	get '/main' do

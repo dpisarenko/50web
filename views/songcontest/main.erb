@@ -2,7 +2,11 @@
 <%= I18n.t(:main_login_successful) %>
 
 <ul>
+
+<% if musician? %>
 	<li><a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a></li>
+<% end %>
+
 	<li><a href="/<%= I18n.locale %>/logout"><%= I18n.t(:main_logout) %></a></li>
 </ul>
 
