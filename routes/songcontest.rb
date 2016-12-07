@@ -78,7 +78,7 @@ class SongContest < Sinatra::Base
 		return false unless ok
 		@person_id = res[:id]
 		ok2, attrs = @peepsdb.call('person_attributes', @person_id)
-		@isMusician = attrs.select { |x| (x[:atkey] == 'Musician') && x[:plusminus]}.count > 0
+		@isMusician = attrs.select { |x| (x[:atkey] == 'musician') && x[:plusminus]}.count > 0
 		logger.info 'isMusician: ' + @isMusician.to_s
 		return true
 	end
