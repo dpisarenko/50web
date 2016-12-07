@@ -77,8 +77,9 @@ class SongContest < Sinatra::Base
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
-		ok, ptype = @peepsdb.call('person_attributes', @person_id)
-		logger.info 'ptype: ' + ptype.to_s
+		ok, attrs = @peepsdb.call('person_attributes', @person_id)
+		@isMusician = attrs.select { |x| (x[:atkey] == 'Musician') && x[:plusminus]}.count > 0
+		logger.info 'isMusician: ' + isMusician.to_s
 	end
 	
 	def authorize!
