@@ -75,13 +75,12 @@ class SongContest < Sinatra::Base
 		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
 		logger.info 'Cookie: ' + request.cookies['ok']
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
-		if ok
-			@person_id = res[:id]
-			ok2, attrs = @peepsdb.call('person_attributes', @person_id)
-			@isMusician = attrs.select { |x| (x[:atkey] == 'Musician') && x[:plusminus]}.count > 0
-			logger.info 'isMusician: ' + @isMusician.to_s
-		end
 		return false unless ok
+		@person_id = res[:id]
+		ok2, attrs = @peepsdb.call('person_attributes', @person_id)
+		@isMusician = attrs.select { |x| (x[:atkey] == 'Musician') && x[:plusminus]}.count > 0
+		logger.info 'isMusician: ' + @isMusician.to_s
+		return true
 	end
 	
 	def authorize!
