@@ -154,7 +154,7 @@ class SongContest < Sinatra::Base
 	end
 
 	post "/upload" do
-		ok, songId = @db.call('song_create', @person_id)  
+		ok, songId = @db.call('create_song', @person_id)  
 		File.open('../../public/songs/song' + songId.to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
 		end
