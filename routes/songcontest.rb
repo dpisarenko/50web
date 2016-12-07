@@ -71,15 +71,12 @@ class SongContest < Sinatra::Base
 	
 	def authorized?
 		# logger.info 'Cookie: ' + request.cookies['ok']
-		logger.info 'Cookie: ' + request.cookies['ok'] unless request.cookies['ok'] === nil
 		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
-		logger.info 'Cookie: ' + request.cookies['ok']
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
 		ok2, attrs = @peepsdb.call('person_attributes', @person_id)
 		@isMusician = attrs.select { |x| (x[:atkey] == 'musician') && x[:plusminus]}.count > 0
-		logger.info 'isMusician: ' + @isMusician.to_s
 		return true
 	end
 	
@@ -88,7 +85,7 @@ class SongContest < Sinatra::Base
 	end	
 
 	get '/' do
-		logger.info 'Logging test'
+		# logger.info 'Logging test'
 		erb :home
 	end
 
