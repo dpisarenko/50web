@@ -77,7 +77,8 @@ class SongContest < Sinatra::Base
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
-		logger.info '@person_id: ' + @person_id.to_s
+		ok, ptype = @peepsdb.call('person_attributes', @person_id)
+		logger.info 'ptype: ' + ptype.to_s
 	end
 	
 	def authorize!
@@ -139,6 +140,9 @@ class SongContest < Sinatra::Base
 		redirect to('/' + I18n.locale.to_s + '/main')
 	end
 
+	def musician?
+	end
+	
 	get '/main' do
 		authorize!
 		erb :main
@@ -157,11 +161,9 @@ class SongContest < Sinatra::Base
 	post "/upload" do
 		authorize!
 		ok, songRec = @db.call('create_song', @person_id)  
-		logger.info 'Song ID: ' + songRec[:id].to_s
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
-		end
-	  
+		end	  
 		erb :main
 	end
 
