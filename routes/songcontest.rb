@@ -84,6 +84,14 @@ class SongContest < Sinatra::Base
 		redirect to('/' + I18n.locale.to_s + '/') unless authorized?
 	end	
 
+	def musician?
+		return @isMusician
+	end
+
+	def authorizeMusician!
+		redirect to('/' + I18n.locale.to_s + '/') unless authorized? && musician?
+	end	
+
 	get '/' do
 		# logger.info 'Logging test'
 		erb :home
@@ -138,10 +146,6 @@ class SongContest < Sinatra::Base
 		# redirect to('/')
 		redirect to('/' + I18n.locale.to_s + '/main')
 	end
-
-	def musician?
-		return @isMusician
-	end
 	
 	get '/main' do
 		authorize!
@@ -154,7 +158,7 @@ class SongContest < Sinatra::Base
 	end
 
 	get '/upload' do
-		authorize!
+		authorizeMusician!
 		erb :upload
 	end
 
