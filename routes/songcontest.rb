@@ -157,8 +157,8 @@ class SongContest < Sinatra::Base
 	post "/upload" do
 		authorize!
 		ok, songRec = @db.call('create_song', @person_id)  
-		logger.info 'songRec: ' + songRec.inspect
-		File.open('../../public/songs/song' + songRec.id.to_s + '.mp3', "wb") do |f|
+		logger.info 'Song ID: ' + songRec[:id].to_s
+		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
 		end
 	  
