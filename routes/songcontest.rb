@@ -127,7 +127,7 @@ class SongContest < Sinatra::Base
 	post '/signup' do
 		sorry 'bademail' unless (/\A\S+@\S+\.\S+\Z/ === params['email'])
 		sorry 'badpassnomatch' unless (params['password'] === params['password2'])
-		sorry 'badpasstooshort' unles (params['password'].length > 3)		
+		sorry 'badpasstooshort' unless (params['password'].length > 3)		
 		ok, res = @peepsdb.call('create_person', params['name'], params['email'])
 		@peepsdb.call('set_password', res[:id], params['password'])
 		if ((params['type'] == 'fan') || (params['type'] == 'musician'))
