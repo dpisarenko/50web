@@ -112,6 +112,8 @@ class SongContest < Sinatra::Base
 			(I18n.t 'sorry_badlogin') % "#{I18n.locale}"
 		when 'badupdate'
 			I18n.t 'sorry_badupdate'
+		when 'badfiletype'
+			I18n.t 'sorry_badfiletype'
 		else
 			I18n.t 'sorry_unknown'
 		end
@@ -164,6 +166,7 @@ class SongContest < Sinatra::Base
 
 	post "/upload" do
 		authorize!
+		sorry 'badfiletype' unless params['song'][:type].to_s == 'audio/mp3'
 		logger.info 'params[song]: ' + params['song'][:type].to_s
 		ok, songRec = @db.call('create_song', @person_id)  
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|

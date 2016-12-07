@@ -23,6 +23,7 @@ en:
   sorry_badpass: 'Not sure why, but my system didn’t accept that password. Try another?'
   sorry_badlogin: 'That email address or password wasn’t right.</p><p>Please <a href="/%s/">try again</a>.'
   sorry_badupdate: "That updated info seems wrong, because the database wouldn’t accept it.</p><p>Please go back, look closely, and try again."
+  sorry_badfiletype: "Wrong file type. Only MP3 files can be uploaded."
   sorry_unknown: "I’m sure it’s my fault."
   upload_success_msg: "The song has been uploaded successfully."
   upload_success_main_page: "Back to the main page"
