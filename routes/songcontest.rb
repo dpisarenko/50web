@@ -77,6 +77,7 @@ class SongContest < Sinatra::Base
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
+		logger.info 'Cookie: ' + @person_id.to_s
 	end
 	
 	def authorize!
@@ -154,7 +155,7 @@ class SongContest < Sinatra::Base
 	end
 
 	post "/upload" do
-		logger.info 'person_id: ' + p[:id].to_s
+		logger.info 'person_id: ' + @person_id.to_s
 		ok, song = @db.call('create_song', @person_id)  
 		File.open('../../public/songs/song' + song.id.to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
