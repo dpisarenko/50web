@@ -79,7 +79,7 @@ class SongContest < Sinatra::Base
 		@person_id = res[:id]
 		ok, attrs = @peepsdb.call('person_attributes', @person_id)
 		@isMusician = attrs.select { |x| (x[:atkey] == 'Musician') && x[:plusminus]}.count > 0
-		logger.info 'isMusician: ' + isMusician.to_s
+		logger.info 'isMusician: ' + @isMusician.to_s
 	end
 	
 	def authorize!
