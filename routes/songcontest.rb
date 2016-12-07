@@ -77,7 +77,7 @@ class SongContest < Sinatra::Base
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
 		@person_id = res[:id]
-		logger.info 'Cookie: ' + @person_id.to_s
+		logger.info '@person_id: ' + @person_id.to_s
 	end
 	
 	def authorize!
