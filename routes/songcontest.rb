@@ -168,7 +168,7 @@ class SongContest < Sinatra::Base
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
 		end	  
-		erb :main
+		erb :upload_success
 	end
 
 	get '/playback' do
