@@ -212,15 +212,15 @@ class SongContest < Sinatra::Base
 		logger.info 'save_feedback 2'
 		grade = params['grade'].to_i
 		logger.info 'save_feedback 3'
-		sorry 'nograde' unless (grade < 1) || (grade > 5)
+		sorry 'nograde' unless (grade >= 1) || (grade <= 5)
 		logger.info 'save_feedback 4'
 		comment = params['comment'].strip
 		logger.info 'save_feedback 5'
-		sorry 'nocomment' unless comment.length < 140
+		sorry 'nocomment' unless comment.length >= 140
 		logger.info 'save_feedback 6'
 		song_id = params['song_id'].to_i
 		logger.info 'save_feedback 7'
-		sorry 'nosong' unless song_id
+		sorry 'nosong' unless song_id > 0
 		logger.info 'save_feedback 8'
 		@db.call('create_feedback', @person_id, song_id, grade, comment)
 		logger.info 'save_feedback 9'
