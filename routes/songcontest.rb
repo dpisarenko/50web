@@ -200,7 +200,7 @@ class SongContest < Sinatra::Base
 		logger.info '@person_id: ' + @person_id.to_s
 		ok, songRec = @db.call('find_song', @person_id)
 		sorry 'nosongs' unless not songRec[:id].nil?
-		songPath = '../../public/songs/song' + songRec[:id].to_s + '.mp3'
+		@songPath = '../../public/songs/song' + songRec[:id].to_s + '.mp3'
 		logger.info 'songRec: ' + songRec.to_s
 		# logger.info 'params[song]: ' + params['song'][:type].to_s
 		erb :playback
