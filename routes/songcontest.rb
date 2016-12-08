@@ -211,8 +211,11 @@ class SongContest < Sinatra::Base
 		sorry 'nograde' unless not params['grade'].nil?
 		grade = params['grade'].to_i
 		sorry 'nograde' unless (grade < 1) || (grade > 5)
-		sorry 'nocomment' unless params['comment'].strip.length < 140
-		sorry 'noperson' unless params['person_id'].to_i
-		sorry 'nosong' unless params['song_id'].to_i
+		comment = params['comment'].strip
+		sorry 'nocomment' unless comment.length < 140
+		song_id = params['song_id'].to_i
+		sorry 'nosong' unless song_id
+		@db.call('create_feedback', @person_id, song_id, grade, comment)
+		redirect to('/' + I18n.locale.to_s + '/playback')
 	end
 end

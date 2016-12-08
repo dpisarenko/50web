@@ -30,7 +30,6 @@ de:
   sorry_unknown: "Ich bin sicher, es ist mein Fehler."
   sorry_nograde: "Sie haben die Bewertung des Lieds nicht eingegeben."
   sorry_nocomment: "Sie haben das Kommentar nicht eingegeben."
-  sorry_noperson: "Interner Fehler (Person wurde nicht übermittelt)."
   sorry_nosong: "Interner Fehler (Lied wurde nicht übermittelt)."  
   upload_success_msg: "Das Lied wurde erfolgreich hochgeladen."
   upload_success_main_page: "Zurück zur Hauptseite"

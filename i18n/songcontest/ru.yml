@@ -30,7 +30,6 @@ ru:
   sorry_unknown: "Я уверен, что это моя вина."
   sorry_nograde: "Не указана оценка песни."
   sorry_nocomment: "Не введён комментарий."
-  sorry_noperson: "Внутренняя ошибка (не указан пользователь)."
   sorry_nosong: "Внутренняя ошибка (не указана песня)."  
   upload_success_msg: "Песня была загружена успешно."
   upload_success_main_page: "Обратно на главную страницу"

@@ -30,7 +30,6 @@ en:
   sorry_unknown: "I’m sure it’s my fault."
   sorry_nograde: "You didn't enter the grade the song."
   sorry_nocomment: "No comment was entered."
-  sorry_noperson: "Internal error (no person)."
   sorry_nosong: "Internal error (no song)."
   upload_success_msg: "The song has been uploaded successfully."
   upload_success_main_page: "Back to the main page"
