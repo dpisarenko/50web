@@ -29,7 +29,7 @@ de:
   sorry_badpasstooshort: "Das Passwort ist zu kurz."
   sorry_unknown: "Ich bin sicher, es ist mein Fehler."
   sorry_nograde: "Sie haben die Bewertung des Lieds nicht eingegeben."
-  sorry_nocomment: "Sie haben das Kommentar nicht eingegeben."
+  sorry_nocomment: "Sie haben das Kommentar nicht eingegeben (oder er war zu kurz)."
   sorry_nosong: "Interner Fehler (Lied wurde nicht übermittelt)."  
   upload_success_msg: "Das Lied wurde erfolgreich hochgeladen."
   upload_success_main_page: "Zurück zur Hauptseite"

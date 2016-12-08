@@ -29,7 +29,7 @@ ru:
   sorry_badpasstooshort: "Пароль слишком короткий."
   sorry_unknown: "Я уверен, что это моя вина."
   sorry_nograde: "Не указана оценка песни."
-  sorry_nocomment: "Не введён комментарий."
+  sorry_nocomment: "Не введён комментарий (или он слишком короткий)."
   sorry_nosong: "Внутренняя ошибка (не указана песня)."  
   upload_success_msg: "Песня была загружена успешно."
   upload_success_main_page: "Обратно на главную страницу"
