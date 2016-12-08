@@ -70,7 +70,6 @@ class SongContest < Sinatra::Base
 	end
 	
 	def authorized?
-		# logger.info 'Cookie: ' + request.cookies['ok']
 		return false unless /[a-zA-Z0-9]{32}:[a-zA-Z0-9]{32}/ === request.cookies['ok']
 		ok, res = @peepsdb.call('get_person_cookie', request.cookies['ok'])
 		return false unless ok
@@ -158,7 +157,6 @@ class SongContest < Sinatra::Base
 		ok, p = @peepsdb.call('get_person_password', params[:email], params[:password])
 		sorry 'badlogin' unless ok
 		login p[:id]
-		# redirect to('/')
 		redirect to('/' + I18n.locale.to_s + '/main')
 	end
 	
@@ -180,7 +178,6 @@ class SongContest < Sinatra::Base
 	post "/upload" do
 		authorize!
 		sorry 'badfiletype' unless params['song'][:type].to_s == 'audio/mp3'
-		# logger.info 'params[song]: ' + params['song'][:type].to_s
 		ok, songRec = @db.call('create_song', @person_id)  
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
@@ -189,7 +186,10 @@ class SongContest < Sinatra::Base
 	end
 
 	get '/playback' do
-		authorize!
+		authorizeFan!
+		ok, songRec = @db.call('find_song', @person_id)
+		logger.info 'songRec: ' + songRec
+		# logger.info 'params[song]: ' + params['song'][:type].to_s
 		erb :playback
 	end
 end

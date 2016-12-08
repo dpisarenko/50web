@@ -6,3 +6,19 @@
   });
 </script>
 <audio src="http://localhost:3000/songs/Sleep%20Away.mp3" preload="auto" />
+<h3><%= I18n.t(:playback_feedback_title) %></h3>
+<%= I18n.t(:playback_feedback_body) %>
+<form action="/<%= I18n.locale %>/playback" method="post">
+	<%= I18n.t(:playback_rating) %>
+	<select name="rating">
+	  <option value="0"><%= I18n.t(:playback_rating_0) %></option>
+	  <option value="1"><%= I18n.t(:playback_rating_1) %></option>
+	  <option value="2"><%= I18n.t(:playback_rating_2) %></option>
+	  <option value="3"><%= I18n.t(:playback_rating_3) %></option>
+	  <option value="4"><%= I18n.t(:playback_rating_4) %></option>
+	  <option value="5"><%= I18n.t(:playback_rating_5) %></option>
+	</select>
+	<%= I18n.t(:playback_comment) %>
+	<textarea name="comment" rows="5" cols="50">
+	</textarea>
+</form>
