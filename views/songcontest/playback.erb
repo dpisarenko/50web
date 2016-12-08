@@ -1,12 +1,6 @@
 <h2><%= I18n.t(:home_title) %></h2>
 TEST1
-<script src="/audiojs/audio.min.js"></script>
 TEST2
-<script>
-  audiojs.events.ready(function() {
-    var as = audiojs.createAll();
-  });
-</script>
 TEST3
 <audio src="<%= @songPath %>" preload="auto" />
 TEST4
@@ -29,3 +23,9 @@ TEST4
 	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
 </form>
 TEST5
+<script src="/audiojs/audio.min.js"></script>
+<script>
+  audiojs.events.ready(function() {
+    var as = audiojs.createAll();
+  });
+</script>
