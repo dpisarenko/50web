@@ -8,8 +8,10 @@ TEST2
   });
 </script>
 TEST3
-
+<audio src="<%= @songPath %>" preload="auto" />
+TEST4
 <%= I18n.t(:playback_feedback_body) %>
+TEST45
 <form action="/<%= I18n.locale %>/save_feedback" method="post">
 	<%= I18n.t(:playback_rating) %>
 	<select name="grade">
@@ -28,5 +30,5 @@ TEST3
 	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
 </form>
 TEST5
-<audio src="<%= @songPath %>" preload="auto" />
-TEST4
+
+
