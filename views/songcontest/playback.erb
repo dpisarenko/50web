@@ -8,8 +8,8 @@ TEST2
   });
 </script>
 TEST3
-<audio src="<%= @songPath %>" preload="auto" />
 TEST4
+<h3><%= I18n.t(:playback_feedback_title) %></h3>
 <%= I18n.t(:playback_feedback_body) %>
 TEST45
 <form action="/<%= I18n.locale %>/save_feedback" method="post">
@@ -22,13 +22,16 @@ TEST45
 	  <option value="4"><%= I18n.t(:playback_rating_4) %></option>
 	  <option value="5"><%= I18n.t(:playback_rating_5) %></option>
 	</select>
+	<br/>
 	<%= I18n.t(:playback_comment) %>
+	<br/>
 	<textarea name="comment" rows="5" cols="50">
 	</textarea>
+	<br/>
 	<input type="hidden" name="person_id" value="<%= @person_id.to_s %>">
 	<input type="hidden" name="song_id" value="<%= @songId %>">	
+	<br/>
 	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
 </form>
 TEST5
-
-
+<audio src="<%= @songPath %>" preload="auto" />´
