@@ -189,7 +189,7 @@ class SongContest < Sinatra::Base
 		authorize!
 		sorry 'badfiletype' unless params['song'][:type].to_s == 'audio/mp3'
 		ok, songRec = @db.call('create_song', @person_id, params['name'])  
-		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
+		File.open('/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
 		end	  
 		erb :upload_success
