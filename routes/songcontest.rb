@@ -126,6 +126,16 @@ class SongContest < Sinatra::Base
 			I18n.t 'sorry_badpassnomatch'
 		when 'badpasstooshort'
 			I18n.t 'sorry_badpasstooshort'
+		when 'nosongs'
+			I18n.t 'sorry_nosongs'
+		when 'nograde'
+			I18n.t 'sorry_nograde' # TODO
+		when 'nocomment'
+			I18n.t 'sorry_nocomment' # TODO
+		when 'noperson'
+			I18n.t 'sorry_noperson' # TODO
+		when 'nosong'
+			I18n.t 'sorry_nosong' # TODO
 		else
 			I18n.t 'sorry_unknown'
 		end
@@ -189,8 +199,20 @@ class SongContest < Sinatra::Base
 		authorizeFan!
 		logger.info '@person_id: ' + @person_id.to_s
 		ok, songRec = @db.call('find_song', @person_id)
+		sorry 'nosongs' unless not songRec[:id].nil?
+		songPath = '../../public/songs/song' + songRec[:id].to_s + '.mp3'
 		logger.info 'songRec: ' + songRec.to_s
 		# logger.info 'params[song]: ' + params['song'][:type].to_s
 		erb :playback
+	end
+	
+	post '/save_feedback' do
+		authorizeFan!
+		sorry 'nograde' unless not params['grade'].nil?
+		grade = params['grade'].to_i
+		sorry 'nograde' unless (grade < 1) || (grade > 5)
+		sorry 'nocomment' unless params['comment'].strip.length < 140
+		sorry 'noperson' unless params['person_id'].to_i
+		sorry 'nosong' unless params['song_id'].to_i
 	end
 end

@@ -28,6 +28,10 @@ en:
   sorry_badpassnomatch: "The entered passwords do not match."
   sorry_badpasstooshort: "The password is too short."
   sorry_unknown: "I’m sure it’s my fault."
+  sorry_nograde: "You didn't enter the grade the song."
+  sorry_nocomment: "No comment was entered."
+  sorry_noperson: "Internal error (no person)."
+  sorry_nosong: "Internal error (no song)."
   upload_success_msg: "The song has been uploaded successfully."
   upload_success_main_page: "Back to the main page"
   playback_feedback_title: "Feedback"
@@ -41,4 +45,5 @@ en:
   playback_rating_5: "5 (best)"
   playback_comment: "Please explain, why you gave this grade to the musician:"
   upload_song_name: "Name of the song:"
-  
+  sorry_nosongs: "Unfortunately there are no songs you haven't listened yet."
+  playback_submit: "Submit"

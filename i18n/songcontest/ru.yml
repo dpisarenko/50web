@@ -28,7 +28,13 @@ ru:
   sorry_badpassnomatch: "Введённые пароли не совпадают."
   sorry_badpasstooshort: "Пароль слишком короткий."
   sorry_unknown: "Я уверен, что это моя вина."
+  sorry_nograde: "Не указана оценка песни."
+  sorry_nocomment: "Не введён комментарий."
+  sorry_noperson: "Внутренняя ошибка (не указан пользователь)."
+  sorry_nosong: "Внутренняя ошибка (не указана песня)."  
   upload_success_msg: "Песня была загружена успешно."
   upload_success_main_page: "Обратно на главную страницу"
   upload_song_name: "Название песни:"
+  sorry_nosongs: "К сожалению, не осталось песен, которые Вы ещё не прослушали."
+  playback_submit: "Отправить"
   
