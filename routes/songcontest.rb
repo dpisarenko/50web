@@ -178,7 +178,7 @@ class SongContest < Sinatra::Base
 	post "/upload" do
 		authorize!
 		sorry 'badfiletype' unless params['song'][:type].to_s == 'audio/mp3'
-		ok, songRec = @db.call('create_song', @person_id)  
+		ok, songRec = @db.call('create_song', @person_id, params['name'])  
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
 		end	  
@@ -187,6 +187,7 @@ class SongContest < Sinatra::Base
 
 	get '/playback' do
 		authorizeFan!
+		logger.info '@person_id: ' + @person_id.to_s
 		ok, songRec = @db.call('find_song', @person_id)
 		logger.info 'songRec: ' + songRec.to_s
 		# logger.info 'params[song]: ' + params['song'][:type].to_s
