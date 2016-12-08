@@ -188,7 +188,7 @@ class SongContest < Sinatra::Base
 	get '/playback' do
 		authorizeFan!
 		ok, songRec = @db.call('find_song', @person_id)
-		logger.info 'songRec: ' + songRec
+		logger.info 'songRec: ' + songRec.to_s
 		# logger.info 'params[song]: ' + params['song'][:type].to_s
 		erb :playback
 	end
