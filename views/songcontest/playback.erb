@@ -5,7 +5,6 @@
     var as = audiojs.createAll();
   });
 </script>
-<audio src="<%= @songPath %>" preload="auto" />
 <h3><%= I18n.t(:playback_feedback_title) %></h3>
 <%= I18n.t(:playback_feedback_body) %>
 <form action="/<%= I18n.locale %>/save_feedback" method="post">
@@ -29,3 +28,4 @@
 	<br/>
 	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
 </form>
+<audio src="<%= @songPath %>" preload="auto" />
