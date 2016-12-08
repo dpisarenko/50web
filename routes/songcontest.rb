@@ -212,7 +212,7 @@ class SongContest < Sinatra::Base
 		logger.info 'save_feedback 2'
 		grade = params['grade'].to_i
 		logger.info 'save_feedback 3'
-		sorry 'nograde' unless (grade >= 1) || (grade <= 5)
+		sorry 'nograde' unless (grade >= 1) && (grade <= 5)
 		logger.info 'save_feedback 4'
 		comment = params['comment'].strip
 		logger.info 'save_feedback 5'
@@ -222,8 +222,9 @@ class SongContest < Sinatra::Base
 		logger.info 'save_feedback 7'
 		sorry 'nosong' unless song_id > 0
 		logger.info 'save_feedback 8'
-		@db.call('create_feedback', @person_id, song_id, grade, comment)
-		logger.info 'save_feedback 9'
+		ok, res = @db.call('create_feedback', @person_id, song_id, grade, comment)
+		
+		logger.info 'save_feedback 9, res: ' + res.to_s
 		redirect to('/' + I18n.locale.to_s + '/playback')
 	end
 end
