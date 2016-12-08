@@ -207,6 +207,7 @@ class SongContest < Sinatra::Base
 	
 	post '/save_feedback' do
 		authorizeFan!
+		logger.info 'save_feedback called'
 		sorry 'nograde' unless not params['grade'].nil?
 		grade = params['grade'].to_i
 		sorry 'nograde' unless (grade < 1) || (grade > 5)
