@@ -7,6 +7,10 @@
 	<li><a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a></li>
 <% end %>
 
+<% if fan? %>
+	<li><a href="/<%= I18n.locale %>/playback"><%= I18n.t(:main_listen) %></a></li>
+<% end %>
+
 	<li><a href="/<%= I18n.locale %>/logout"><%= I18n.t(:main_logout) %></a></li>
 </ul>
 

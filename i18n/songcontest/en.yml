@@ -17,6 +17,7 @@ en:
   main_logout: "Log out"
   upload_body_text: "Please select a file to upload"
   main_upload: "Upload a song"
+  main_listen: "Listen to new music"
   sorry_bademail: "There was a typo in your email address.</p><p>Please try again."
   sorry_unknownemail: "That email address is not in my system.</p><p>Do you have another?"
   sorry_badid: 'That link is expired. Maybe try to <a href="/%s/">log in</a>?'

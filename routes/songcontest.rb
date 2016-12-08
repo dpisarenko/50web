@@ -77,6 +77,7 @@ class SongContest < Sinatra::Base
 		@person_id = res[:id]
 		ok2, attrs = @peepsdb.call('person_attributes', @person_id)
 		@isMusician = attrs.select { |x| (x[:atkey] == 'musician') && x[:plusminus]}.count > 0
+		@isFan = attrs.select { |x| (x[:atkey] == 'fan') && x[:plusminus]}.count > 0
 		return true
 	end
 	
@@ -87,11 +88,19 @@ class SongContest < Sinatra::Base
 	def musician?
 		return @isMusician
 	end
-
+	
+	def fan?
+		return @isFan
+	end
+	
 	def authorizeMusician!
 		redirect to('/' + I18n.locale.to_s + '/') unless authorized? && musician?
+	end
+	
+	def authorizeFan!
+		redirect to('/' + I18n.locale.to_s + '/') unless authorized? && fan?
 	end	
-
+	
 	get '/' do
 		# logger.info 'Logging test'
 		erb :home
@@ -171,7 +180,7 @@ class SongContest < Sinatra::Base
 	post "/upload" do
 		authorize!
 		sorry 'badfiletype' unless params['song'][:type].to_s == 'audio/mp3'
-		logger.info 'params[song]: ' + params['song'][:type].to_s
+		# logger.info 'params[song]: ' + params['song'][:type].to_s
 		ok, songRec = @db.call('create_song', @person_id)  
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
 			f.write(params['song'][:tempfile].read)
