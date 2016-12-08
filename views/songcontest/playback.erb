@@ -21,7 +21,8 @@ TEST3
 	  <option value="5"><%= I18n.t(:playback_rating_5) %></option>
 	</select>
 	<%= I18n.t(:playback_comment) %>
-	<textarea name="comment" rows="5" cols="50"/>
+	<textarea name="comment" rows="5" cols="50">
+	</textarea>
 	<input type="hidden" name="person_id" value="<%= @person_id.to_s %>">
 	<input type="hidden" name="song_id" value="<%= @songId %>">	
 	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
