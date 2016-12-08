@@ -22,6 +22,6 @@
 	<%= I18n.t(:playback_comment) %>
 	<textarea name="comment" rows="5" cols="50"/>
 	<input type="hidden" name="person_id" value="<%= @person_id.to_s %>">
-	<input type="hidden" name="song_id" value="<%= @songRec[:id].to_s %>">	
+	<input type="hidden" name="song_id" value="<%= @songId %>">	
 	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
 </form>

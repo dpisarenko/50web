@@ -198,9 +198,10 @@ class SongContest < Sinatra::Base
 	get '/playback' do
 		authorizeFan!
 		logger.info '@person_id: ' + @person_id.to_s
-		ok, @songRec = @db.call('find_song', @person_id)
+		ok, songRec = @db.call('find_song', @person_id)
 		sorry 'nosongs' unless not songRec[:id].nil?
 		@songPath = '../../public/songs/song' + songRec[:id].to_s + '.mp3'
+		@songId = songRec[:id].to_s
 		erb :playback
 	end
 	
