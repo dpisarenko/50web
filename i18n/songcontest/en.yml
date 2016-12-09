@@ -28,7 +28,7 @@ en:
   sorry_badpassnomatch: "The entered passwords do not match."
   sorry_badpasstooshort: "The password is too short."
   sorry_unknown: "I’m sure it’s my fault."
-  sorry_nograde: "You didn't enter the grade the song."
+  sorry_nograde: "You didn't enter the grade for the song."
   sorry_nocomment: "No comment was entered (or it was too short)."
   sorry_nosong: "Internal error (no song)."
   upload_success_msg: "The song has been uploaded successfully."
