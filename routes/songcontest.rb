@@ -220,6 +220,7 @@ class SongContest < Sinatra::Base
 	
 	get '/stats' do
 		authorizeMusician!
+		ok, res = @db.call('all_songs_stats', @person_id)
 		erb :stats
 	end
 end
