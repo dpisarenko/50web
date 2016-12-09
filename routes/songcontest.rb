@@ -186,7 +186,7 @@ class SongContest < Sinatra::Base
 	end
 
 	post "/upload" do
-		authorize!
+		authorizeMusician!
 		sorry 'badfiletype' unless params['song'][:type].to_s == 'audio/mp3'
 		ok, songRec = @db.call('create_song', @person_id, params['name'])  
 		File.open('../../public/songs/song' + songRec[:id].to_s + '.mp3', "wb") do |f|
@@ -216,5 +216,10 @@ class SongContest < Sinatra::Base
 		sorry 'nosong' unless song_id > 0
 		ok, res = @db.call('create_feedback', @person_id, song_id, grade, comment)
 		redirect to('/' + I18n.locale.to_s + '/playback')
+	end
+	
+	get '/stats' do
+		authorizeMusician!
+		erb :stats
 	end
 end
