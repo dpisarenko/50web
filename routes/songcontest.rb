@@ -129,13 +129,13 @@ class SongContest < Sinatra::Base
 		when 'nosongs'
 			I18n.t 'sorry_nosongs'
 		when 'nograde'
-			I18n.t 'sorry_nograde' # TODO
+			I18n.t 'sorry_nograde'
 		when 'nocomment'
-			I18n.t 'sorry_nocomment' # TODO
-		when 'noperson'
-			I18n.t 'sorry_noperson' # TODO
+			I18n.t 'sorry_nocomment'
 		when 'nosong'
-			I18n.t 'sorry_nosong' # TODO
+			I18n.t 'sorry_nosong'
+		when 'nostats'
+			I18n.t 'sorry_nostats'
 		else
 			I18n.t 'sorry_unknown'
 		end
@@ -221,6 +221,7 @@ class SongContest < Sinatra::Base
 	get '/stats' do
 		authorizeMusician!
 		ok, res = @db.call('all_songs_stats', @person_id)
+		sorry 'nostats' unless not res.nil?
 		logger.info 'res: ' + res.to_s
 		erb :stats
 	end

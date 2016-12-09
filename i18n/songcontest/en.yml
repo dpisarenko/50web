@@ -47,3 +47,4 @@ en:
   sorry_nosongs: "Unfortunately there are no songs you haven't listened yet."
   playback_submit: "Submit"
   main_song_stats: "Song statistics"
+  sorry_nostats: "Statistics can't be composed now."
