@@ -222,7 +222,7 @@ class SongContest < Sinatra::Base
 		authorizeMusician!
 		ok, res = @db.call('all_songs_stats', @person_id)
 		sorry 'nostats' unless not res.nil?
-		logger.info 'res: ' + res.to_s
+		# logger.info 'res: ' + res.to_s
 		erb :stats
 	end
 end
