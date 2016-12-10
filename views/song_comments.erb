@@ -1,0 +1,15 @@
+<h2><%= I18n.t(:home_title) %></h2>
+<h3><%= @songName %></h3>
+
+<table>
+<tr>
+	<th><%= I18n.t(:song_comments_grade) %></th>
+	<th><%= I18n.t(:song_comments_comment) %></th>
+</tr>
+<% for @item in @comments %>
+	<tr>
+		<td><%= @item[:grade] %></td>
+		<td><%= @item[:grade_comment] %></td>
+	<tr>
+<% end %>
+</table>
