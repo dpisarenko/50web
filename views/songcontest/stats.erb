@@ -8,7 +8,7 @@
 </tr>
 <% for @item in @stats %>
 	<tr>
-		<td><%= @item[:song_name] %> - <%= @item[:song_id] %></td>
+		<td><a href="/<%= I18n.locale %>/song-comments?song=<%= @item[:song_id] %>"><%= @item[:song_name] %></a></td>
 		<td><%= @item[:avg_grade] %></td>
 		<td><%= @item[:feedback_count] %></td>
 	<tr>
