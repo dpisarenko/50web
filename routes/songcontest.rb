@@ -223,8 +223,6 @@ class SongContest < Sinatra::Base
 	get '/stats' do
 		authorizeMusician!
 		ok, statsCount = @db.call('song_stats_count', @person_id)
-		
-		logger.info 'statsCount: ' + statsCount.to_s
 		sorry 'nostats' unless statsCount[:calculate_song_stats_count].to_i > 0
 		ok, @stats = @db.call('all_songs_stats', @person_id)
 		erb :stats
@@ -235,6 +233,8 @@ class SongContest < Sinatra::Base
 		logger.info 'songId: ' + params['song']
 		songId = params['song'].to_i
 		sorry 'badsong' unless songId > 0
+		ok, songNameRec = @db.call('song_name', @person_id, songId)
+		logger.info 'songNameRec: ' + songNameRec.to_s
 		ok, @comments = @db.call('song_comments', @person_id, songId)
 		logger.info '@comments: ' + @comments.to_s
 	end
