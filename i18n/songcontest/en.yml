@@ -52,3 +52,6 @@ en:
   stats_avg_grade: "Average grade"
   stats_feedback_count: "Number of reviews"
   sorry_badsong: "Wrong song ID."
+  song_comments_grade: "Grade"
+  song_comments_comment: "Comment"
+  

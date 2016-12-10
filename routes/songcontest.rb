@@ -235,7 +235,9 @@ class SongContest < Sinatra::Base
 		sorry 'badsong' unless songId > 0
 		ok, songNameRec = @db.call('song_name', @person_id, songId)
 		logger.info 'songNameRec: ' + songNameRec.to_s
+		@songName = songNameRec[:compose_song_name]
 		ok, @comments = @db.call('song_comments', @person_id, songId)
 		logger.info '@comments: ' + @comments.to_s
+		erb :song_comments
 	end
 end
