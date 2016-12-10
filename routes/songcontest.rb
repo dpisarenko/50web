@@ -136,6 +136,8 @@ class SongContest < Sinatra::Base
 			I18n.t 'sorry_nosong'
 		when 'nostats'
 			I18n.t 'sorry_nostats'
+		when 'badsong'
+			I18n.t 'sorry_badsong'
 		else
 			I18n.t 'sorry_unknown'
 		end
@@ -222,13 +224,15 @@ class SongContest < Sinatra::Base
 		authorizeMusician!
 		ok, @stats = @db.call('all_songs_stats', @person_id)
 		sorry 'nostats' unless not @stats.nil?
-		logger.info '@stats: ' + @stats.to_s
 		erb :stats
 	end
 	
 	get '/song_comments' do
 		authorizeMusician!
 		logger.info 'songId: ' + params['song']
-		# ok, comments = @db.call('song_comments', @person_id)
+		songId = params['song'].to_i
+		sorry 'badsong' unless songId > 0
+		ok, @comments = @db.call('song_comments', @person_id, songId)
+		logger.info '@comments: ' + @comments.to_s
 	end
 end
