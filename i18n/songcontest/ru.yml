@@ -52,3 +52,5 @@ ru:
   stats_avg_grade: "Средняя оценка"
   stats_feedback_count: "Количество оценок"
   sorry_badsong: "Неправильный номер произведения"
+  song_comments_grade: "Оценка"
+  song_comments_comment: "Комментарий"

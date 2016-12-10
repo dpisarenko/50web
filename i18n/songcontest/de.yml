@@ -52,3 +52,5 @@ de:
   stats_avg_grade: "Durchschnittliche Bewertung"
   stats_feedback_count: "Anzahl der Bewertungen"
   sorry_badsong: "Falsche Liednummer."
+  song_comments_grade: "Bewertung"
+  song_comments_comment: "Kommentar"
