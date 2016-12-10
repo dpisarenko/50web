@@ -225,4 +225,10 @@ class SongContest < Sinatra::Base
 		logger.info '@stats: ' + @stats.to_s
 		erb :stats
 	end
+	
+	get '/song_comments' do
+		authorizeMusician!
+		logger.info 'songId: ' + params['song']
+		# ok, comments = @db.call('song_comments', @person_id)
+	end
 end
