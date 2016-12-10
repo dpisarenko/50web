@@ -48,3 +48,6 @@ en:
   playback_submit: "Submit"
   main_song_stats: "Song statistics"
   sorry_nostats: "Statistics can't be composed now."
+  stats_song: "Song"
+  stats_avg_grade: "Average grade"
+  stats_feedback_count: "Number of reviews"

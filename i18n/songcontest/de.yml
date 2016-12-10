@@ -48,3 +48,6 @@ de:
   playback_submit: "Abschicken"
   main_song_stats: "Liederstatistik"
   sorry_nostats: "Statistiken können derzeit nicht erzeugt werden."
+  stats_song: "Lied"
+  stats_avg_grade: "Durchschnittliche Bewertung"
+  stats_feedback_count: "Anzahl der Bewertungen"

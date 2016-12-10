@@ -1,5 +1,16 @@
 <h2><%= I18n.t(:home_title) %></h2>
 
+<table>
+<tr>
+	<th><%= I18n.t(:stats_song) %></th>
+	<th><%= I18n.t(:stats_avg_grade) %></th>
+	<th><%= I18n.t(:stats_feedback_count) %></th>
+</tr>
 <% for @item in @stats %>
-  <%= @item.to_s %>
+	<tr>
+		<td><%= @item[:song_name] %> - <%= @item[:song_id] %></td>
+		<td><%= @item[:avg_grade] %></td>
+		<td><%= @item[:feedback_count] %></td>
+	<tr>
 <% end %>
+</table>

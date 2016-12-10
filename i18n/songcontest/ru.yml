@@ -48,4 +48,6 @@ ru:
   playback_submit: "Отправить"
   main_song_stats: "Статистика по песням"
   sorry_nostats: "На данный момент статистика не может быть составлена."
-  
+  stats_song: "Произведение"
+  stats_avg_grade: "Средняя оценка"
+  stats_feedback_count: "Количество оценок"
