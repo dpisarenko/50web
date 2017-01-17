@@ -2,22 +2,27 @@
 
 <div style="max-width:380px;" class="well center-block">
 	<h3 class="text-center"><%= I18n.t(:home_sign_up) %></h3>
-	<form action="/<%= I18n.locale %>/signup" method="post" role="form" >
+	<form action="/<%= I18n.locale %>/signup" method="post" role="form" data-toggle="validator" id="myFrom">
 		<div class="form-group">
-			<label for="name"><%= I18n.t(:home_name) %>:</label>
-			<input class="form-control" type="text" id="name" placeholder="<%= I18n.t(:home_name) %>">
+			<label class="control-label" for="name"><%= I18n.t(:home_name) %>:</label>
+			<input class="form-control" type="text" id="name" placeholder="<%= I18n.t(:home_name) %>" required>
 		</div>
 		<div class="form-group">
 			<label for="email"><%= I18n.t(:home_email) %>: </label>
-			<input class="form-control" type="text" id="email" placeholder="<%= I18n.t(:home_email) %>">
+			<input class="form-control" type="text" id="email" placeholder="<%= I18n.t(:home_email) %>" data-error="<%= I18n.t(:sorry_bademail) %>" required>
+    		<div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group">
 			<label for="password"><%= I18n.t(:home_password) %>: </label>
-			<input class="form-control" type="password" id="password">
+			<input class="form-control" type="password" id="password" data-minlength="3" data-error="<%= I18n.t(:sorry_badpasstooshort) %>" required>
+			<div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group">
 			<label for="password2"><%= I18n.t(:home_repeat_password) %>: </label>
-			<input class="form-control" type="password" id="password2"><br/>
+			<input class="form-control" type="password" id="password2" data-match="#password" data-error="<%= I18n.t(:sorry_badpassnomatch) %>" required>
+        <div class="help-block with-errors"></div>
+
+		</div>
 		<div class="from-group">
 			<label><%= I18n.t(:home_account_type) %>: </label>
 			<div class="radio">
