@@ -1,13 +1,56 @@
-<h2><%= I18n.t(:home_title) %></h2>
-<h3><%= I18n.t(:home_sign_up) %></h3>
-<form action="/<%= I18n.locale %>/signup" method="post">
-	<%= I18n.t(:home_name) %>: <input type="text" name="name" placeholder="<%= I18n.t(:home_name) %>"><br/>
-	<%= I18n.t(:home_email) %>: <input type="text" name="email" placeholder="<%= I18n.t(:home_email) %>"><br/>
-	<%= I18n.t(:home_password) %>: <input type="password" name="password"><br/>
-	<%= I18n.t(:home_repeat_password) %>: <input type="password" name="password2"><br/>
-	<%= I18n.t(:home_account_type) %>: <input type="radio" checked="true" name="type" value="fan"><%= I18n.t(:home_fan) %>
-	<input type="radio" name="type" value="musician"><%= I18n.t(:home_musician) %><br/>
-	<input type="submit" value="<%= I18n.t(:home_submit) %>">
+<h2 class="text-center"><%= I18n.t(:home_title) %></h2>
+
+<div style="max-width:380px;" class="well center-block">
+	<h3 class="text-center"><%= I18n.t(:home_sign_up) %></h3>
+	<form action="/<%= I18n.locale %>/signup" method="post" role="form" data-toggle="validator" id="myFrom">
+		<div class="form-group">
+			<label class="control-label" for="name"><%= I18n.t(:home_name) %>:</label>
+			<input class="form-control" type="text" id="name" placeholder="<%= I18n.t(:home_name) %>" required>
+		</div>
+		<div class="form-group">
+			<label for="email"><%= I18n.t(:home_email) %>: </label>
+			<input class="form-control" type="text" id="email" placeholder="<%= I18n.t(:home_email) %>" data-error="<%= I18n.t(:sorry_bademail) %>" required>
+    		<div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group">
+			<label for="password"><%= I18n.t(:home_password) %>: </label>
+			<input class="form-control" type="password" id="password" data-minlength="3" data-error="<%= I18n.t(:sorry_badpasstooshort) %>" required>
+			<div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group">
+			<label for="password2"><%= I18n.t(:home_repeat_password) %>: </label>
+			<input class="form-control" type="password" id="password2" data-match="#password" data-error="<%= I18n.t(:sorry_badpassnomatch) %>" required>
+        <div class="help-block with-errors"></div>
+
+		</div>
+		<div class="from-group">
+			<label><%= I18n.t(:home_account_type) %>: </label>
+			<div class="radio">
+				<label><input type="radio" name="type" value="fan"><%= I18n.t(:home_fan) %></label>
+			</div>
+			<div class="radio">
+				<label><input type="radio" name="type" value="musician"><%= I18n.t(:home_musician) %>
+				</label>
+			</div>
+		</div>
+		<div class="center-block">
+			<button type="submit" class="btn btn-info btn-block"><%= I18n.t(:home_submit) %>"</button>
+		</div>
+	</form>
+
+	<h3 class="text-center"><%= I18n.t(:home_log_in) %></h3>
+	<form action="/<%= I18n.locale %>/login" method="post" role="form">
+		<div class="form-group">
+			<label><%= I18n.t(:home_email) %>: </label>
+			<input class="form-control" type="text" name="email" placeholder="Your e-mail">
+		</div>
+		<div class="form-group">
+			<label><%= I18n.t(:home_password) %>: </label>
+			<input class="form-control" type="password" name="password">
+		</div>
+		<div class="center-block">
+			<button type="submit" class="btn btn-info btn-block"><%= I18n.t(:home_submit) %>"</button>
+		</div>
 </form>
 <h3><%= I18n.t(:home_log_in) %></h3>
 <form action="/<%= I18n.locale %>/login" method="post">
