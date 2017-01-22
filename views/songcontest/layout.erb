@@ -9,8 +9,10 @@
 <link rel="stylesheet" href="/css/songcontest.css">
 </head>
 <body>
+
+<% if authorized? %>
 <!--  NavBaR   -->
-<nav class="navbar navbar-default text-right" role="navigation">
+    <nav class="navbar navbar-default text-right" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsemenu">
@@ -19,25 +21,47 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/<%= I18n.locale %>/main">
                 	<p><%= I18n.t(:layout_title) %></p>
                 </a>
             </div><!-- navbar-header -->
             <div class="collapse navbar-collapse navbar-right" id="collapsemenu">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#merch">Songs</a></li>
+                    <li class="active"><a href="/<%= I18n.locale %>/playback">Songs</a></li>
                     <li><a href="#blog">Blog</a></li>
                     <li><a href="#about">About</a></li>
+                    <li><a class="logout" href="/<%= I18n.locale %>/logout"><%= I18n.t(:main_logout) %></a></li>
                 </ul>
             </div><!-- collapse navbar-collapse -->
         </div><!-- container -->
     </nav>
+
+<% end %>
+
+<!-- Body -->
 <section id="content">
 
 <%= yield %>
 
 </section>
+<section id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <a href="/<%= I18n.locale %>/main"><%= I18n.t(:links_home) %></a>
+            </div>
+            <div class="col-xs-12 col-sm-4 rights">
+                <%= I18n.t(:links_rights) %>
+                <br/>
+                <a href="http://www.altruix.cc/"><%= I18n.t(:links_name) %></a>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <a href="/<%= I18n.locale %>/main"><%= I18n.t(:links_contribute) %></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
