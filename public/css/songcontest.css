@@ -1,0 +1,53 @@
+/*** Navbar ***/
+.navbar {
+	border: none;
+}
+
+/*** Body ***/
+body {
+	text-align: center;
+	min-height: 100%;
+	position: relative;
+}
+
+#content {
+	padding-bottom: 70px;
+}
+
+body form {
+	text-align: left;
+}
+/*** Footer ***/
+#footer {
+	text-align: center;
+	color: #424242;
+	position: absolute;
+	height: 60px;
+	width: 100%;
+	bottom: 0px;
+	background-color: #f8f8f8;
+	margin-top: 10em;
+}
+
+ul {
+	list-style: none;
+}
+
+#footer a {
+	text-decoration: none;
+	color: #777;
+	margin-top: 10px;
+}
+
+#footer a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+#footer div {
+	margin-top: 7px;
+}
+
+#footer div .rights {
+	margin-top: 0px;
+}

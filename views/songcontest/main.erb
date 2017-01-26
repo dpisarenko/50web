@@ -8,15 +8,36 @@
 <% end %>
 
 <% if musician? %>
-	<li><a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a></li>
-	<li><a href="/<%= I18n.locale %>/stats"><%= I18n.t(:main_song_stats) %></a></li>
-	
+	<ul>
+		<li><a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a></li>
+		<li><a href="/<%= I18n.locale %>/stats"><%= I18n.t(:main_song_stats) %></a></li>
+	</ul>
 <% end %>
 
 <% if fan? %>
-	<li><a href="/<%= I18n.locale %>/playback"><%= I18n.t(:main_listen) %></a></li>
+	<h3 href="/<%= I18n.locale %>/playback"><%= I18n.t(:main_listen) %></h3>
+	<br/>
+	<div class="container">
+		<div class="row">
+			<div class="song col-xs-12 col-sm-6 col-md-4">
+				<span class="glyphicon glyphicon-music"></span>
+				<p>Song Name</p>
+				<p>Artist</p>
+			</div>
+			<div class="song col-xs-12 col-sm-6 col-md-4">
+				<span class="glyphicon glyphicon-music"></span>
+				<p>Song Name</p>
+				<p>Artist</p>
+			</div>
+			<div class="song col-xs-12 col-sm-6 col-md-4">
+				<span class="glyphicon glyphicon-music"></span>
+				<p>Song Name</p>
+				<p>Artist</p>
+			</div>
+		</div>
+	</div>
 <% end %>
-
-	<li><a href="/<%= I18n.locale %>/logout"><%= I18n.t(:main_logout) %></a></li>
-</ul>
+	
+	<br/>
+	<a href="/<%= I18n.locale %>/logout"><%= I18n.t(:main_logout) %></a>
 
