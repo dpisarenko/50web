@@ -77,6 +77,8 @@ class SongContest < Sinatra::Base
 		ok2, attrs = @peepsdb.call('person_attributes', @person_id)
 		@isMusician = attrs.select { |x| (x[:atkey] == 'musician') && x[:plusminus]}.count > 0
 		@isFan = attrs.select { |x| (x[:atkey] == 'fan') && x[:plusminus]}.count > 0
+		@isMusician = attrs.select { |x| (x[:atkey] == 'musician') && x[:plusminus]}.count > 0
+		@isOrg = attrs.select { |x| (x[:atkey] == 'org') && x[:plusminus]}.count > 0
 		return true
 	end
 	
@@ -90,6 +92,10 @@ class SongContest < Sinatra::Base
 	
 	def fan?
 		return @isFan
+	end
+
+	def org?
+		return @isOrg
 	end
 	
 	def authorizeMusician!
