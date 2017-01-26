@@ -3,6 +3,10 @@
 
 <ul>
 
+<% if organizer? %>
+	<li><a href="/<%= I18n.locale %>/contests"><%= I18n.t(:main_contests) %></a></li>
+<% end %>
+
 <% if musician? %>
 	<li><a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a></li>
 	<li><a href="/<%= I18n.locale %>/stats"><%= I18n.t(:main_song_stats) %></a></li>
