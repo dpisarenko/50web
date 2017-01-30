@@ -59,3 +59,8 @@ en:
   links_rights: "This is an open-source project managed by"
   links_name: "DMITRI PISARENKO"
   links_contribute: "Want to contribute?"
+  contests_title: "Contests"
+  contests_nr: "Nr."
+  contests_title_table: "Title"
+  contests_status: "Status"
+  contests_new_button: "Create New Contest"

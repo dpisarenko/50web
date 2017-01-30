@@ -55,3 +55,8 @@ ru:
   song_comments_grade: "Оценка"
   song_comments_comment: "Комментарий"
   main_contests: "Конкурсы"
+  contests_title: "Конкурсы"
+  contests_nr: "№"
+  contests_title_table: "Название"
+  contests_status: "Статус"
+  contests_new_button: "Создать новый конкурс"

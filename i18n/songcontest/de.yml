@@ -55,3 +55,8 @@ de:
   song_comments_grade: "Bewertung"
   song_comments_comment: "Kommentar"
   main_contests: "Contests"
+  contests_title: "Contests"
+  contests_nr: "Nr."
+  contests_title_table: "Titel"
+  contests_status: "Status"
+  contests_new_button: "Neuen Contest erstellen"
