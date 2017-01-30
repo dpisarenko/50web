@@ -8,4 +8,17 @@ TODO: Button "New song contest"
 		</div>
 </form>
 
-TODO: Table
+<table>
+	<tr>
+		<th><%= I18n.t(:contests_nr) =%></th>
+		<th><%= I18n.t(:contests_title) =%></th>
+		<th><%= I18n.t(:contests_status) =%></th>
+	</tr>
+	<% for @item in @contests %>
+		<tr>
+			<td><a href="/<%= I18n.locale %>/contest_details?contest=<%= @item[:contest_id] %>"><%= @item[:contest_id] %></a></td>
+			<td><%= @item[:contest_title] %></td>
+			<td><%= @item[:contest_status] %></td>
+		</tr>
+	<% end %>
+</table>
