@@ -105,6 +105,10 @@ class SongContest < Sinatra::Base
 	def authorizeFan!
 		redirect to('/' + I18n.locale.to_s + '/') unless authorized? && fan?
 	end	
+
+	def authorizeOrg!
+		redirect to('/' + I18n.locale.to_s + '/') unless authorized? && org?
+	end	
 	
 	get '/' do
 		# logger.info 'Logging test'
@@ -245,5 +249,10 @@ class SongContest < Sinatra::Base
 		ok, @comments = @db.call('song_comments', @person_id, songId)
 		logger.info '@comments: ' + @comments.to_s
 		erb :song_comments
+	end
+	
+	get '/contests' do
+		authorizeOrg!
+		erb :contests
 	end
 end
