@@ -1,7 +1,5 @@
 <h2 class="text-center"><%= I18n.t(:contests_title) %></h2>
 
-TODO: Button "New song contest"
-
 <form action="/<%= I18n.locale %>/contests" method="post" role="form">
 	<div class="center-block">
 			<button type="submit" class="btn btn-info btn-block"><%= I18n.t(:contests_new_button) %></button>
@@ -10,9 +8,9 @@ TODO: Button "New song contest"
 
 <table>
 	<tr>
-		<th><%= I18n.t(:contests_nr) =%></th>
-		<th><%= I18n.t(:contests_title_table) =%></th>
-		<th><%= I18n.t(:contests_status) =%></th>
+		<th><%= I18n.t(:contests_nr) %></th>
+		<th><%= I18n.t(:contests_title_table) %></th>
+		<th><%= I18n.t(:contests_status) %></th>
 	</tr>
 	<% for @item in @contests %>
 		<tr>

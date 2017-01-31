@@ -253,6 +253,7 @@ class SongContest < Sinatra::Base
 	
 	get '/contests' do
 		authorizeOrg!
+		@items = []
 		erb :contests
 	end
 end
