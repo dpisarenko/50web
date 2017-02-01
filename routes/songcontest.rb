@@ -253,7 +253,7 @@ class SongContest < Sinatra::Base
 	
 	get '/contests' do
 		authorizeOrg!
-		@contests = []
+		ok, @contests = @db.call('get_all_contests') 
 		erb :contests
 	end
 end
