@@ -256,7 +256,7 @@ class SongContest < Sinatra::Base
 	get '/contests' do
 		authorizeOrg!
 		ok, contestsCount = @db.call('contests_count')
-		sorry 'nocontests' unless statsCount[:calculate_song_stats_count].to_i > 0
+		sorry 'nocontests' unless contestsCount[:calculate_song_stats_count].to_i > 0
 		ok, @contests = @db.call('get_all_contests') 
 		erb :contests
 	end
