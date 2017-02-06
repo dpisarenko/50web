@@ -148,6 +148,8 @@ class SongContest < Sinatra::Base
 			I18n.t 'sorry_nostats'
 		when 'badsong'
 			I18n.t 'sorry_badsong'
+		when 'nocontests'
+			I18n.t 'sorry_nocontests'
 		else
 			I18n.t 'sorry_unknown'
 		end
@@ -253,6 +255,8 @@ class SongContest < Sinatra::Base
 	
 	get '/contests' do
 		authorizeOrg!
+		ok, contestsCount = @db.call('contests_count')
+		sorry 'nocontests' unless statsCount[:calculate_song_stats_count].to_i > 0
 		ok, @contests = @db.call('get_all_contests') 
 		erb :contests
 	end
