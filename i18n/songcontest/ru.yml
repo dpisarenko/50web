@@ -60,3 +60,4 @@ ru:
   contests_title_table: "Название"
   contests_status: "Статус"
   contests_new_button: "Создать новый конкурс"
+  sorry_nocontests: "На данный момент в базе данных нет конкурсов"

@@ -60,3 +60,4 @@ de:
   contests_title_table: "Titel"
   contests_status: "Status"
   contests_new_button: "Neuen Contest erstellen"
+  sorry_nocontests: "Derzeit existieren keine Contests in der Datenbank"
