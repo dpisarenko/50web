@@ -1,16 +1,22 @@
-<h2><%= I18n.t(:home_title) %></h2>
+<div class="container">
+	<h2><%= I18n.t(:home_title) %></h2>
 
-<table>
-<tr>
-	<th><%= I18n.t(:stats_song) %></th>
-	<th><%= I18n.t(:stats_avg_grade) %></th>
-	<th><%= I18n.t(:stats_feedback_count) %></th>
-</tr>
-<% for @item in @stats %>
-	<tr>
-		<td><a href="/<%= I18n.locale %>/song_comments?song=<%= @item[:song_id] %>"><%= @item[:song_name] %></a></td>
-		<td><%= @item[:avg_grade] %></td>
-		<td><%= @item[:feedback_count] %></td>
-	<tr>
-<% end %>
-</table>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th><%= I18n.t(:stats_song) %></th>
+				<th><%= I18n.t(:stats_avg_grade) %></th>
+				<th><%= I18n.t(:stats_feedback_count) %></th>
+			</tr>
+		</thead>
+		<% for @item in @stats %>
+			<tbody>
+				<tr>
+					<td><a href="/<%= I18n.locale %>/song_comments?song=<%= @item[:song_id] %>"><%= @item[:song_name] %></a></td>
+					<td><%= @item[:avg_grade] %></td>
+					<td><%= @item[:feedback_count] %></td>
+				<tr>
+			</tbody>
+		<% end %>
+	</table>
+</div>

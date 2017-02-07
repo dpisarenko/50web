@@ -5,26 +5,29 @@
     var as = audiojs.createAll();
   });
 </script>
-<audio src="<%= @songPath %>" preload="auto"></audio>
-<h3><%= I18n.t(:playback_feedback_title) %></h3>
-<%= I18n.t(:playback_feedback_body) %>
-<form action="/<%= I18n.locale %>/save_feedback" method="post">
-	<%= I18n.t(:playback_rating) %>
-	<select name="grade">
-	  <option value="0"><%= I18n.t(:playback_rating_0) %></option>
-	  <option value="1"><%= I18n.t(:playback_rating_1) %></option>
-	  <option value="2"><%= I18n.t(:playback_rating_2) %></option>
-	  <option value="3"><%= I18n.t(:playback_rating_3) %></option>
-	  <option value="4"><%= I18n.t(:playback_rating_4) %></option>
-	  <option value="5"><%= I18n.t(:playback_rating_5) %></option>
-	</select>
-	<br/>
-	<%= I18n.t(:playback_comment) %>
-	<br/>
-	<textarea name="comment" rows="5" cols="50"></textarea>
-	<br/>
-	<input type="hidden" name="person_id" value="<%= @person_id.to_s %>">
-	<input type="hidden" name="song_id" value="<%= @songId %>">	
-	<br/>
-	<input type="submit" value="<%= I18n.t(:playback_submit) %>">
-</form>
+<audio src="<%= @songPath %>" preload="auto" id="audio"></audio>
+
+<div style="max-width:380px;" class="well center-block feedback">
+	<h4 class="text-center"><%= I18n.t(:playback_feedback_title) %></h4>
+	<p><%= I18n.t(:playback_feedback_body) %></p>
+	<form action="/<%= I18n.locale %>/save_feedback" method="post" role="form" data-toggle="validator">
+		<div class="form-group">
+			<label for="grade"><%= I18n.t(:playback_rating) %></label>
+			<select name="grade" id="grade" class="form-control" required>
+			  <option value="0"><%= I18n.t(:playback_rating_0) %></option>
+			  <option value="1"><%= I18n.t(:playback_rating_1) %></option>
+			  <option value="2"><%= I18n.t(:playback_rating_2) %></option>
+			  <option value="3"><%= I18n.t(:playback_rating_3) %></option>
+			  <option value="4"><%= I18n.t(:playback_rating_4) %></option>
+			  <option value="5"><%= I18n.t(:playback_rating_5) %></option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="comment"><%= I18n.t(:playback_comment) %></label>
+			<textarea name="comment" rows="5" cols="50" class="form-control" id="comment" required></textarea>
+		</div>
+		<div class="center-block">
+			<button type="submit" class="btn btn-info btn-block"><%= I18n.t(:home_submit) %></button>
+		</div>
+	</form>
+</div>

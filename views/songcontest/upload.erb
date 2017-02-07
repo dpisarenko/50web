@@ -1,12 +1,17 @@
 <h2><%= I18n.t(:home_title) %></h2>
-<%= I18n.t(:upload_body_text) %>
-<form action="/<%= I18n.locale %>/upload" method="post" enctype="multipart/form-data">
-<p>
-<input type="file" name="song" size="40">
-</p>
-<%= I18n.t(:upload_song_name) %>
-<input type="text" name="name" size="60">
-<div>
-<input type="submit" value="<%= I18n.t(:home_submit) %>">
+
+<div style="max-width:380px;" class="well center-block uploader">
+	<h4 class="text-center"><%= I18n.t(:upload_body_text) %></h4>
+	<form action="/<%= I18n.locale %>/upload" method="post" role="form" data-toggle="validator" id="uploadeSong" enctype="multipart/form-data">
+		<div class="form-group">
+			<input class="form-control" type="file" name="song" id="chooseFile" required>
+		</div>
+		<div class="form-group">
+			<label for="name"><%= I18n.t(:upload_song_name) %> </label>
+			<input class="form-control" type="text" id="name" name="name" required>
+		</div>
+		<div class="center-block">
+			<button type="submit" class="btn btn-info btn-block"><%= I18n.t(:home_submit) %></button>
+		</div>
+	</form>
 </div>
-</form>

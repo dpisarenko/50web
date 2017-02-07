@@ -1,7 +1,7 @@
 <h2 class="text-center"><%= I18n.t(:home_title) %></h2>
 <%= I18n.t(:main_login_successful) %>
 
-<ul>
+<!-- <ul>
 
 <% if org? %>
 	<li><a href="/<%= I18n.locale %>/contests"><%= I18n.t(:main_contests) %></a></li>
@@ -12,31 +12,35 @@
 		<li><a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a></li>
 		<li><a href="/<%= I18n.locale %>/stats"><%= I18n.t(:main_song_stats) %></a></li>
 	</ul>
-<% end %>
+<% end %> -->
 
-<% if fan? %>
-	<h3 href="/<%= I18n.locale %>/playback"><%= I18n.t(:main_listen) %></h3>
-	<br/>
 	<div class="container">
 		<div class="row">
-			<div class="song col-xs-12 col-sm-6 col-md-4">
-				<span class="glyphicon glyphicon-music"></span>
-				<p>Song Name</p>
-				<p>Artist</p>
-			</div>
-			<div class="song col-xs-12 col-sm-6 col-md-4">
-				<span class="glyphicon glyphicon-music"></span>
-				<p>Song Name</p>
-				<p>Artist</p>
-			</div>
-			<div class="song col-xs-12 col-sm-6 col-md-4">
-				<span class="glyphicon glyphicon-music"></span>
-				<p>Song Name</p>
-				<p>Artist</p>
-			</div>
+			<% if fan? %>
+				<div class="fan col-xs-12 col-sm-6 col-md-4">
+					<span class="glyphicon glyphicon-music"></span>
+					<br/>
+					<a href="/<%= I18n.locale %>/playback"><%= I18n.t(:main_listen) %></a>
+				</div>
+			<% end %>
+			<% if musician? %>			
+				<div class="musicina col-xs-12 col-sm-6 col-md-4">
+					<span class="glyphicon glyphicon-music"></span>
+					<br/>
+					<a href="/<%= I18n.locale %>/upload"><%= I18n.t(:main_upload) %></a>
+					<br/>
+					<a href="/<%= I18n.locale %>/stats"><%= I18n.t(:main_song_stats) %></a>
+				</div>
+			<% end %>
+			<% if org? %>
+				<div class="org col-xs-12 col-sm-6 col-md-4">
+					<span class="glyphicon glyphicon-music"></span>
+					<br/>
+					<a href="/<%= I18n.locale %>/contests"><%= I18n.t(:main_contests) %></a>
+				</div>
+			<% end %>
 		</div>
 	</div>
-<% end %>
 	
 	<br/>
 	<a href="/<%= I18n.locale %>/logout"><%= I18n.t(:main_logout) %></a>
